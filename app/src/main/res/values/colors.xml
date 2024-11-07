@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="darkBrown_vintage">#65451F</color>
+    <color name="peach_warm">#FFB38E</color>
+    <color name="red_vintage">#CA3F3F</color>
+    <color name="golden_star_vintage">#FADFA1</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="color4blueToken">#4A89FF</color>
+    <color name="color4pearlToken">#FF9E9E</color>
+    <color name="color4greenToken">#6DFA50</color>
+    <color name="color4redToken">#FF0000</color>
+    <color name="color4goldToken">#F2F802</color>
+    <color name="color4tokenIsChoose">#F8790B</color>
+    <color name="bgToken">#FBEEE7</color>
+</resources>

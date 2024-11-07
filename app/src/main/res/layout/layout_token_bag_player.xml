@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardElevation="12dp"
+    android:background="@color/transparent"
+    app:cardBackgroundColor="@color/transparent"
+    >
+    <GridLayout
+        android:id="@+id/list_token"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:rowCount="4"
+        android:columnCount="1">
+
+    </GridLayout>
+
+</androidx.cardview.widget.CardView>

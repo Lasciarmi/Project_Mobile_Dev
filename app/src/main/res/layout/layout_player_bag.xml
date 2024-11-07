@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="12dp"
+    android:layout_marginStart="1dp"
+    android:background="@color/transparent"
+    app:cardBackgroundColor="@color/transparent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/player_name_bot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Player Name"
+            android:gravity="center"/>
+        <!-- List Token -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/list_blue_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/list_white_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/list_green_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/list_black_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/list_red_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+            <include
+                android:id="@+id/list_pearl_token"
+                layout="@layout/layout_token_bag_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+        <!-- End List Token-->
+
+        <!-- Card Stack-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/blue_cardStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/color4blueToken">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/white_cardStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@color/white">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/green_cardStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@color/color4greenToken">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/black_cardStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@color/black">
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/red_cardStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="@color/color4redToken">
+
+            </FrameLayout>
+
+        </LinearLayout>
+        <!--End Card Stack-->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            android:layout_margin="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reserved Card"
+                android:gravity="center"
+                android:layout_margin="4dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <GridLayout
+                android:id="@+id/card_reserved_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rowCount="1"
+                android:columnCount="3">
+            </GridLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
