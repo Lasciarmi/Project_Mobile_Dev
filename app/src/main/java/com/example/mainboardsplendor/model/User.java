@@ -15,4 +15,6 @@ public class User {
     private int reserveCard;
     private int tokensStack;
 
+
+
 }

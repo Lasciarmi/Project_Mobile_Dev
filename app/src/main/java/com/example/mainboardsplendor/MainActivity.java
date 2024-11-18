@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         // Init token board (TODO: IMPLEMENT SPIRAL TOKEN)
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.tokenBoard.splendorDuelBoard, false);
+                View view = LayoutInflater.from(this).inflate(
+                        R.layout.custom_token, binding.tokenBoard.splendorDuelBoard, false);
                 binding.tokenBoard.splendorDuelBoard.addView(view);
             }
         }
