@@ -1,7 +1,10 @@
 package com.example.mainboardsplendor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,8 +21,23 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.databinding.ActivityMainBinding;
+import com.example.mainboardsplendor.model.Token;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    private int quantityBlueToken = 4;
+    private int quantityWhiteToken = 4;
+    private int quantityGreenToken = 4;
+    private int quantityBlackToken = 4;
+    private int quantityRedToken = 4;
+    private int quantityPearlToken = 2;
+    private int quantityGoldToken = 3;
+
+    private List<Token> tokenBag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +50,20 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        // Init tokenBag
+        initTokenBag();
+
         // Init nama player
         binding.scoreBoardPlayer1.playerName.setText("MC");
         binding.scoreBoardPlayer2.playerName.setText("Theo");
 
         binding.scoreBoardPlayer1.totalPrivilegePlayer.setText("1");
 
-        // Init token board (TODO: IMPLEMENT SPIRAL TOKEN)
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                View view = LayoutInflater.from(this).inflate(
-                        R.layout.custom_token, binding.tokenBoard.splendorDuelBoard, false);
-                binding.tokenBoard.splendorDuelBoard.addView(view);
-            }
-        }
+        // Implementation Spiral Token
+        int rowCount = binding.tokenBoard.splendorDuelBoard.getRowCount();
+        int colCount = binding.tokenBoard.splendorDuelBoard.getColumnCount();
+        InitTokenBoard(rowCount, colCount, binding.tokenBoard.splendorDuelBoard);
+        // End Implementation Spiral Token
 
         // Init Grid list_blue_token pada bag player
         for (int i = 0; i< 4; i++) {
@@ -252,7 +270,113 @@ public class MainActivity extends AppCompatActivity {
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
     }
 
-    // Method untuk nambah Card Stack
+    private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
+        boolean[][] isFilled = new boolean[rowCount][colCount];
+
+        int[][] movementPattern = {
+                {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
+                {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
+                {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
+                {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
+                {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
+        };
+
+        for (int i = 0; i < movementPattern.length; i++) {
+            Token token = pickRandomToken();
+            if (token == null) {
+                break;
+            }
+            int row = movementPattern[i][0];
+            int col = movementPattern[i][1];
+            Log.d("MainActivity", "Row: " + row + ", Col: " + col);
+
+            // Create View for token
+            View view = LayoutInflater.from(this).inflate(
+                    R.layout.custom_token, tokenBoard, false);
+
+            CardView cardView = view.findViewById(R.id.cardView_token);
+            ImageView tokenView = view.findViewById(R.id.token_view);
+
+            cardView.setCardBackgroundColor(token.getColor().toArgb());
+
+            Color color = token.getColor();
+            if (color.equals(Color.valueOf(getResources().getColor(R.color.color4blueToken)))) {
+                tokenView.setImageResource(R.drawable.blue_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.white)))) {
+                tokenView.setImageResource(R.drawable.white_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4greenToken)))) {
+                tokenView.setImageResource(R.drawable.green_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.black)))) {
+                tokenView.setImageResource(R.drawable.black_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4redToken)))) {
+                tokenView.setImageResource(R.drawable.red_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4pearlToken)))) {
+                tokenView.setImageResource(R.drawable.pearl_token);
+            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4goldToken)))) {
+                tokenView.setImageResource(R.drawable.gold_token);
+            }
+
+            // Define row & col gridLayout
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.rowSpec = GridLayout.spec(row);
+            params.columnSpec = GridLayout.spec(col);
+            params.setGravity(Gravity.FILL);
+            view.setLayoutParams(params);
+
+            // Adding View to GridLayout
+            tokenBoard.addView(view);
+
+            // Mark Slot
+            isFilled[row][col] = true;
+        }
+    }
+
+    private void initTokenBag() {
+        tokenBag = new ArrayList<>();
+
+        Token blueToken = new Token(this);
+        blueToken.setColor(Color.valueOf(getResources().getColor(R.color.color4blueToken)));
+        Token whiteToken = new Token(this);
+        whiteToken.setColor(Color.valueOf(getResources().getColor(R.color.white)));
+        Token greenToken = new Token(this);
+        greenToken.setColor(Color.valueOf(getResources().getColor(R.color.color4greenToken)));
+        Token blackToken = new Token(this);
+        blackToken.setColor(Color.valueOf(getResources().getColor(R.color.black)));
+        Token redToken = new Token(this);
+        redToken.setColor(Color.valueOf(getResources().getColor(R.color.color4redToken)));
+        Token pearlToken = new Token(this);
+        pearlToken.setColor(Color.valueOf(getResources().getColor(R.color.color4pearlToken)));
+        Token goldToken = new Token(this);
+        goldToken.setColor(Color.valueOf(getResources().getColor(R.color.color4goldToken)));
+
+        addTokens(blueToken, quantityBlueToken);
+        addTokens(whiteToken, quantityWhiteToken);
+        addTokens(greenToken, quantityGreenToken);
+        addTokens(blackToken, quantityBlackToken);
+        addTokens(redToken, quantityRedToken);
+        addTokens(pearlToken, quantityPearlToken);
+        addTokens(goldToken, quantityGoldToken);
+    }
+
+    // Method for add Token in Array TokenBag
+    private void addTokens(Token token, int quantity) {
+        for (int i=0; i<quantity; i++) {
+            tokenBag.add(token);
+        }
+    }
+
+    public Token pickRandomToken() {
+        if (tokenBag.isEmpty()) {
+            return null;
+        }
+        Random random = new Random();
+        int randomIndex = random.nextInt(tokenBag.size());
+
+        // Pick a Random Token
+        return tokenBag.remove(randomIndex);
+    }
+
+    // Method for add Card Stack
     public void addNewCard(FrameLayout redCardStack) {
         ImageView card = new ImageView(this);
         card.setImageResource(R.drawable.blank_card);

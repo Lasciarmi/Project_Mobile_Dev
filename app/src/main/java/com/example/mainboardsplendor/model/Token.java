@@ -23,8 +23,6 @@ public class Token extends androidx.appcompat.widget.AppCompatImageView {
         super(context, attrs, defStyleAttr);
     }
 
-
-
     public Color getColor() {
         return color;
     }
