@@ -1,6 +1,5 @@
 package com.example.mainboardsplendor;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,13 +9,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -36,8 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private int quantityRedToken = 4;
     private int quantityPearlToken = 2;
     private int quantityGoldToken = 3;
+    private int[][] movementPattern = {
+            {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
+            {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
+            {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
+            {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
+            {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
+    };
 
     private List<Token> tokenBag;
+    private List<CardView> tokenPick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,6 +264,8 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.cardReservedPlayer.addView(card);
         }
 
+
+
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
@@ -268,18 +277,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
+
     }
 
     private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
         boolean[][] isFilled = new boolean[rowCount][colCount];
-
-        int[][] movementPattern = {
-                {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
-                {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
-                {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
-                {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
-                {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
-        };
 
         for (int i = 0; i < movementPattern.length; i++) {
             Token token = pickRandomToken();
@@ -349,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
         Token goldToken = new Token(this);
         goldToken.setColor(Color.valueOf(getResources().getColor(R.color.color4goldToken)));
 
+
         addTokens(blueToken, quantityBlueToken);
         addTokens(whiteToken, quantityWhiteToken);
         addTokens(greenToken, quantityGreenToken);
@@ -395,4 +398,14 @@ public class MainActivity extends AppCompatActivity {
         // Tambahkan kartu ke dalam redCardStack
         redCardStack.addView(card);
     }
+
+    private View.OnContextClickListener pickToken(int row, int col, CardView cardView) {
+        if (tokenPick.size() == 0) {
+            tokenPick.add(cardView);
+            Log.d("", "berhasil");
+        }
+        return null;
+    }
+
+
 }

@@ -16,5 +16,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/circle"
-        android:src="@drawable/gold_token"/>
+        android:src="@drawable/gold_token" />
 </androidx.cardview.widget.CardView>

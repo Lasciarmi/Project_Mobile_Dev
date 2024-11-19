@@ -1,7 +1,6 @@
 package com.example.mainboardsplendor.model;
 
 import android.content.Context;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -12,7 +11,6 @@ public class RoyalCard extends androidx.appcompat.widget.AppCompatImageView {
 
     private int points;
     private int crowns;
-    private Image imageRoyalCard;
 
     public RoyalCard(@NonNull Context context) {
         super(context);
@@ -41,8 +39,4 @@ public class RoyalCard extends androidx.appcompat.widget.AppCompatImageView {
     public void setCrowns(int crowns) {
         this.crowns = crowns;
     }
-
-    public Image getImageRoyalCard() {return imageRoyalCard;}
-
-    public void setImageRoyalCard(Image imageRoyalCard) {this.imageRoyalCard = imageRoyalCard;}
 }

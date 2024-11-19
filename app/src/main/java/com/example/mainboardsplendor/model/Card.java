@@ -2,7 +2,6 @@ package com.example.mainboardsplendor.model;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -18,7 +17,6 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int discount;
     private int crowns;
     private int level;
-    private Image cardImage;
     //
     private ArrayList<Integer> price;
 
@@ -81,6 +79,4 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     public void setDiscount(int discount) {
         this.discount = discount;
     }
-    public Image getCardImage() {return cardImage;}
-    public void setCardImage(Image cardImage) {this.cardImage = cardImage;}
 }
