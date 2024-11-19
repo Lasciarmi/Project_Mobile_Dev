@@ -17,6 +17,15 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int discount;
     private int crowns;
     private int level;
+    private int Image;
+
+    public int getImage() {
+        return Image;
+    }
+
+    public void setImage(int image) {
+        Image = image;
+    }
 
     private ArrayList<Integer> price;
 

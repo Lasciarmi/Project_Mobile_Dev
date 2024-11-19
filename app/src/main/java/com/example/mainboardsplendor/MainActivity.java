@@ -1,6 +1,5 @@
 package com.example.mainboardsplendor;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +9,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -169,18 +166,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_TOP
-        for (int i = 0; i < 3; i++){
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.setMargins(5, 0, 5, 0);
-            params.width = (int) (65 * getResources().getDisplayMetrics().density);
-            params.height = (int) (105 * getResources().getDisplayMetrics().density);
-
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.blank_card);
-            imageView.setLayoutParams(params);
-
-            binding.cardBoard.cardStoreTop.addView(imageView);
-        }
+//        for (int i = 0; i < 3; i++){
+//            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+//            params.setMargins(5, 0, 5, 0);
+//            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+//            params.height = (int) (105 * getResources().getDisplayMetrics().density);
+//
+//            ImageView imageView = new ImageView(this);
+//            imageView.setImageResource(R.drawable.blank_card);
+//            imageView.setLayoutParams(params);
+//
+//            binding.cardBoard.cardStoreTop.addView(imageView);
+//        }
 
         // INIT CARD_MID
         for (int i = 0; i < 4; i++){
@@ -305,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice1.add(6); // for black
         listPrice1.add(2); // for red
         listPrice1.add(0); // for pearl
-        Card cardBlack1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 0, listPrice1);
+        Card card_black_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 0, listPrice1, R.drawable.card_black_level_3_1);
 
         ArrayList<Integer> listPrice2 = new ArrayList<>();
         listPrice2.add(0); //for blue
@@ -314,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice2.add(0); // for black
         listPrice2.add(3); // for red
         listPrice2.add(1); // for pearl
-        Card cardBlack2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 2, listPrice2);
+        Card card_black_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 2, listPrice2, R.drawable.card_black_level_3_2);
 
         ArrayList<Integer> listPrice3 = new ArrayList<>();
         listPrice3.add(6); //for blue
@@ -323,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice3.add(0); // for black
         listPrice3.add(0); // for red
         listPrice3.add(0); // for pearl
-        Card cardBlue1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 0, listPrice3);
+        Card card_blue_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 0, listPrice3, R.drawable.card_blue_level_3_1);
 
         ArrayList<Integer> listPrice4 = new ArrayList<>();
         listPrice4.add(0); //for blue
@@ -332,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice4.add(5); //for black
         listPrice4.add(0); //for red
         listPrice4.add(1); //for pearl
-        Card cardBlue2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 2, listPrice4);
+        Card card_blue_level3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 2, listPrice4, R.drawable.card_blue_level_3_2);
 
         ArrayList<Integer> listPrice5 = new ArrayList<>();
         listPrice5.add(2); //for blue
@@ -341,16 +338,16 @@ public class MainActivity extends AppCompatActivity {
         listPrice5.add(0); //for black
         listPrice5.add(2); //for red
         listPrice5.add(0); //for pearl
-        Card cardGreen1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 0, listPrice5);
+        Card card_green_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 0, listPrice5, R.drawable.card_green_level_3_1);
 
         ArrayList<Integer> listPrice6 = new ArrayList<>();
-        listPrice6.add(2); //for blue
-        listPrice6.add(0); //for white
+        listPrice6.add(3); //for blue
+        listPrice6.add(5); //for white
         listPrice6.add(0); //for green
         listPrice6.add(0); //for black
-        listPrice6.add(2); //for red
-        listPrice6.add(0); //for pearl
-        Card cardGreen2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 2, listPrice6);
+        listPrice6.add(3); //for red
+        listPrice6.add(1); //for pearl
+        Card card_green_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 2, listPrice6, R.drawable.card_green_level_3_2);
 
         ArrayList<Integer> listPrice7 = new ArrayList<>();
         listPrice7.add(0); //for blue
@@ -359,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice7.add(0); //for black
         listPrice7.add(0); //for red
         listPrice7.add(0); //for pearl
-        Card cardNormal = AddCard(6, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 0, 0, listPrice7);
+        Card card_normal_level_3 = AddCard(6, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 0, 0, listPrice7, R.drawable.card_normal_level_3);
 
         ArrayList<Integer> listPrice8 = new ArrayList<>();
         listPrice8.add(0); //for blue
@@ -368,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
         listPrice8.add(2); //for black
         listPrice8.add(6); //for red
         listPrice8.add(0); //for pearl
-        Card cardRed1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 0, listPrice8);
+        Card card_red_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 0, listPrice8, R.drawable.card_red_level_3_1);
 
         ArrayList<Integer> listPrice9 = new ArrayList<>();
         listPrice9.add(0); //for blue
@@ -377,30 +374,60 @@ public class MainActivity extends AppCompatActivity {
         listPrice9.add(2); //for black
         listPrice9.add(0); //for red
         listPrice9.add(0); //for pearl
-        Card cardRed2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 2, listPrice9);
+        Card card_red_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 2, listPrice9, R.drawable.card_red_level_3_2);
 
         ArrayList<Integer> listPrice10 = new ArrayList<>();
         listPrice10.add(0); //for blue
         listPrice10.add(0); //for white
         listPrice10.add(0); //for green
         listPrice10.add(0); //for black
+        listPrice10.add(8); //for red
+        listPrice10.add(0); //for pearl
+        Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 0, listPrice10, R.drawable.card_ultra_level_3_1);
+
+        ArrayList<Integer> listPrice11 = new ArrayList<>();
+        listPrice10.add(0); //for blue
+        listPrice10.add(0); //for white
+        listPrice10.add(0); //for green
+        listPrice10.add(8); //for black
         listPrice10.add(0); //for red
         listPrice10.add(0); //for pearl
-        Card cardUltra = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 0, listPrice10);
+        Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 3, listPrice10, R.drawable.card_ultra_level_3_2);
 
-        listCardLevel3.add(cardBlack1);
-        listCardLevel3.add(cardBlack2);
-        listCardLevel3.add(cardBlue1);
-        listCardLevel3.add(cardBlue2);
-        listCardLevel3.add(cardGreen1);
-        listCardLevel3.add(cardGreen2);
-        listCardLevel3.add(cardNormal);
-        listCardLevel3.add(cardRed1);
-        listCardLevel3.add(cardRed2);
-        listCardLevel3.add(cardUltra);
+        ArrayList<Integer> listPrice12= new ArrayList<>();
+        listPrice12.add(2); //for blue
+        listPrice12.add(6); //for white
+        listPrice12.add(0); //for green
+        listPrice12.add(2); //for black
+        listPrice12.add(0); //for red
+        listPrice12.add(0); //for pearl
+        Card card_white_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.white)), 3, 1, 0, listPrice12, R.drawable.card_white_level_3_1);
+
+        ArrayList<Integer> listPrice13= new ArrayList<>();
+        listPrice13.add(3); //for blue
+        listPrice13.add(0); //for white
+        listPrice13.add(0); //for green
+        listPrice13.add(3); //for black
+        listPrice13.add(5); //for red
+        listPrice13.add(1); //for pearl
+        Card card_white_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.white)), 3, 1, 2, listPrice13, R.drawable.card_white_level_3_2);
+
+        listCardLevel3.add(card_black_level_3_1);
+        listCardLevel3.add(card_black_level_3_2);
+        listCardLevel3.add(card_blue_level_3_1);
+        listCardLevel3.add(card_blue_level3_2);
+        listCardLevel3.add(card_green_level_3_1);
+        listCardLevel3.add(card_green_level_3_2);
+        listCardLevel3.add(card_normal_level_3);
+        listCardLevel3.add(card_red_level_3_1);
+        listCardLevel3.add(card_red_level_3_2);
+        listCardLevel3.add(card_ultra_level_3_1);
+        listCardLevel3.add(card_ultra_level_3_2);
+        listCardLevel3.add(card_white_level_3_1);
+        listCardLevel3.add(card_white_level_3_2);
     }
 
-    private Card AddCard(int cardValue, Color color, int level, int discount, int crowns, ArrayList<Integer> price){
+    private Card AddCard(int cardValue, Color color, int level, int discount, int crowns, ArrayList<Integer> price, int image){
         Card card = new Card(this);
         card.setCardValue(cardValue);
         card.setColor(color);
@@ -408,6 +435,7 @@ public class MainActivity extends AppCompatActivity {
         card.setDiscount(discount);
         card.setCrowns(crowns);
         card.setPrice(price);
+        card.setImage(image);
         return card;
     }
 
@@ -420,9 +448,31 @@ public class MainActivity extends AppCompatActivity {
     private void InitCardBoard(List<Card> cards, GridLayout cardBoard) {
         for (int i=0; i < 3; i++) {
             Card card = PickRandomCard(cards);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.setMargins(5, 0, 5, 0);
+            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+            params.height = (int) (105 * getResources().getDisplayMetrics().density);
+
+            card.setImageResource(card.getImage());
+            card.setLayoutParams(params);
+
             cardBoard.addView(card);
         }
     }
+
+//    private Integer getImageResource(Card card){
+//        Color color = card.getColor();
+//        if (color.equals(Color.valueOf(getResources().getColor(R.color.color4blueToken)))) {
+//            return R.drawable.blue_token;
+//        } else if (color.equals(Color.valueOf(getResources().getColor(R.color.white)))) {
+//            return R.drawable.white_token;
+//        } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4greenToken)))) {
+//            return R.drawable.green_token;
+//        } else if (color.equals(Color.valueOf(getResources().getColor(R.color.black)))) {
+//            return R.drawable.black_token;
+//        } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4redToken)))) {
+//            return R.drawable.red_token;
+//    }
 
     private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
         boolean[][] isFilled = new boolean[rowCount][colCount];
