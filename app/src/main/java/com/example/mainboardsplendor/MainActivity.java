@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.databinding.ActivityMainBinding;
+import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
@@ -37,7 +39,14 @@ public class MainActivity extends AppCompatActivity {
     private int quantityPearlToken = 2;
     private int quantityGoldToken = 3;
 
-    private List<Token> tokenBag;
+    private int quantityCardLevel3 = 10;
+    private int quantityCardLevel2 = 20;
+    private int quantityCardLevel1 = 25;
+
+    private List<Token> tokenBag = new ArrayList<>();
+    private List<Card> listCardLevel3 = new ArrayList<>();
+    private List<Card> listCardLevel2 = new ArrayList<>();
+    private List<Card> listCardLevel1 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +62,27 @@ public class MainActivity extends AppCompatActivity {
         // Init tokenBag
         initTokenBag();
 
+        // Init TokenBoard in Spiral
+        int rowCount = binding.tokenBoard.splendorDuelBoard.getRowCount();
+        int colCount = binding.tokenBoard.splendorDuelBoard.getColumnCount();
+        InitTokenBoard(rowCount, colCount, binding.tokenBoard.splendorDuelBoard);
+        // End Init TokenBoard in Spiral
+
+        // Init CardBoard
+        GridLayout cardBoard_level3 = binding.cardBoard.cardStoreTop;
+        GridLayout cardBoard_level2 = binding.cardBoard.cardStoreMid;
+        GridLayout cardBoard_level1 = binding.cardBoard.cardStoreBot;
+        InitCardTopDeck(listCardLevel3, quantityCardLevel3);
+        InitCardBoard(listCardLevel3, cardBoard_level3);
+//        InitCardBoard(listCardLevel2, cardBoard_level2);
+//        InitCardBoard(listCardLevel1, cardBoard_level1);
+        // End Init CardBoard
+
         // Init nama player
         binding.scoreBoardPlayer1.playerName.setText("MC");
         binding.scoreBoardPlayer2.playerName.setText("Theo");
 
         binding.scoreBoardPlayer1.totalPrivilegePlayer.setText("1");
-
-        // Implementation Spiral Token
-        int rowCount = binding.tokenBoard.splendorDuelBoard.getRowCount();
-        int colCount = binding.tokenBoard.splendorDuelBoard.getColumnCount();
-        InitTokenBoard(rowCount, colCount, binding.tokenBoard.splendorDuelBoard);
-        // End Implementation Spiral Token
 
         // Init Grid list_blue_token pada bag player
         for (int i = 0; i< 4; i++) {
@@ -153,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 3; i++){
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
+            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+            params.height = (int) (105 * getResources().getDisplayMetrics().density);
 
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.blank_card);
@@ -165,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++){
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
+            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+            params.height = (int) (105 * getResources().getDisplayMetrics().density);
 
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.blank_card);
@@ -177,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++){
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
+            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+            params.height = (int) (105 * getResources().getDisplayMetrics().density);
 
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.blank_card);
@@ -189,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i<4; i++){
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 20, 5, 0);
+            params.width = (int) (65 * getResources().getDisplayMetrics().density);
+            params.height = (int) (105 * getResources().getDisplayMetrics().density);
 
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.blank_card);
@@ -270,6 +297,133 @@ public class MainActivity extends AppCompatActivity {
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
     }
 
+    private void InitCardTopDeck(List<Card> listCardLevel3, int quantityCardLevel3) {
+        ArrayList<Integer> listPrice1 = new ArrayList<>();
+        listPrice1.add(0); //for blue
+        listPrice1.add(2); // for white
+        listPrice1.add(0); // for green
+        listPrice1.add(6); // for black
+        listPrice1.add(2); // for red
+        listPrice1.add(0); // for pearl
+        Card cardBlack1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 0, listPrice1);
+
+        ArrayList<Integer> listPrice2 = new ArrayList<>();
+        listPrice2.add(0); //for blue
+        listPrice2.add(3); // for white
+        listPrice2.add(5); // for green
+        listPrice2.add(0); // for black
+        listPrice2.add(3); // for red
+        listPrice2.add(1); // for pearl
+        Card cardBlack2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 2, listPrice2);
+
+        ArrayList<Integer> listPrice3 = new ArrayList<>();
+        listPrice3.add(6); //for blue
+        listPrice3.add(2); // for white
+        listPrice3.add(2); // for green
+        listPrice3.add(0); // for black
+        listPrice3.add(0); // for red
+        listPrice3.add(0); // for pearl
+        Card cardBlue1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 0, listPrice3);
+
+        ArrayList<Integer> listPrice4 = new ArrayList<>();
+        listPrice4.add(0); //for blue
+        listPrice4.add(3); //for white
+        listPrice4.add(3); //for green
+        listPrice4.add(5); //for black
+        listPrice4.add(0); //for red
+        listPrice4.add(1); //for pearl
+        Card cardBlue2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 2, listPrice4);
+
+        ArrayList<Integer> listPrice5 = new ArrayList<>();
+        listPrice5.add(2); //for blue
+        listPrice5.add(0); //for white
+        listPrice5.add(6); //for green
+        listPrice5.add(0); //for black
+        listPrice5.add(2); //for red
+        listPrice5.add(0); //for pearl
+        Card cardGreen1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 0, listPrice5);
+
+        ArrayList<Integer> listPrice6 = new ArrayList<>();
+        listPrice6.add(2); //for blue
+        listPrice6.add(0); //for white
+        listPrice6.add(0); //for green
+        listPrice6.add(0); //for black
+        listPrice6.add(2); //for red
+        listPrice6.add(0); //for pearl
+        Card cardGreen2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 2, listPrice6);
+
+        ArrayList<Integer> listPrice7 = new ArrayList<>();
+        listPrice7.add(0); //for blue
+        listPrice7.add(8); //for white
+        listPrice7.add(0); //for green
+        listPrice7.add(0); //for black
+        listPrice7.add(0); //for red
+        listPrice7.add(0); //for pearl
+        Card cardNormal = AddCard(6, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 0, 0, listPrice7);
+
+        ArrayList<Integer> listPrice8 = new ArrayList<>();
+        listPrice8.add(0); //for blue
+        listPrice8.add(0); //for white
+        listPrice8.add(2); //for green
+        listPrice8.add(2); //for black
+        listPrice8.add(6); //for red
+        listPrice8.add(0); //for pearl
+        Card cardRed1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 0, listPrice8);
+
+        ArrayList<Integer> listPrice9 = new ArrayList<>();
+        listPrice9.add(0); //for blue
+        listPrice9.add(0); //for white
+        listPrice9.add(2); //for green
+        listPrice9.add(2); //for black
+        listPrice9.add(0); //for red
+        listPrice9.add(0); //for pearl
+        Card cardRed2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 2, listPrice9);
+
+        ArrayList<Integer> listPrice10 = new ArrayList<>();
+        listPrice10.add(0); //for blue
+        listPrice10.add(0); //for white
+        listPrice10.add(0); //for green
+        listPrice10.add(0); //for black
+        listPrice10.add(0); //for red
+        listPrice10.add(0); //for pearl
+        Card cardUltra = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 0, listPrice10);
+
+        listCardLevel3.add(cardBlack1);
+        listCardLevel3.add(cardBlack2);
+        listCardLevel3.add(cardBlue1);
+        listCardLevel3.add(cardBlue2);
+        listCardLevel3.add(cardGreen1);
+        listCardLevel3.add(cardGreen2);
+        listCardLevel3.add(cardNormal);
+        listCardLevel3.add(cardRed1);
+        listCardLevel3.add(cardRed2);
+        listCardLevel3.add(cardUltra);
+    }
+
+    private Card AddCard(int cardValue, Color color, int level, int discount, int crowns, ArrayList<Integer> price){
+        Card card = new Card(this);
+        card.setCardValue(cardValue);
+        card.setColor(color);
+        card.setLevel(level);
+        card.setDiscount(discount);
+        card.setCrowns(crowns);
+        card.setPrice(price);
+        return card;
+    }
+
+    private Card PickRandomCard(List<Card> listCard){
+        Random random = new Random();
+        int randomIndex = random.nextInt(listCard.size());
+        return listCard.get(randomIndex);
+    }
+
+    private void InitCardBoard(List<Card> cards, GridLayout cardBoard) {
+        for (int i=0; i < 3; i++) {
+            Card card = PickRandomCard(cards);
+            cardBoard.addView(card);
+        }
+    }
+
     private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
         boolean[][] isFilled = new boolean[rowCount][colCount];
 
@@ -332,8 +486,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTokenBag() {
-        tokenBag = new ArrayList<>();
-
         Token blueToken = new Token(this);
         blueToken.setColor(Color.valueOf(getResources().getColor(R.color.color4blueToken)));
         Token whiteToken = new Token(this);
