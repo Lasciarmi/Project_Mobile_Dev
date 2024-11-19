@@ -1,6 +1,5 @@
 package com.example.mainboardsplendor;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,20 +9,20 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
-import androidx.core.view.LayoutInflaterCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.databinding.ActivityMainBinding;
+import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.Token;
+import com.example.mainboardsplendor.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private int quantityCardLevel1 = 25;
 
     private List<Token> tokenBag = new ArrayList<>();
+    private User player1;
+    private User player2;
     private List<Card> listCardLevel3 = new ArrayList<>();
     private List<Card> listCardLevel2 = new ArrayList<>();
     private List<Card> listCardLevel1 = new ArrayList<>();
@@ -78,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
 //        InitCardBoard(listCardLevel1, cardBoard_level1);
         // End Init CardBoard
 
-        // Init nama player
-        binding.scoreBoardPlayer1.playerName.setText("MC");
-        binding.scoreBoardPlayer2.playerName.setText("Theo");
+        // Init User
+        // TODO: 11/19/2024  init user with class and method : last edited by theo
+        initUser(binding.scoreBoardPlayer1, binding.scoreBoardPlayer2);
 
         binding.scoreBoardPlayer1.totalPrivilegePlayer.setText("1");
 
@@ -295,6 +296,25 @@ public class MainActivity extends AppCompatActivity {
 
         binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
+    }
+
+    private void initUser(LayoutScorePlayerBoardBinding scoreBoardPlayer1, LayoutScorePlayerBoardBinding scoreBoardPlayer2) {
+        // TODO: 11/19/2024 : last edited by theo
+        player1 = new User("MC");
+        player2 = new User("Theo");
+        updateScoreBoard(player1, scoreBoardPlayer1);
+        updateScoreBoard(player2, scoreBoardPlayer2);
+    }
+
+    private void updateScoreBoard(User player, LayoutScorePlayerBoardBinding scoreBoardPlayer) {
+        // TODO: 11/19/2024 : last edited by theo
+        scoreBoardPlayer.playerName.setText(player.getUsername());
+        scoreBoardPlayer.poinPlayer.setText(String.valueOf(player.getCardsPoint()));
+        scoreBoardPlayer.crownPlayer.setText(String.valueOf(player.getCrowns()));
+        scoreBoardPlayer.cardPoinPlayer.setText(String.valueOf(player.getMostSameCardColorValue()));
+        scoreBoardPlayer.totalPrivilegePlayer.setText(String.valueOf(player.getScroll()));
+        scoreBoardPlayer.totalReservedCardPlayer.setText(String.valueOf(player.getReserveCard()));
+        scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(player.getTokensStack()));
     }
 
     private void InitCardTopDeck(List<Card> listCardLevel3, int quantityCardLevel3) {
