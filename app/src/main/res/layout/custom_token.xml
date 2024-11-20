@@ -8,7 +8,7 @@
     android:layout_margin="2dp"
     app:cardElevation="12dp"
     app:cardCornerRadius="22.5dp"
-    app:cardBackgroundColor="@color/color4goldToken">
+    app:cardBackgroundColor="@color/color4tokenIsChoose">
 
     <com.example.mainboardsplendor.model.Token
         android:id="@+id/token_view"

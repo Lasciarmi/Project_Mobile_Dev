@@ -44,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private List<Token> tokenBag;
-    private List<CardView> tokenPick;
+    private final List<CardView> tokenPick = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        ActivityMainBinding binding =ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // End Implementation Spiral Token
 
         // Init Grid list_blue_token pada bag player
-        for (int i = 0; i< 4; i++) {
+        for (int i = 0; i < 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listBlueToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Init Grid list_white_token pada bag player
-        for (int i = 0; i< 4; i++) {
+        for (int i = 0; i < 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listWhiteToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Init Grid list_green_token pada bag player
-        for (int i = 0; i< 4; i++) {
+        for (int i = 0; i < 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listGreenToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Init Grid list_black_token pada bag player
-        for (int i = 0; i< 4; i++) {
+        for (int i = 0; i < 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listBlackToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Init Grid list_red_token pada bag player
-        for (int i = 0; i< 4; i++) {
+        for (int i = 0; i < 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listRedToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.listRedToken.listToken.addView(view);
         }
 
-        for (int i = 0; i< 2; i++) {
+        for (int i = 0; i < 2; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listPearlToken.listToken, false);
             ImageView tokenView = view.findViewById(R.id.token_view);
             CardView cardView = view.findViewById(R.id.cardView_token);
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_TOP
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_MID
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_BOT
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
 
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT RESERVED_CARD
-        for (int i = 0; i<4; i++){
+        for (int i = 0; i < 4; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 20, 5, 0);
 
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_STACK
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             ImageView card = new ImageView(this);
             card.setImageResource(R.drawable.blank_card); // Ganti dengan Kartu Token
             card.setLayoutParams(new FrameLayout.LayoutParams(
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.blueCardStack.addView(card);
         }
 
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             ImageView card = new ImageView(this);
             card.setImageResource(R.drawable.blank_card); // Ganti dengan Kartu Token
             card.setLayoutParams(new FrameLayout.LayoutParams(
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.whiteCardStack.addView(card);
         }
 
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             ImageView card = new ImageView(this);
             card.setImageResource(R.drawable.blank_card); // Ganti dengan Kartu Token
             card.setLayoutParams(new FrameLayout.LayoutParams(
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.greenCardStack.addView(card);
         }
 
-        for (int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             ImageView card = new ImageView(this);
             card.setImageResource(R.drawable.blank_card); // Ganti dengan Kartu Token
             card.setLayoutParams(new FrameLayout.LayoutParams(
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             binding.layoutPlayer1Bag.blackCardStack.addView(card);
         }
 
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(5, 0, 5, 0);
 
@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
 
             binding.layoutPlayer1Bag.cardReservedPlayer.addView(card);
         }
-
 
 
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
@@ -282,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
         boolean[][] isFilled = new boolean[rowCount][colCount];
-
+        CardView[][] map = new CardView[rowCount][colCount];
         for (int i = 0; i < movementPattern.length; i++) {
             Token token = pickRandomToken();
             if (token == null) {
@@ -317,6 +316,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4goldToken)))) {
                 tokenView.setImageResource(R.drawable.gold_token);
             }
+            map[row][col] = cardView;
+            cardView.setOnClickListener(v -> pickToken(row,col,cardView, map));
 
             // Define row & col gridLayout
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -330,6 +331,12 @@ public class MainActivity extends AppCompatActivity {
 
             // Mark Slot
             isFilled[row][col] = true;
+        }
+    }
+
+    private void pick() {
+        if(tokenPick.isEmpty()){
+            Toast.makeText(this, "oi", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -363,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Method for add Token in Array TokenBag
     private void addTokens(Token token, int quantity) {
-        for (int i=0; i<quantity; i++) {
+        for (int i = 0; i < quantity; i++) {
             tokenBag.add(token);
         }
     }
@@ -399,13 +406,103 @@ public class MainActivity extends AppCompatActivity {
         redCardStack.addView(card);
     }
 
-    private View.OnContextClickListener pickToken(int row, int col, CardView cardView) {
-        if (tokenPick.size() == 0) {
+    private void pickToken(int row, int col, CardView cardView, CardView[][] map) {
+        //kalo blom ada yang diambil
+        if (tokenPick.isEmpty()) {
+            int colorchoosen = ContextCompat.getColor(this, R.color.color4tokenIsChoose);
+            map[row][col].setCardBackgroundColor(colorchoosen);
             tokenPick.add(cardView);
-            Log.d("", "berhasil");
+            for (int r = 0; r < 5; r++) {
+                for (int c = 0; c < 5; c++) {
+                    if (r != checkRangeRow(row+1) && c==col || r != checkRangeRow(row+2) && c==col || r != checkRangeRow(row-2) && c==col || r != checkRangeRow(row-1) && c==col){
+                        map[r][c].setClickable(false);
+                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+                        map[r][c].setCardBackgroundColor(colorfalse);
+                    }
+                    else if (c != checkRangeCol(col+1)&& r==row || c != checkRangeCol(col+2)&& r==row || c != checkRangeCol(col-1)&& r==row || c != checkRangeCol(col-2) && r==row){
+                        map[r][c].setClickable(false);
+                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+                        map[r][c].setCardBackgroundColor(colorfalse);
+                    }
+//                    else if (c!= checkRangeCol(col +1) && r!=checkRangeRow(row+1) || c!= checkRangeCol(col +2) && r!=checkRangeRow(row+2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col -1) && r!=checkRangeRow(row-1) || c!= checkRangeCol(col -2) && r!=checkRangeRow(row-2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col -1) && r!=checkRangeRow(row+1) || c!= checkRangeCol(col -2) && r!=checkRangeRow(row+2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col +1) && r!=checkRangeRow(row-1) || c!= checkRangeCol(col +2) && r!=checkRangeRow(row-2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    }
+                }
+            }
         }
-        return null;
+        else if (tokenPick.size() == 1){
+            tokenPick.add(cardView);
+            for (int ro = 0; ro < 5; ro++){
+                for (int co = 0; co<5; co++){
+                    if (tokenPick.get(0) == map[row][col]){
+                        if (checkRangeRow(ro-1) != row && checkRangeRow(ro+1) != row){
+                            map[checkRangeRow(ro+1)][col].setClickable(false);
+                            map[checkRangeRow(ro-1)][col].setClickable(false);
+                            map[checkRangeRow(ro+2)][col].setClickable(false);
+                            map[checkRangeRow(ro-2)][col].setClickable(false);
+                        }
+                        if (col != checkRangeCol(co-1) && col != checkRangeCol(co+1)){
+                            map[checkRangeRow(row)][co+1].setClickable(false);
+                            map[checkRangeRow(row)][co-1].setClickable(false);
+                            map[checkRangeRow(row)][co+2].setClickable(false);
+                            map[checkRangeRow(row)][co-2].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co-1) && row!= checkRangeRow(ro-1)){
+                            map[checkRangeRow(ro-1)][checkRangeCol(co-1)].setClickable(false);
+                            map[checkRangeRow(ro-2)][checkRangeCol(co-2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co+1) && row!= checkRangeRow(ro+1)){
+                            map[checkRangeRow(ro+1)][checkRangeCol(co+1)].setClickable(false);
+                            map[checkRangeRow(ro+2)][checkRangeCol(co+2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co+1) && row!= checkRangeRow(ro-1)){
+                            map[checkRangeRow(ro-1)][checkRangeCol(co+1)].setClickable(false);
+                            map[checkRangeRow(ro-2)][checkRangeCol(co+2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co-1) && row!= checkRangeRow(ro+1)){
+                            map[checkRangeRow(ro+1)][checkRangeCol(co-1)].setClickable(false);
+                            map[checkRangeRow(ro+2)][checkRangeCol(co-2)].setClickable(false);
+                        }
+                    }
+                }
+            }
+        }
+        else if (tokenPick.size() == 2){
+            tokenPick.add(cardView);
+        }
     }
 
+    private int checkRangeRow(int row){
+        if (row > movementPattern.length){
+            return movementPattern.length-1;
+        }
+        else if(row<0){
+            return 0;
+        }
+        return row;
+    }
 
+    private int checkRangeCol(int col){
+        if (col > movementPattern.length){
+            return movementPattern.length-1;
+        }
+        else if(col<0){
+            return 0;
+        }
+        return col;
+    }
 }
