@@ -17,8 +17,8 @@ import com.example.mainboardsplendor.model.User;
 public class CreateUserActivity extends AppCompatActivity {
 
     private ActivityCreateUserBinding binding;
-    final static String PLAYER_1 = "user1";
-    final static String PLAYER_2 = "user2";
+    public final static String PLAYER_1 = "user1";
+    public final static String PLAYER_2 = "user2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class CreateUserActivity extends AppCompatActivity {
             return insets;
         });
 
-        binding.backButton.setOnClickListener(view -> OpenStartUpActivity());
+        binding.backButton.setOnClickListener(view -> finish());
         binding.playButton.setOnClickListener(view -> OpenMainBoardActivity());
     }
 
@@ -42,11 +42,6 @@ public class CreateUserActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(PLAYER_1, user1);
         intent.putExtra(PLAYER_2, user2);
-        startActivity(intent);
-    }
-
-    private void OpenStartUpActivity() {
-        Intent intent = new Intent(this, StartUpActivity.class);
         startActivity(intent);
     }
 }

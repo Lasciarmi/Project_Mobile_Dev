@@ -28,11 +28,6 @@ public class RulesActivity extends AppCompatActivity {
             return insets;
         });
 
-        binding.backButton.setOnClickListener(view -> OpenStartUpActivity());
-    }
-
-    private void OpenStartUpActivity() {
-        Intent intent = new Intent(this, StartUpActivity.class);
-        startActivity(intent);
+        binding.backButton.setOnClickListener(view -> finish());
     }
 }
