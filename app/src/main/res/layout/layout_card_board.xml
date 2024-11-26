@@ -30,8 +30,8 @@
                 android:layout_marginStart="12dp">
 
                 <ImageView
-                    android:layout_width="65dp"
-                    android:layout_height="105dp"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/card_back_level3"/>
 

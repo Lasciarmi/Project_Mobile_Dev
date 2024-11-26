@@ -19,6 +19,8 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int level;
     private int Image;
 
+    private ArrayList<Integer> price;
+
     public int getImage() {
         return Image;
     }
@@ -27,7 +29,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
         Image = image;
     }
 
-    private ArrayList<Integer> price;
+
 
     public Card(@NonNull Context context) {
         super(context);
