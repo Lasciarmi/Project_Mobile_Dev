@@ -17,8 +17,8 @@ import com.example.mainboardsplendor.model.User;
 public class CreateUserActivity extends AppCompatActivity {
 
     private ActivityCreateUserBinding binding;
-    final static String PLAYER_1 = "user1";
-    final static String PLAYER_2 = "user2";
+    public final static String PLAYER_1 = "user1";
+    public final static String PLAYER_2 = "user2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

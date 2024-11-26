@@ -1,6 +1,5 @@
 package com.example.mainboardsplendor;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,8 +12,6 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -22,6 +19,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mainboardsplendor.controller.CardController;
+import com.example.mainboardsplendor.controller.TokenController;
+import com.example.mainboardsplendor.controller.UserController;
 import com.example.mainboardsplendor.databinding.ActivityMainBinding;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
@@ -33,14 +33,6 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
-    private int quantityBlueToken = 4;
-    private int quantityWhiteToken = 4;
-    private int quantityGreenToken = 4;
-    private int quantityBlackToken = 4;
-    private int quantityRedToken = 4;
-    private int quantityPearlToken = 2;
-    private int quantityGoldToken = 3;
 
 //    private int quantityCardLevel3 = 13;
 //    private int quantityCardLevel2 = 24;
@@ -55,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private User user1;
     private User user2;
 
+    private TokenController tokenController;
+    private UserController user1Controller;
+    private UserController user2Controller;
+    private CardController cardController;
+
+    private GridLayout tokenGridLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,41 +66,67 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+
         // Get Player 1 and 2 Username
         Intent intent = getIntent();
         user1 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_1));
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
 
+        // Init name player
+        user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag);
+        user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag);
+        user1Controller.setPlayerBoard();
+        user2Controller.setPlayerBoard();
+
         // Init tokenBag
-        initTokenBag();
+        tokenController = new TokenController(tokenBag, this, this);
+        tokenController.initTokenBag();
 
         // Init TokenBoard in Spiral
-        int rowCount = binding.tokenBoard.splendorDuelBoard.getRowCount();
-        int colCount = binding.tokenBoard.splendorDuelBoard.getColumnCount();
-        InitTokenBoard(rowCount, colCount, binding.tokenBoard.splendorDuelBoard);
-        // End Init TokenBoard in Spiral
+        tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
+        int rowCount =tokenGridLayout.getRowCount();
+        int colCount = tokenGridLayout.getColumnCount();
+        tokenController.InitTokenBoard(rowCount, colCount, tokenGridLayout);
+        for (int i = 0; i < 25; i++) {
+            View parentView = tokenGridLayout.getChildAt(i);
+
+            if (parentView instanceof androidx.cardview.widget.CardView) {
+                // Now find the Token view inside the CardView
+                Token token = parentView.findViewById(R.id.token_view);
+
+                if (token != null) {
+                    ArrayList<Integer> location = token.getLocation();
+
+                    // Check if location is not null before logging
+                    if (location != null) {
+                        Log.d("MainActivity", "Token found at index " + i + ": " + location.toString());
+                    } else {
+                        Log.e("MainActivity", "Location is null for token at index " + i);
+                    }
+                } else {
+                    Log.e("MainActivity", "Token view not found at index " + i);
+                }
+            } else {
+                Log.e("MainActivity", "Child at index " + i + " is not a CardView");
+            }
+        }
+
 
         // get GridLayout for each cardBoard level
-        GridLayout cardBoard_level3 = binding.cardBoard.cardStoreTop;
-        GridLayout cardBoard_level2 = binding.cardBoard.cardStoreMid;
-        GridLayout cardBoard_level1 = binding.cardBoard.cardStoreBot;
+//        GridLayout cardBoard_level3 = binding.cardBoard.cardStoreTop;
+//        GridLayout cardBoard_level2 = binding.cardBoard.cardStoreMid;
+//        GridLayout cardBoard_level1 = binding.cardBoard.cardStoreBot;
         // Init Card on Deck
-        InitCardTopDeck(listCardLevel3);
-        InitCardMidDeck(listCardLevel2);
-        InitCardBotDeck(listCardLevel1);
-        // Init Card on Board
-        InitCardBoard(listCardLevel3, cardBoard_level3, 3);
-        InitCardBoard(listCardLevel2, cardBoard_level2, 4);
-        InitCardBoard(listCardLevel1, cardBoard_level1, 5);
+//        InitCardTopDeck(listCardLevel3);
+//        InitCardMidDeck(listCardLevel2);
+//        InitCardBotDeck(listCardLevel1);
+//        // Init Card on Board
+//        InitCardBoard(listCardLevel3, cardBoard_level3, 3);
+//        InitCardBoard(listCardLevel2, cardBoard_level2, 4);
+//        InitCardBoard(listCardLevel1, cardBoard_level1, 5);
         //Init Card Reserved on Board
         InitReservedCard(listRoyalCard);
         InitReservedCardBoard(listRoyalCard, binding.cardBoard.reservedCard, 4);
-
-        // Init nama player
-        binding.scoreBoardPlayer1.playerName.setText(user1.getUsername());
-        binding.scoreBoardPlayer2.playerName.setText(user2.getUsername());
-
-        binding.scoreBoardPlayer1.totalPrivilegePlayer.setText("1");
 
         // Init Grid list_blue_token pada bag player
         for (int i = 0; i< 4; i++) {
@@ -258,101 +283,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
-    }
-
-    private void InitCardTopDeck(List<Card> listCardLevel3) {
-        ArrayList<Integer> arrayList_price_card_black_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_black_level_3_1 = {0, 2, 0, 6, 2, 0};
-        AddPriceList(arrayList_price_card_black_level_3_1, list_price_card_black_level_3_1);
-        Card card_black_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 0, arrayList_price_card_black_level_3_1, R.drawable.card_black_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_black_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_black_level_3_2 = {0, 3, 5, 0, 3, 1};
-        AddPriceList(arrayList_price_card_black_level_3_2, list_price_card_black_level_3_2);
-        Card card_black_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.black)), 3, 1, 2, arrayList_price_card_black_level_3_2, R.drawable.card_black_level_3_2);
-
-        ArrayList<Integer> arrayList_price_card_blue_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_blue_level_3_1 = {6, 2, 2, 0, 0, 0};
-        AddPriceList(arrayList_price_card_blue_level_3_1, list_price_card_blue_level_3_1);
-        Card card_blue_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 0, arrayList_price_card_blue_level_3_1, R.drawable.card_blue_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_blue_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_blue_level_3_2 = {0, 3, 3, 5, 0, 1};
-        AddPriceList(arrayList_price_card_blue_level_3_2, list_price_card_blue_level_3_2);
-        Card card_blue_level3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4blueToken)), 3, 1, 2, arrayList_price_card_blue_level_3_2, R.drawable.card_blue_level_3_2);
-
-        ArrayList<Integer> arrayList_price_card_green_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_green_level_3_1 = {2, 0, 6, 0, 2, 0};
-        AddPriceList(arrayList_price_card_green_level_3_1, list_price_card_green_level_3_1);
-        Card card_green_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 0, arrayList_price_card_green_level_3_1, R.drawable.card_green_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_green_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_green_level_3_2 = {3, 5, 0, 0, 3, 1};
-        AddPriceList(arrayList_price_card_green_level_3_2, list_price_card_green_level_3_2);
-        Card card_green_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4greenToken)), 3, 1, 2, arrayList_price_card_green_level_3_2, R.drawable.card_green_level_3_2);
-
-        ArrayList<Integer> arrayList_price_card_normal_level_3 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_normal_level_3 = {0, 8, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_normal_level_3, list_price_card_normal_level_3);
-        Card card_normal_level_3 = AddCard(6, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 0, 0, arrayList_price_card_normal_level_3, R.drawable.card_normal_level_3);
-
-        ArrayList<Integer> arrayList_price_card_red_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_red_level_3_1 = {0, 0, 2, 2, 6, 0};
-        AddPriceList(arrayList_price_card_red_level_3_1, list_price_card_red_level_3_1);
-        Card card_red_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 0, arrayList_price_card_red_level_3_1, R.drawable.card_red_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_red_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_red_level_3_2 = {5, 0, 3, 3, 0, 1};
-        AddPriceList(arrayList_price_card_red_level_3_2, list_price_card_red_level_3_2);
-        Card card_red_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4redToken)), 3, 1, 2, arrayList_price_card_red_level_3_2, R.drawable.card_red_level_3_2);
-
-        ArrayList<Integer> arrayList_price_card_ultra_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_ultra_level_3_1 = {0, 0, 0, 8, 0, 0};
-        AddPriceList(arrayList_price_card_ultra_level_3_1, list_price_card_ultra_level_3_1);
-        Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 0, arrayList_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_ultra_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_ultra_level_3_2 = {0, 0, 0, 8, 0, 0};
-        AddPriceList(arrayList_price_card_ultra_level_3_2, list_price_card_ultra_level_3_2);
-        Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(getResources().getColor(R.color.color4normalToken)), 3, 1, 3, arrayList_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_2);
-
-        ArrayList<Integer> arrayList_price_card_white_level_3_1 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_white_level_3_1 = {2, 6, 0, 2, 0, 0};
-        AddPriceList(arrayList_price_card_white_level_3_1, list_price_card_white_level_3_1);
-        Card card_white_level_3_1 = AddCard(4, Color.valueOf(getResources().getColor(R.color.white)), 3, 1, 0, arrayList_price_card_white_level_3_1, R.drawable.card_white_level_3_1);
-
-        ArrayList<Integer> arrayList_price_card_white_level_3_2 = new ArrayList<>();
-        // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_white_level_3_2 = {3, 0, 0, 3, 5, 1};
-        AddPriceList(arrayList_price_card_white_level_3_2, list_price_card_white_level_3_2);
-        Card card_white_level_3_2 = AddCard(3, Color.valueOf(getResources().getColor(R.color.white)), 3, 1, 2, arrayList_price_card_white_level_3_2, R.drawable.card_white_level_3_2);
-
-        // Total 13 Cards
-        listCardLevel3.add(card_black_level_3_1);
-        listCardLevel3.add(card_black_level_3_2);
-        listCardLevel3.add(card_blue_level_3_1);
-        listCardLevel3.add(card_blue_level3_2);
-        listCardLevel3.add(card_green_level_3_1);
-        listCardLevel3.add(card_green_level_3_2);
-        listCardLevel3.add(card_normal_level_3);
-        listCardLevel3.add(card_red_level_3_1);
-        listCardLevel3.add(card_red_level_3_2);
-        listCardLevel3.add(card_ultra_level_3_1);
-        listCardLevel3.add(card_ultra_level_3_2);
-        listCardLevel3.add(card_white_level_3_1);
-        listCardLevel3.add(card_white_level_3_2);
     }
 
     private void InitCardMidDeck(List<Card> listCardLevel2) {
@@ -822,109 +752,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void InitTokenBoard(int rowCount, int colCount, GridLayout tokenBoard) {
-        boolean[][] isFilled = new boolean[rowCount][colCount];
-
-        int[][] movementPattern = {
-                {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
-                {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
-                {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
-                {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
-                {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
-        };
-
-        for (int i = 0; i < movementPattern.length; i++) {
-            Token token = pickRandomToken();
-            if (token == null) {
-                break;
-            }
-            int row = movementPattern[i][0];
-            int col = movementPattern[i][1];
-            Log.d("MainActivity", "Row: " + row + ", Col: " + col);
-
-            // Create View for token
-            View view = LayoutInflater.from(this).inflate(
-                    R.layout.custom_token, tokenBoard, false);
-
-            CardView cardView = view.findViewById(R.id.cardView_token);
-            ImageView tokenView = view.findViewById(R.id.token_view);
-
-            cardView.setCardBackgroundColor(token.getColor().toArgb());
-
-            Color color = token.getColor();
-            if (color.equals(Color.valueOf(getResources().getColor(R.color.color4blueToken)))) {
-                tokenView.setImageResource(R.drawable.blue_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.white)))) {
-                tokenView.setImageResource(R.drawable.white_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4greenToken)))) {
-                tokenView.setImageResource(R.drawable.green_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.black)))) {
-                tokenView.setImageResource(R.drawable.black_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4redToken)))) {
-                tokenView.setImageResource(R.drawable.red_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4pearlToken)))) {
-                tokenView.setImageResource(R.drawable.pearl_token);
-            } else if (color.equals(Color.valueOf(getResources().getColor(R.color.color4goldToken)))) {
-                tokenView.setImageResource(R.drawable.gold_token);
-            }
-
-            // Define row & col gridLayout
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.rowSpec = GridLayout.spec(row);
-            params.columnSpec = GridLayout.spec(col);
-            params.setGravity(Gravity.FILL);
-            view.setLayoutParams(params);
-
-            // Adding View to GridLayout
-            tokenBoard.addView(view);
-
-            // Mark Slot
-            isFilled[row][col] = true;
-        }
-    }
-
-    private void initTokenBag() {
-        Token blueToken = new Token(this);
-        blueToken.setColor(Color.valueOf(getResources().getColor(R.color.color4blueToken)));
-        Token whiteToken = new Token(this);
-        whiteToken.setColor(Color.valueOf(getResources().getColor(R.color.white)));
-        Token greenToken = new Token(this);
-        greenToken.setColor(Color.valueOf(getResources().getColor(R.color.color4greenToken)));
-        Token blackToken = new Token(this);
-        blackToken.setColor(Color.valueOf(getResources().getColor(R.color.black)));
-        Token redToken = new Token(this);
-        redToken.setColor(Color.valueOf(getResources().getColor(R.color.color4redToken)));
-        Token pearlToken = new Token(this);
-        pearlToken.setColor(Color.valueOf(getResources().getColor(R.color.color4pearlToken)));
-        Token goldToken = new Token(this);
-        goldToken.setColor(Color.valueOf(getResources().getColor(R.color.color4goldToken)));
-
-        addTokens(blueToken, quantityBlueToken);
-        addTokens(whiteToken, quantityWhiteToken);
-        addTokens(greenToken, quantityGreenToken);
-        addTokens(blackToken, quantityBlackToken);
-        addTokens(redToken, quantityRedToken);
-        addTokens(pearlToken, quantityPearlToken);
-        addTokens(goldToken, quantityGoldToken);
-    }
-
-    // Method for add Token in Array TokenBag
-    private void addTokens(Token token, int quantity) {
-        for (int i=0; i<quantity; i++) {
-            tokenBag.add(token);
-        }
-    }
-
-    public Token pickRandomToken() {
-        if (tokenBag.isEmpty()) {
-            return null;
-        }
-        Random random = new Random();
-        int randomIndex = random.nextInt(tokenBag.size());
-
-        // Pick a Random Token
-        return tokenBag.remove(randomIndex);
-    }
+//    public Token pickRandomToken() {
+//        if (tokenBag.isEmpty()) {
+//            return null;
+//        }
+//        Random random = new Random();
+//        int randomIndex = random.nextInt(tokenBag.size());
+//
+//        // Pick a Random Token
+//        return tokenBag.remove(randomIndex);
+//    }
 
     // Method for add Card Stack on bag player
     public void addNewCard(FrameLayout redCardStack) {
