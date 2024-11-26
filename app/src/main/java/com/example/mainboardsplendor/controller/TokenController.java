@@ -2,14 +2,17 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.ImageViewCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
@@ -95,26 +98,27 @@ public class TokenController {
             View view = LayoutInflater.from(context).inflate(
                     R.layout.custom_token, splendorDuelBoard, false);
 
+            Token tokenGrid = view.findViewById(R.id.token_view);
+
             CardView cardView = view.findViewById(R.id.cardView_token);
-            ImageView tokenView = view.findViewById(R.id.token_view);
 
             cardView.setCardBackgroundColor(token.getColor().toArgb());
 
             Color color = token.getColor();
             if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)))) {
-                tokenView.setImageResource(R.drawable.blue_token);
+                tokenGrid.setImageResource(R.drawable.blue_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.white)))) {
-                tokenView.setImageResource(R.drawable.white_token);
+                tokenGrid.setImageResource(R.drawable.white_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)))) {
-                tokenView.setImageResource(R.drawable.green_token);
+                tokenGrid.setImageResource(R.drawable.green_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.black)))) {
-                tokenView.setImageResource(R.drawable.black_token);
+                tokenGrid.setImageResource(R.drawable.black_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)))) {
-                tokenView.setImageResource(R.drawable.red_token);
+                tokenGrid.setImageResource(R.drawable.red_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4pearlToken)))) {
-                tokenView.setImageResource(R.drawable.pearl_token);
+                tokenGrid.setImageResource(R.drawable.pearl_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4goldToken)))) {
-                tokenView.setImageResource(R.drawable.gold_token);
+                tokenGrid.setImageResource(R.drawable.gold_token);
             }
 
             // Define row & col gridLayout
@@ -123,14 +127,15 @@ public class TokenController {
             params.columnSpec = GridLayout.spec(col);
             params.setGravity(Gravity.FILL);
             view.setLayoutParams(params);
-
-            // Adding View to GridLayout
             ArrayList<Integer> location = new ArrayList<>();
             location.add(row);
             location.add(col);
             Log.d("MainActivity", "Setting location: " + location.toString());
-            token.setLocation(location);
-            Log.d("MainActivity", "Location set: " + token.getLocation().toString());
+            tokenGrid.setLocation(location);
+            Log.d("MainActivity", "Location set: " + tokenGrid.getLocation().toString());
+
+            // Adding View to GridLayout
+
             splendorDuelBoard.addView(view);
 
             // Mark Slot

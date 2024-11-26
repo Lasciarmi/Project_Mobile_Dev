@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         // Init name player
         user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag);
         user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag);
-        user1Controller.setPlayerBoard();
-        user2Controller.setPlayerBoard();
+        user1Controller.setPlayerBoard(1);
+        user2Controller.setPlayerBoard(0);
 
         // Init tokenBag
         tokenController = new TokenController(tokenBag, this, this);
