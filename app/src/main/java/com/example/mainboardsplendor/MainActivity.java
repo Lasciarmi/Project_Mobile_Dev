@@ -184,62 +184,6 @@ public class MainActivity extends AppCompatActivity {
             // TODO making reverse layout for all list token
         }
 
-        // INIT CARD_TOP
-        for (int i = 0; i < 3; i++){
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.setMargins(5, 0, 5, 0);
-            params.width = (int) (65 * getResources().getDisplayMetrics().density);
-            params.height = (int) (105 * getResources().getDisplayMetrics().density);
-
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.blank_card);
-            imageView.setLayoutParams(params);
-
-            binding.cardBoard.cardStoreTop.addView(imageView);
-        }
-
-        // INIT CARD_MID
-        for (int i = 0; i < 4; i++){
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.setMargins(5, 0, 5, 0);
-            params.width = (int) (65 * getResources().getDisplayMetrics().density);
-            params.height = (int) (105 * getResources().getDisplayMetrics().density);
-
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.blank_card);
-            imageView.setLayoutParams(params);
-
-            binding.cardBoard.cardStoreMid.addView(imageView);
-        }
-
-        // INIT CARD_BOT
-        for (int i = 0; i < 5; i++){
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.setMargins(5, 0, 5, 0);
-            params.width = (int) (65 * getResources().getDisplayMetrics().density);
-            params.height = (int) (105 * getResources().getDisplayMetrics().density);
-
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.blank_card);
-            imageView.setLayoutParams(params);
-
-            binding.cardBoard.cardStoreBot.addView(imageView);
-        }
-
-        // INIT RESERVED_CARD
-        for (int i = 0; i<4; i++){
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.setMargins(5, 20, 5, 0);
-            params.width = (int) (65 * getResources().getDisplayMetrics().density);
-            params.height = (int) (105 * getResources().getDisplayMetrics().density);
-
-            ImageView imageView = new ImageView(this);
-            imageView.setImageResource(R.drawable.blank_card);
-            imageView.setLayoutParams(params);
-
-            binding.cardBoard.reservedCard.addView(imageView);
-        }
-
         // INIT CARD_STACK
         for (int i=0; i<5; i++){
             ImageView card = new ImageView(this);
@@ -980,7 +924,7 @@ public class MainActivity extends AppCompatActivity {
         addTokens(goldToken, quantityGoldToken);
     }
 
-    // Method for add Token in Array TokenBag
+    // Method for add Card Stack on bag player
     private void addTokens(Token token, int quantity) {
         for (int i=0; i<quantity; i++) {
             tokenBag.add(token);
