@@ -1,6 +1,11 @@
 package com.example.mainboardsplendor.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class User implements Parcelable {
 
     private String username;
 
@@ -23,6 +28,28 @@ public class User {
         this.reserveCard = 0;
         this.tokensStack = 0;
     }
+
+    protected User(Parcel in) {
+        username = in.readString();
+        CardsPoint = in.readInt();
+        crowns = in.readInt();
+        mostSameCardColorValue = in.readInt();
+        Scroll = in.readInt();
+        reserveCard = in.readInt();
+        tokensStack = in.readInt();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public void setUsername(String username) {
         this.username = username;
@@ -80,4 +107,19 @@ public class User {
         return tokensStack;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(username);
+        parcel.writeInt(CardsPoint);
+        parcel.writeInt(crowns);
+        parcel.writeInt(mostSameCardColorValue);
+        parcel.writeInt(Scroll);
+        parcel.writeInt(reserveCard);
+        parcel.writeInt(tokensStack);
+    }
 }
