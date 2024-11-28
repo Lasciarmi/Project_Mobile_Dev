@@ -2,18 +2,14 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.widget.ImageViewCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;

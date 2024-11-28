@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.databinding.LayoutCardBoardBinding;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 

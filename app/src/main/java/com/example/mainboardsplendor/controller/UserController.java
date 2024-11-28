@@ -2,8 +2,6 @@ package com.example.mainboardsplendor.controller;
 
 import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
-import com.example.mainboardsplendor.databinding.LayoutTokenBagPlayerBinding;
-import com.example.mainboardsplendor.databinding.LayoutTokenBoardBinding;
 import com.example.mainboardsplendor.model.User;
 
 public class UserController {

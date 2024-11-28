@@ -1,6 +1,5 @@
 package com.example.mainboardsplendor;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,7 +9,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.databinding.ActivityRulesBinding;
-import com.example.mainboardsplendor.databinding.ActivityStartUpBinding;
 
 public class RulesActivity extends AppCompatActivity {
 
