@@ -39,12 +39,22 @@ public class MainActivity extends AppCompatActivity {
     private int quantityRedToken = 4;
     private int quantityPearlToken = 2;
     private int quantityGoldToken = 3;
+    private int[][] movementPattern = {
+            {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
+            {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
+            {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
+            {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
+            {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
+    };
 
-//    private int quantityCardLevel3 = 10;
-//    private int quantityCardLevel2 = 20;
-//    private int quantityCardLevel1 = 25;
+/*
+    private int quantityCardLevel3 = 10;
+    private int quantityCardLevel2 = 20;
+    private int quantityCardLevel1 = 25;
+*/
 
     private List<Token> tokenBag = new ArrayList<>();
+    private final List<CardView> tokenPick = new ArrayList<>();
     private List<Card> listCardLevel3 = new ArrayList<>();
     private List<Card> listCardLevel2 = new ArrayList<>();
     private List<Card> listCardLevel1 = new ArrayList<>();
@@ -960,5 +970,105 @@ public class MainActivity extends AppCompatActivity {
 
         // Tambahkan kartu ke dalam redCardStack
         redCardStack.addView(card);
+    }
+
+    private void pickToken(int row, int col, CardView cardView, CardView[][] map) {
+        //kalo blom ada yang diambil
+        if (tokenPick.isEmpty()) {
+            int colorchoosen = ContextCompat.getColor(this, R.color.color4tokenIsChoose);
+            map[row][col].setCardBackgroundColor(colorchoosen);
+            tokenPick.add(cardView);
+            for (int r = 0; r < 5; r++) {
+                for (int c = 0; c < 5; c++) {
+                    if (r != checkRangeRow(row+1) && c==col || r != checkRangeRow(row+2) && c==col || r != checkRangeRow(row-2) && c==col || r != checkRangeRow(row-1) && c==col){
+                        map[r][c].setClickable(false);
+                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+                        map[r][c].setCardBackgroundColor(colorfalse);
+                    }
+                    else if (c != checkRangeCol(col+1)&& r==row || c != checkRangeCol(col+2)&& r==row || c != checkRangeCol(col-1)&& r==row || c != checkRangeCol(col-2) && r==row){
+                        map[r][c].setClickable(false);
+                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+                        map[r][c].setCardBackgroundColor(colorfalse);
+                    }
+//                    else if (c!= checkRangeCol(col +1) && r!=checkRangeRow(row+1) || c!= checkRangeCol(col +2) && r!=checkRangeRow(row+2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col -1) && r!=checkRangeRow(row-1) || c!= checkRangeCol(col -2) && r!=checkRangeRow(row-2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col -1) && r!=checkRangeRow(row+1) || c!= checkRangeCol(col -2) && r!=checkRangeRow(row+2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    } else if (c!= checkRangeCol(col +1) && r!=checkRangeRow(row-1) || c!= checkRangeCol(col +2) && r!=checkRangeRow(row-2)) {
+//                        map[r][c].setClickable(false);
+//                        int colorfalse = ContextCompat.getColor(this, R.color.transparent);
+//                        map[r][c].setCardBackgroundColor(colorfalse);
+//                    }
+                }
+            }
+        }
+        else if (tokenPick.size() == 1){
+            tokenPick.add(cardView);
+            for (int ro = 0; ro < 5; ro++){
+                for (int co = 0; co<5; co++){
+                    if (tokenPick.get(0) == map[row][col]){
+                        if (checkRangeRow(ro-1) != row && checkRangeRow(ro+1) != row){
+                            map[checkRangeRow(ro+1)][col].setClickable(false);
+                            map[checkRangeRow(ro-1)][col].setClickable(false);
+                            map[checkRangeRow(ro+2)][col].setClickable(false);
+                            map[checkRangeRow(ro-2)][col].setClickable(false);
+                        }
+                        if (col != checkRangeCol(co-1) && col != checkRangeCol(co+1)){
+                            map[checkRangeRow(row)][co+1].setClickable(false);
+                            map[checkRangeRow(row)][co-1].setClickable(false);
+                            map[checkRangeRow(row)][co+2].setClickable(false);
+                            map[checkRangeRow(row)][co-2].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co-1) && row!= checkRangeRow(ro-1)){
+                            map[checkRangeRow(ro-1)][checkRangeCol(co-1)].setClickable(false);
+                            map[checkRangeRow(ro-2)][checkRangeCol(co-2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co+1) && row!= checkRangeRow(ro+1)){
+                            map[checkRangeRow(ro+1)][checkRangeCol(co+1)].setClickable(false);
+                            map[checkRangeRow(ro+2)][checkRangeCol(co+2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co+1) && row!= checkRangeRow(ro-1)){
+                            map[checkRangeRow(ro-1)][checkRangeCol(co+1)].setClickable(false);
+                            map[checkRangeRow(ro-2)][checkRangeCol(co+2)].setClickable(false);
+                        }
+                        if(col != checkRangeCol(co-1) && row!= checkRangeRow(ro+1)){
+                            map[checkRangeRow(ro+1)][checkRangeCol(co-1)].setClickable(false);
+                            map[checkRangeRow(ro+2)][checkRangeCol(co-2)].setClickable(false);
+                        }
+                    }
+                }
+            }
+        }
+        else if (tokenPick.size() == 2){
+            tokenPick.add(cardView);
+        }
+    }
+
+    private int checkRangeRow(int row){
+        if (row > movementPattern.length){
+            return movementPattern.length;
+        }
+        else if(row<0){
+            return 0;
+        }
+        return row;
+    }
+
+    private int checkRangeCol(int col){
+        if (col > movementPattern.length){
+            return movementPattern.length;
+        }
+        else if(col<0){
+            return 0;
+        }
+        return col;
     }
 }
