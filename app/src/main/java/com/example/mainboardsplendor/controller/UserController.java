@@ -17,8 +17,20 @@ public class UserController {
     }
 
     public void setPlayerBoard(int i) {
-        scoreBoardPlayer.playerName.setText(user.getUsername());
         tokenBagPlayer.playerNameBot.setText(user.getUsername());
-        scoreBoardPlayer.totalPrivilegePlayer.setText("1");
+
+        scoreBoardPlayer.playerName.setText(user.getUsername());
+
+        scoreBoardPlayer.poinPlayer.setText( String.valueOf(user.getCardsPoint()) );
+        scoreBoardPlayer.crownPlayer.setText(String.valueOf(user.getCrowns()));
+        scoreBoardPlayer.cardPoinPlayer.setText(String.valueOf(user.getMostSameCardColorValue()));
+
+        scoreBoardPlayer.totalPrivilegePlayer.setText(String.valueOf(user.getScroll()));
+        scoreBoardPlayer.totalReservedCardPlayer.setText(String.valueOf(user.getReserveCard()));
+        scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(user.getTokensStack()));
+    }
+
+    public User getUser() {
+        return user;
     }
 }

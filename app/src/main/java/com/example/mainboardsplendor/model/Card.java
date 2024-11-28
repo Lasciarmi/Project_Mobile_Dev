@@ -17,18 +17,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int crowns;
     private int level;
     private int Image;
-
     private ArrayList<Integer> price;
-
-    public int getImage() {
-        return Image;
-    }
-
-    public void setImage(int image) {
-        Image = image;
-    }
-
-
 
     public Card(@NonNull Context context) {
         super(context);
@@ -40,6 +29,14 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public Card(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public int getImage() {
+        return Image;
+    }
+
+    public void setImage(int image) {
+        Image = image;
     }
 
     public Color getColor() {
@@ -72,6 +69,10 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setPrice(ArrayList<Integer> price) {
         this.price = price;
+    }
+
+    public boolean isValidToPick() {
+        return true;
     }
 
     public int getLevel() {

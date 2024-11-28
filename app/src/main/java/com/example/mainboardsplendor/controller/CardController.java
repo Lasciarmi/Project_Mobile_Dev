@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
@@ -25,6 +26,7 @@ public class CardController {
     private List<Card> listCardLevel2;
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
+    private Card selectedCard;
 
     private Context context;
     private MainActivity mainActivity;
@@ -560,6 +562,12 @@ public class CardController {
         card.setCrowns(crowns);
         card.setPrice(price);
         card.setImage(image);
+        card.setOnClickListener(view -> {
+            if (card.isValidToPick()) {
+                selectedCard = card;
+                Toast.makeText(context, String.valueOf(card.getColor()), Toast.LENGTH_SHORT).show();
+            }
+        });
         return card;
     }
 
