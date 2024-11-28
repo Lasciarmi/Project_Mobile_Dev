@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.ImageViewCompat;
@@ -98,27 +99,28 @@ public class TokenController {
             View view = LayoutInflater.from(context).inflate(
                     R.layout.custom_token, splendorDuelBoard, false);
 
-            Token tokenGrid = view.findViewById(R.id.token_view);
+            Token tokenImage = view.findViewById(R.id.token_view);
 
             CardView cardView = view.findViewById(R.id.cardView_token);
 
             cardView.setCardBackgroundColor(token.getColor().toArgb());
 
             Color color = token.getColor();
+            tokenImage.setColor(color);
             if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)))) {
-                tokenGrid.setImageResource(R.drawable.blue_token);
+                tokenImage.setImageResource(R.drawable.blue_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.white)))) {
-                tokenGrid.setImageResource(R.drawable.white_token);
+                tokenImage.setImageResource(R.drawable.white_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)))) {
-                tokenGrid.setImageResource(R.drawable.green_token);
+                tokenImage.setImageResource(R.drawable.green_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.black)))) {
-                tokenGrid.setImageResource(R.drawable.black_token);
+                tokenImage.setImageResource(R.drawable.black_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)))) {
-                tokenGrid.setImageResource(R.drawable.red_token);
+                tokenImage.setImageResource(R.drawable.red_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4pearlToken)))) {
-                tokenGrid.setImageResource(R.drawable.pearl_token);
+                tokenImage.setImageResource(R.drawable.pearl_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4goldToken)))) {
-                tokenGrid.setImageResource(R.drawable.gold_token);
+                tokenImage.setImageResource(R.drawable.gold_token);
             }
 
             // Define row & col gridLayout
@@ -130,9 +132,10 @@ public class TokenController {
             ArrayList<Integer> location = new ArrayList<>();
             location.add(row);
             location.add(col);
-            Log.d("MainActivity", "Setting location: " + location.toString());
-            tokenGrid.setLocation(location);
-            Log.d("MainActivity", "Location set: " + tokenGrid.getLocation().toString());
+//            Log.d("MainActivity", "Setting location: " + location.toString());
+            tokenImage.setLocation(location);
+            tokenImage.setOnClickListener(view1 -> Toast.makeText(context, tokenImage.getColor()+ ", " + tokenImage.getLocation().toString(), Toast.LENGTH_SHORT).show());
+//            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             // Adding View to GridLayout
 

@@ -87,29 +87,31 @@ public class MainActivity extends AppCompatActivity {
         int rowCount =tokenGridLayout.getRowCount();
         int colCount = tokenGridLayout.getColumnCount();
         tokenController.InitTokenBoard(rowCount, colCount, tokenGridLayout);
-        for (int i = 0; i < 25; i++) {
-            View parentView = tokenGridLayout.getChildAt(i);
 
-            if (parentView instanceof androidx.cardview.widget.CardView) {
-                // Now find the Token view inside the CardView
-                Token token = parentView.findViewById(R.id.token_view);
-
-                if (token != null) {
-                    ArrayList<Integer> location = token.getLocation();
-
-                    // Check if location is not null before logging
-                    if (location != null) {
-                        Log.d("MainActivity", "Token found at index " + i + ": " + location.toString());
-                    } else {
-                        Log.e("MainActivity", "Location is null for token at index " + i);
-                    }
-                } else {
-                    Log.e("MainActivity", "Token view not found at index " + i);
-                }
-            } else {
-                Log.e("MainActivity", "Child at index " + i + " is not a CardView");
-            }
-        }
+//        How to get Token on GridLayout
+//        for (int i = 0; i < 25; i++) {
+//            View parentView = tokenGridLayout.getChildAt(i);
+//
+//            if (parentView instanceof androidx.cardview.widget.CardView) {
+//                // Now find the Token view inside the CardView
+//                Token token = parentView.findViewById(R.id.token_view);
+//
+//                if (token != null) {
+//                    ArrayList<Integer> location = token.getLocation();
+//
+//                    // Check if location is not null before logging
+//                    if (location != null) {
+//                        Log.d("MainActivity", "Token found at index " + i + ": " + location.toString());
+//                    } else {
+//                        Log.e("MainActivity", "Location is null for token at index " + i);
+//                    }
+//                } else {
+//                    Log.e("MainActivity", "Token view not found at index " + i);
+//                }
+//            } else {
+//                Log.e("MainActivity", "Child at index " + i + " is not a CardView");
+//            }
+//        }
 
 
         // get GridLayout for each cardBoard level
