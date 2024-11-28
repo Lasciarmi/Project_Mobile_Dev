@@ -20,6 +20,7 @@ public class UserController {
 
     public void setPlayerBoard(int i) {
         scoreBoardPlayer.playerName.setText(user.getUsername());
+        tokenBagPlayer.playerNameBot.setText(user.getUsername());
         scoreBoardPlayer.totalPrivilegePlayer.setText("1");
     }
 }
