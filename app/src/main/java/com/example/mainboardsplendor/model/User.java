@@ -5,9 +5,13 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
+
 public class User implements Parcelable {
 
     private String username;
+
+    private HashMap<Token, Integer> ownedTokens;
 
     //Objective
     private int CardsPoint;
@@ -27,6 +31,7 @@ public class User implements Parcelable {
         this.Scroll = 0;
         this.reserveCard = 0;
         this.tokensStack = 0;
+        this.ownedTokens = new HashMap<>();
     }
 
     protected User(Parcel in) {
@@ -37,6 +42,7 @@ public class User implements Parcelable {
         Scroll = in.readInt();
         reserveCard = in.readInt();
         tokensStack = in.readInt();
+        ownedTokens = in.readHashMap(Token.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -50,6 +56,27 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public HashMap<Token, Integer> getOwnedTokens() {
+        return ownedTokens;
+    }
+
+    public void setOwnedTokens(HashMap<Token, Integer> ownedTokens) {
+        this.ownedTokens = ownedTokens;
+    }
+
+    public void addToken2Bag(Token token, int quantity) {
+        if (ownedTokens.containsKey(token)) {
+            int currentQuantity = (int) ownedTokens.get(token);
+            ownedTokens.put(token, currentQuantity + quantity);
+        } else {
+            ownedTokens.put(token, quantity);
+        }
+    }
+
+    public void setCardsPoint(int cardsPoint) {
+        CardsPoint = cardsPoint;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -121,5 +148,6 @@ public class User implements Parcelable {
         parcel.writeInt(Scroll);
         parcel.writeInt(reserveCard);
         parcel.writeInt(tokensStack);
+        parcel.writeMap(ownedTokens);
     }
 }

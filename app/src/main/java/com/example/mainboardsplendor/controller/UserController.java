@@ -4,7 +4,10 @@ import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
 import com.example.mainboardsplendor.databinding.LayoutTokenBagPlayerBinding;
 import com.example.mainboardsplendor.databinding.LayoutTokenBoardBinding;
+import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.model.User;
+
+import java.util.HashMap;
 
 public class UserController {
 
@@ -22,5 +25,9 @@ public class UserController {
         scoreBoardPlayer.playerName.setText(user.getUsername());
         tokenBagPlayer.playerNameBot.setText(user.getUsername());
         scoreBoardPlayer.totalPrivilegePlayer.setText("1");
+    }
+
+    public HashMap<Token, Integer> getOwnedToken(){
+        return user.getOwnedTokens();
     }
 }

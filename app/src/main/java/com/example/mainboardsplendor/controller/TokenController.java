@@ -152,6 +152,7 @@ public class TokenController {
         Boolean selected = token.getSelected();
         Boolean valid = token.getValid();
 
+
         if (selectedToken.isEmpty() && checkIsGoldToken(token)){
             for (int i=0; i<movementPattern.length; i++){
                 View chilView = splendorDuelBoard.getChildAt(i);
@@ -215,6 +216,9 @@ public class TokenController {
                 }
 
                 selectedToken.remove(token);
+                for (Token token1: selectedToken) {
+                    token1.setClickable(true);
+                }
 
                 // Menampilkan Toast dalam thread utama jika diperlukan
                 if (context != null) {
@@ -232,7 +236,7 @@ public class TokenController {
                 }
             }
 
-            refreshValidToken(token);
+            refreshValidToken();
         }
 
         if(!selectedToken.isEmpty()){
@@ -242,7 +246,7 @@ public class TokenController {
         }
     }
 
-    private void refreshValidToken(Token token){
+    private void refreshValidToken(){
         if (selectedToken.isEmpty()) {
             for (int i = 0; i < movementPattern.length; i++) {
                 int row = movementPattern[i][0];
@@ -434,6 +438,7 @@ public class TokenController {
             Token token1 = selectedToken.get(0);
             Token token2 = selectedToken.get(1);
             Token token3 = selectedToken.get(2);
+            token2.setClickable(false);
 
             for (int i=0; i<movementPattern.length; i++){
                 if ((movementPattern[i][0] == token1.getLocation().get(0) && movementPattern[i][1] == token1.getLocation().get(1)) ||
