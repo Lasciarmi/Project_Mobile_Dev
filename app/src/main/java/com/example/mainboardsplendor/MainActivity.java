@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private CardController cardController;
 
     private GridLayout tokenGridLayout;
+    private CardView taskBarTakeToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
         // Get Player 1 and 2 Username
         Intent intent = getIntent();
         user1 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_1));
@@ -80,56 +81,26 @@ public class MainActivity extends AppCompatActivity {
         user2Controller.setPlayerBoard(0);
 
         // Init tokenBag
-        tokenController = new TokenController(tokenBag, this, this);
+        tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
+        taskBarTakeToken = binding.taskBar.taskBarTakeGems;
+        Button takeButton = taskBarTakeToken.findViewById(R.id.take_button);
+        takeButton.setOnClickListener(v -> {
+            List<Token> selectedTokens = tokenController.getSelectedToken();
+            // Todo: tambah attribut currentPlayer untuk tahu siapa player aktifnya,
+            //  beri indikator seperti warna nama playernya berubah/ teks pemberitahuan player aktif pada taskbar
+            // check current player baru ambil token
+        });
+        tokenController = new TokenController(tokenBag, tokenGridLayout, taskBarTakeToken,this, this);
         tokenController.initTokenBag();
 
         // Init TokenBoard in Spiral
-        tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
-
         int rowCount =tokenGridLayout.getRowCount();
         int colCount = tokenGridLayout.getColumnCount();
-        tokenController.InitTokenBoard(rowCount, colCount, tokenGridLayout);
+        tokenController.InitTokenBoard(rowCount, colCount);
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
+        binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
+        binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
 
-//        How to get Token on GridLayout
-//        for (int i = 0; i < 25; i++) {
-//            View parentView = tokenGridLayout.getChildAt(i);
-//
-//            if (parentView instanceof androidx.cardview.widget.CardView) {
-//                // Now find the Token view inside the CardView
-//                Token token = parentView.findViewById(R.id.token_view);
-//
-//                if (token != null) {
-//                    ArrayList<Integer> location = token.getLocation();
-//
-//                    // Check if location is not null before logging
-//                    if (location != null) {
-//                        Log.d("MainActivity", "Token found at index " + i + ": " + location.toString());
-//                    } else {
-//                        Log.e("MainActivity", "Location is null for token at index " + i);
-//                    }
-//                } else {
-//                    Log.e("MainActivity", "Token view not found at index " + i);
-//                }
-//            } else {
-//                Log.e("MainActivity", "Child at index " + i + " is not a CardView");
-//            }
-//        }
-
-
-        // get GridLayout for each cardBoard level
-//        GridLayout cardBoard_level3 = binding.cardBoard.cardStoreTop;
-//        GridLayout cardBoard_level2 = binding.cardBoard.cardStoreMid;
-//        GridLayout cardBoard_level1 = binding.cardBoard.cardStoreBot;
-        // Init Card on Deck
-//        InitCardTopDeck(listCardLevel3);
-//        InitCardMidDeck(listCardLevel2);
-//        InitCardBotDeck(listCardLevel1);
-//        // Init Card on Board
-//        InitCardBoard(listCardLevel3, cardBoard_level3, 3);
-//        InitCardBoard(listCardLevel2, cardBoard_level2, 4);
-//        InitCardBoard(listCardLevel1, cardBoard_level1, 5);
-        //Init Card Reserved on Board
         // Init CardBoard
         cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this);
         cardController.InitCardTopDeck();
@@ -231,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // INIT CARD_STACK
-
         addNewCard(binding.layoutPlayer1Bag.blueCardStack);
         addNewCard(binding.layoutPlayer1Bag.blueCardStack);
         addNewCard(binding.layoutPlayer1Bag.blueCardStack);
@@ -242,8 +212,6 @@ public class MainActivity extends AppCompatActivity {
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
 
-        binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
-        binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
     }
 
     // Method for add Card Stack on bag player
@@ -265,4 +233,6 @@ public class MainActivity extends AppCompatActivity {
         // Tambahkan kartu ke dalam redCardStack
         redCardStack.addView(card);
     }
+
+
 }

@@ -2,24 +2,23 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.widget.ImageViewCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TokenController {
@@ -34,11 +33,24 @@ public class TokenController {
     private List<Token> tokenBag;
     private Context context;
     private MainActivity mainActivity;
+    public List<Token> selectedToken = new ArrayList<>();
+    private GridLayout splendorDuelBoard;
+    private CardView taskBarTakeToken;
 
-    public TokenController(List<Token> tokenBag, Context context, MainActivity mainActivity) {
+    int[][] movementPattern = {
+            {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
+            {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
+            {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
+            {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
+            {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
+    };
+
+    public TokenController(List<Token> tokenBag, GridLayout splendorDuelBoard, CardView taskBarTakeToken, Context context, MainActivity mainActivity) {
         this.tokenBag = tokenBag;
         this.context = context;
         this.mainActivity = mainActivity;
+        this.splendorDuelBoard = splendorDuelBoard;
+        this.taskBarTakeToken = taskBarTakeToken;
     }
 
     public void initTokenBag() {
@@ -72,16 +84,8 @@ public class TokenController {
         }
     }
 
-    public void InitTokenBoard(int rowCount, int colCount, GridLayout splendorDuelBoard) {
+    public void InitTokenBoard(int rowCount, int colCount) {
         boolean[][] isFilled = new boolean[rowCount][colCount];
-
-        int[][] movementPattern = {
-                {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
-                {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
-                {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
-                {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
-                {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
-        };
 
         for (int i = 0; i < movementPattern.length; i++) {
             Token token = pickRandomToken();
@@ -134,10 +138,8 @@ public class TokenController {
             location.add(col);
 //            Log.d("MainActivity", "Setting location: " + location.toString());
             tokenImage.setLocation(location);
-            tokenImage.setOnClickListener(view1 -> Toast.makeText(context, tokenImage.getColor()+ ", " + tokenImage.getLocation().toString(), Toast.LENGTH_SHORT).show());
+            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
 //            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
-
-            // Adding View to GridLayout
 
             splendorDuelBoard.addView(view);
 
@@ -146,11 +148,353 @@ public class TokenController {
         }
     }
 
+    private void selectToken(Token token) {
+        Boolean selected = token.getSelected();
+        Boolean valid = token.getValid();
+
+        if (selectedToken.isEmpty() && checkIsGoldToken(token)){
+            for (int i=0; i<movementPattern.length; i++){
+                View chilView = splendorDuelBoard.getChildAt(i);
+                CardView cardView = (CardView) chilView;
+                Token currentToken = cardView.findViewById(R.id.token_view);
+                currentToken.setValid(false);
+                currentToken.setClickable(false);
+                int color = ContextCompat.getColor(context, R.color.transparent);
+                cardView.setCardBackgroundColor(color);
+            }
+            token.setIsSelected(true);
+            token.setValid(false);
+            token.setClickable(true);
+            CardView cardView = getViewAt(token.getLocation().get(0), token.getLocation().get(1), splendorDuelBoard);
+            if (cardView != null) {
+                int color = ContextCompat.getColor(context, R.color.color4tokenIsChoose);
+                cardView.setCardBackgroundColor(color);
+            }
+            selectedToken.add(token);
+        }
+        else  {
+            if (!selected && valid) {
+                token.setIsSelected(true);
+                token.setValid(false);
+
+                CardView cardView = getViewAt(token.getLocation().get(0), token.getLocation().get(1), splendorDuelBoard);
+                if (cardView != null) {
+                    int color = ContextCompat.getColor(context, R.color.color4tokenIsChoose);
+                    cardView.setCardBackgroundColor(color);
+                }
+
+                selectedToken.add(token);
+
+                disableAllGoldTokens(splendorDuelBoard);
+
+                // Menampilkan Toast dalam thread utama jika diperlukan
+                if (context != null) {
+                    String message = "Add 1 Token\n" +
+                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
+                            "Selected Tokens isValid?: " + token.getValid();
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+                    TextView textView = new TextView(context);
+                    textView.setText(message);
+                    textView.setPadding(16, 16, 16, 16);
+                    textView.setBackgroundColor(Color.BLACK);
+                    textView.setTextColor(Color.WHITE);
+                    toast.setView(textView);
+                    toast.show();
+                }
+            }
+
+
+            else if (selected && !valid) {
+                token.setIsSelected(false);
+                token.setValid(true);
+
+                CardView cardView = getViewAt(token.getLocation().get(0), token.getLocation().get(1), splendorDuelBoard);
+                if (cardView != null) {
+                    Color color = token.getColor();
+                    cardView.setCardBackgroundColor(color.toArgb());
+                }
+
+                selectedToken.remove(token);
+
+                // Menampilkan Toast dalam thread utama jika diperlukan
+                if (context != null) {
+                    String message = "Add 1 Token\n" +
+                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
+                            "Selected Tokens isValid?: " + token.getValid();
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+                    TextView textView = new TextView(context);
+                    textView.setText(message);
+                    textView.setPadding(16, 16, 16, 16);
+                    textView.setBackgroundColor(Color.BLACK);
+                    textView.setTextColor(Color.WHITE);
+                    toast.setView(textView);
+                    toast.show();
+                }
+            }
+
+            refreshValidToken(token);
+        }
+
+        if(!selectedToken.isEmpty()){
+            taskBarTakeToken.setVisibility(View.VISIBLE);
+        } else {
+            taskBarTakeToken.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void refreshValidToken(Token token){
+        if (selectedToken.isEmpty()) {
+            for (int i = 0; i < movementPattern.length; i++) {
+                int row = movementPattern[i][0];
+                int col = movementPattern[i][1];
+
+                View chilView = splendorDuelBoard.getChildAt(i);
+                CardView cardView = (CardView) chilView;
+                Token currentToken = cardView.findViewById(R.id.token_view);
+                currentToken.setClickable(true);
+                currentToken.setValid(true);
+                currentToken.setIsSelected(false);
+                cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+            }
+        }
+        else if (selectedToken.size() == 1) {
+            for (int i=0; i<movementPattern.length; i++){
+                if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)){
+                    // current Location
+                    continue;
+                } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) + 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
+                    // bot Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) - 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
+                    // top Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                    // right Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                    // Left Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                    // Top-Left Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                    // Top-Right Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                    // Bot-Left Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                }  else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                    // Bot-Right Location
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+                } else {
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    CardView cardView = (CardView) chilView;
+                    Token currentToken = cardView.findViewById(R.id.token_view);
+                    currentToken.setClickable(false);
+                    currentToken.setValid(false);
+                    currentToken.setIsSelected(false);
+                    int color = ContextCompat.getColor(context, R.color.transparent);
+                    cardView.setCardBackgroundColor(color);
+                }
+            }
+        }
+        else if (selectedToken.size() == 2) {
+            // Ambil koordinat token yang dipilih
+            int row1 = selectedToken.get(0).getLocation().get(0);
+            int col1 = selectedToken.get(0).getLocation().get(1);
+            int row2 = selectedToken.get(1).getLocation().get(0);
+            int col2 = selectedToken.get(1).getLocation().get(1);
+
+            // Pastikan kedua token berada di kolom yang sama
+            if (col1 == col2) {
+                int smallestRow = Math.min(row1, row2);
+                int largestRow = Math.max(row1, row2);
+
+                for (int i = 0; i < movementPattern.length; i++) {
+                    int row = movementPattern[i][0];
+                    int col = movementPattern[i][1];
+
+                    if ((row == smallestRow - 1 && col == col1) ||
+                            (row == largestRow + 1 && col == col1)){
+                        // Hint lokasi yang valid
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((row == row1 && col == col1) ||
+                            (row == row2 && col == col2)) {
+                        continue;
+                    } else {
+                        // Non-hint lokasi
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        CardView cardView = (CardView) chilView;
+                        Token currentToken = cardView.findViewById(R.id.token_view);
+                        currentToken.setClickable(false);
+                        currentToken.setValid(false);
+                        currentToken.setIsSelected(false);
+                        int color = ContextCompat.getColor(context, R.color.transparent);
+                        cardView.setCardBackgroundColor(color);
+                    }
+                }
+            } else if (row1 == row2) { //pastikan  keduanya dalam row yang sama
+                int smallestCol = Math.min(col1, col2);
+                int largestCol = Math.max(col1, col2);
+
+                for (int i = 0; i < movementPattern.length; i++) {
+                    int row = movementPattern[i][0];
+                    int col = movementPattern[i][1];
+
+                    if ((col == smallestCol - 1 && row == row1) || // Kiri
+                            (col == largestCol + 1 && row == row1)) { // Kanan
+                        // Hint lokasi yang valid
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((row == row1 && col == col1) ||
+                            (row == row2 && col == col2)) {
+                        // Lokasi saat ini
+                        continue;
+                    } else {
+                        // Non-hint lokasi
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        CardView cardView = (CardView) chilView;
+                        Token currentToken = cardView.findViewById(R.id.token_view);
+                        currentToken.setClickable(false);
+                        currentToken.setValid(false);
+                        currentToken.setIsSelected(false);
+                        int color = ContextCompat.getColor(context, R.color.transparent);
+                        cardView.setCardBackgroundColor(color);
+                    }
+                }
+            } else if (Math.abs(row1 - row2) == Math.abs(col1 - col2)) {
+            int smallestRow = Math.min(row1, row2);
+            int smallestCol = Math.min(col1, col2);
+            int largestRow = Math.max(row1, row2);
+            int largestCol = Math.max(col1, col2);
+
+            for (int i = 0; i < movementPattern.length; i++) {
+                int row = movementPattern[i][0];
+                int col = movementPattern[i][1];
+
+                // Valid diagonal hint locations
+                if ((row == smallestRow - 1 && col == smallestCol - 1) || // Top-left
+                        (row == smallestRow - 1 && col == largestCol + 1) || // Top-right
+                        (row == largestRow + 1 && col == smallestCol - 1) || // Bottom-left
+                        (row == largestRow + 1 && col == largestCol + 1)) {  // Bottom-right
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    updateTokenView(chilView);
+
+                } else if ((row == row1 && col == col1) || (row == row2 && col == col2)) {
+                    // Current token positions
+                    continue;
+
+                } else {
+                    // Non-hint locations
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    CardView cardView = (CardView) chilView;
+                    Token currentToken = cardView.findViewById(R.id.token_view);
+                    currentToken.setClickable(false);
+                    currentToken.setValid(false);
+                    currentToken.setIsSelected(false);
+                    int color = ContextCompat.getColor(context, R.color.transparent);
+                    cardView.setCardBackgroundColor(color);
+                }
+            }
+        }
+
+    }
+        else {
+            Token token1 = selectedToken.get(0);
+            Token token2 = selectedToken.get(1);
+            Token token3 = selectedToken.get(2);
+
+            for (int i=0; i<movementPattern.length; i++){
+                if ((movementPattern[i][0] == token1.getLocation().get(0) && movementPattern[i][1] == token1.getLocation().get(1)) ||
+                        (movementPattern[i][0] == token2.getLocation().get(0) && movementPattern[i][1] == token2.getLocation().get(1)) ||
+                        (movementPattern[i][0] == token3.getLocation().get(0) && movementPattern[i][1] == token3.getLocation().get(1))){
+                    // current Location
+                    continue;
+                } else {
+                    View chilView = splendorDuelBoard.getChildAt(i);
+                    CardView cardView = (CardView) chilView;
+                    Token currentToken = cardView.findViewById(R.id.token_view);
+                    currentToken.setClickable(false);
+                    currentToken.setValid(false);
+                    currentToken.setIsSelected(false);
+                    int color = ContextCompat.getColor(context, R.color.transparent);
+                    cardView.setCardBackgroundColor(color);
+                }
+            }
+        }
+    }
+
+    private void disableAllGoldTokens(GridLayout gridLayout) {
+        for (int i = 0; i < gridLayout.getChildCount(); i++) {
+            View childView = gridLayout.getChildAt(i);
+            CardView cardView = (CardView) childView;
+            Token currentToken = cardView.findViewById(R.id.token_view);
+
+            if (checkIsGoldToken(currentToken)) {
+                disableGoldToken(cardView);
+            }
+        }
+    }
+
+    private void disableGoldToken(CardView cardView) {
+        // Pastikan token yang sesuai ditemukan
+        Token currentToken = cardView.findViewById(R.id.token_view);
+
+        currentToken.setValid(false);
+        currentToken.setClickable(false);
+
+        int transparentColor = ContextCompat.getColor(context, R.color.transparent);
+        cardView.setCardBackgroundColor(transparentColor);
+
+    }
+
+    private Boolean checkIsGoldToken(Token token) {
+        return token.getColor().equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4goldToken)));
+    }
+
+    private void updateTokenView(View view){
+        CardView cardView = (CardView) view;
+        Token currentToken = cardView.findViewById(R.id.token_view);
+        if (!checkIsGoldToken(currentToken)){
+            currentToken.setClickable(true);
+            currentToken.setValid(true);
+            currentToken.setIsSelected(false);
+            cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+        }
+    }
+
+    private CardView getViewAt(int row, int col, GridLayout gridLayout) {
+        for (int i = 0; i < movementPattern.length; i++) {
+            int[] position = movementPattern[i];
+            int patternRow = position[0];
+            int patternCol = position[1];
+
+            if (patternRow == row && patternCol == col) {
+                View childView = gridLayout.getChildAt(i);
+                return (CardView) childView;
+            }
+        }
+        return null;
+    }
+
     private Token pickRandomToken() {
         if (tokenBag.isEmpty()) {
             return null;
         }
         int randomIndex = (int) (Math.random() * tokenBag.size());
         return tokenBag.remove(randomIndex);
+    }
+
+    public List<Token> getSelectedToken(){
+        return selectedToken;
     }
 }
