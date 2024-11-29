@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,10 +71,12 @@ public class MainActivity extends AppCompatActivity {
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
 
         // Init name player
-        user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag);
-        user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag);
-        user1Controller.setPlayerBoard(1);
-        user2Controller.setPlayerBoard(0);
+        user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag, this);
+        user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag, this);
+
+        // Set Current Player to Player 1
+        user2Controller.setPlayerBold();
+        changeCurrentPlayer();
 
         // Init tokenBag
         tokenController = new TokenController(tokenBag, this, this);
@@ -83,9 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Init TokenBoard in Spiral
         tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
-
-        // Set Current Player to Player 1
-        changeCurrentPlayer();
 
         int rowCount =tokenGridLayout.getRowCount();
         int colCount = tokenGridLayout.getColumnCount();
@@ -284,6 +282,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             currentPlayer = user1Controller.getUser();
         }
+        user1Controller.setPlayerBoard();
+        user2Controller.setPlayerBoard();
     }
 
 }

@@ -16,4 +16,5 @@
     <color name="color4tokenIsChoose">#F8790B</color>
     <color name="bgToken">#FBEEE7</color>
     <color name="color4normalToken">#00FFFFFF</color>
+    <color name="first_player">#C96868</color>
 </resources>
