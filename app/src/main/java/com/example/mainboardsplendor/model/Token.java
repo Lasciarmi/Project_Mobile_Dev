@@ -48,7 +48,7 @@ public class Token extends androidx.appcompat.widget.AppCompatImageView {
         return isSelected;
     }
 
-    public void setSelected(Boolean selected) {
+    public void setIsSelected(Boolean selected) {
         isSelected = selected;
     }
 

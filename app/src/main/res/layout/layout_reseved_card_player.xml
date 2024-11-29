@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_reserved_card"
+    app:cardElevation="12dp"
+    app:cardBackgroundColor="@color/transparent">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <com.example.mainboardsplendor.model.Card
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:id="@+id/card_reserved"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:src="@drawable/blank_card" />
+
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/joker_token"
+            layout="@layout/custom_token"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+</androidx.cardview.widget.CardView>

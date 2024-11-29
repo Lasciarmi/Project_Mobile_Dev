@@ -9,7 +9,12 @@ import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
+import com.example.mainboardsplendor.databinding.LayoutTokenBagPlayerBinding;
+import com.example.mainboardsplendor.databinding.LayoutTokenBoardBinding;
+import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.model.User;
+
+import java.util.HashMap;
 
 public class UserController {
 
@@ -56,5 +61,9 @@ public class UserController {
 
     public User getUser() {
         return user;
+    }
+
+    public HashMap<Token, Integer> getOwnedToken(){
+        return user.getOwnedTokens();
     }
 }
