@@ -19,6 +19,7 @@ import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class TokenController {
@@ -113,6 +114,7 @@ public class TokenController {
             tokenImage.setColor(color);
             if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)))) {
                 tokenImage.setImageResource(R.drawable.blue_token);
+
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.white)))) {
                 tokenImage.setImageResource(R.drawable.white_token);
             } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)))) {
@@ -142,6 +144,7 @@ public class TokenController {
 //            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             splendorDuelBoard.addView(view);
+
 
             // Mark Slot
             isFilled[row][col] = true;
@@ -189,19 +192,19 @@ public class TokenController {
                 disableAllGoldTokens(splendorDuelBoard);
 
                 // Menampilkan Toast dalam thread utama jika diperlukan
-                if (context != null) {
-                    String message = "Add 1 Token\n" +
-                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
-                            "Selected Tokens isValid?: " + token.getValid();
-                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-                    TextView textView = new TextView(context);
-                    textView.setText(message);
-                    textView.setPadding(16, 16, 16, 16);
-                    textView.setBackgroundColor(Color.BLACK);
-                    textView.setTextColor(Color.WHITE);
-                    toast.setView(textView);
-                    toast.show();
-                }
+//                if (context != null) {
+//                    String message = "Add 1 Token\n" +
+//                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
+//                            "Selected Tokens isValid?: " + token.getValid();
+//                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+//                    TextView textView = new TextView(context);
+//                    textView.setText(message);
+//                    textView.setPadding(16, 16, 16, 16);
+//                    textView.setBackgroundColor(Color.BLACK);
+//                    textView.setTextColor(Color.WHITE);
+//                    toast.setView(textView);
+//                    toast.show();
+//                }
             }
 
 
@@ -499,7 +502,7 @@ public class TokenController {
         }
     }
 
-    private CardView getViewAt(int row, int col, GridLayout gridLayout) {
+    public CardView getViewAt(int row, int col, GridLayout gridLayout) {
         for (int i = 0; i < movementPattern.length; i++) {
             int[] position = movementPattern[i];
             int patternRow = position[0];
@@ -524,4 +527,6 @@ public class TokenController {
     public List<Token> getSelectedToken(){
         return selectedToken;
     }
+
+
 }

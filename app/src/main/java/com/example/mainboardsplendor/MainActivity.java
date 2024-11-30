@@ -1,6 +1,7 @@
 package com.example.mainboardsplendor;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +33,7 @@ import com.example.mainboardsplendor.model.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private UserController user2Controller;
     private CardController cardController;
 
-    private User currentPlayer;
+    public UserController currentPlayer;
 
     private GridLayout tokenGridLayout;
     private CardView taskBarTakeToken;
@@ -80,24 +84,39 @@ public class MainActivity extends AppCompatActivity {
         user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag, this);
         user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag, this);
 
+        // Set player 1 and 2
+        user2Controller.setPlayerBoard();
+        user1Controller.setPlayerBoard();
+
         // Set Current Player to Player 1
         user2Controller.setPlayerBold();
         changeCurrentPlayer();
+
 
         // Init tokenBag
         tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
         taskBarTakeToken = binding.taskBar.taskBarTakeGems;
         Button takeButton = taskBarTakeToken.findViewById(R.id.take_button);
 
-        ownedTokensPlayer1 =  user1Controller.getOwnedToken();
-        ownedTokensPlayer2 =  user2Controller.getOwnedToken();
+        ownedTokensPlayer1 =  user1Controller.getUser().getOwnedTokens();
+        ownedTokensPlayer2 =  user2Controller.getUser().getOwnedTokens();
 
-//        takeButton.setOnClickListener(v -> {
+        takeButton.setOnClickListener(v -> {
+
 //            List<Token> selectedTokens = tokenController.getSelectedToken();
-//            // Todo: tambah attribut currentPlayer untuk tahu siapa player aktifnya,
-//            //  beri indikator seperti warna nama playernya berubah/ teks pemberitahuan player aktif pada taskbar
-//            // check current player baru ambil token
-//        });
+//            currentPlayer.setOwnedToken(selectedTokens, currentPlayer.getUser());
+//            changeCurrentPlayer();
+            for (Token token : tokenController.getSelectedToken()){
+                CardView childView = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
+            }
+
+
+//            for (Map.Entry<Token, Integer> entry: currentPlayer.getUser().getOwnedTokens().entrySet()) {
+//                String message = "Token: " + entry.getKey().getColor() + ", Quantity: " + entry.getValue();
+//                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+//            }
+
+        });
         tokenController = new TokenController(tokenBag, tokenGridLayout, taskBarTakeToken,this, this);
 
         tokenController.initTokenBag();
@@ -275,13 +294,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeCurrentPlayer() {
-        if (currentPlayer == user1Controller.getUser()) {
-            currentPlayer = user2Controller.getUser();
+        if (currentPlayer == user1Controller) {
+            currentPlayer = user2Controller;
+//            currentPlayer.setPlayerBoard();
         } else {
-            currentPlayer = user1Controller.getUser();
+            currentPlayer = user1Controller;
+//            currentPlayer.setPlayerBoard();
         }
-        user1Controller.setPlayerBoard();
-        user2Controller.setPlayerBoard();
+
     }
 
 }

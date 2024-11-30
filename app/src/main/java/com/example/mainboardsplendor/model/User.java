@@ -2,6 +2,8 @@ package com.example.mainboardsplendor.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -61,17 +63,12 @@ public class User implements Parcelable {
         return ownedTokens;
     }
 
-    public void setOwnedTokens(HashMap<Token, Integer> ownedTokens) {
-        this.ownedTokens = ownedTokens;
+    public void InitOwnedTokens(HashMap<Token, Integer> ownedTokens, Token token) {
+        ownedTokens.put(token, 0);
     }
 
-    public void addToken2Bag(Token token, int quantity) {
-        if (ownedTokens.containsKey(token)) {
-            int currentQuantity = (int) ownedTokens.get(token);
-            ownedTokens.put(token, currentQuantity + quantity);
-        } else {
-            ownedTokens.put(token, quantity);
-        }
+    public void addToken2Bag(Token token) {
+            ownedTokens.put(token, ownedTokens.get(token) + 1);
     }
 
     public void setCardsPoint(int cardsPoint) {

@@ -15,6 +15,7 @@ import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.model.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class UserController {
 
@@ -63,7 +64,14 @@ public class UserController {
         return user;
     }
 
-    public HashMap<Token, Integer> getOwnedToken(){
-        return user.getOwnedTokens();
+
+    public void setOwnedToken(List<Token> selectedToken, User user) {
+        for (int i = 0; i < selectedToken.size(); i++) {
+            if (user.getOwnedTokens().containsKey(selectedToken.get(i))) {
+                user.getOwnedTokens().put(selectedToken.get(i), user.getOwnedTokens().get(selectedToken.get(i)) + 1);
+            } else {
+                user.getOwnedTokens().put(selectedToken.get(i), 1);
+            }
+        }
     }
 }
