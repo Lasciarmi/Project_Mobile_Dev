@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
+import com.example.mainboardsplendor.TokenColor;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
@@ -113,19 +114,19 @@ public class TokenController {
 
             Color color = token.getColor();
             tokenImage.setColor(color);
-            if (color.equals(MainActivity.TokenColor.BLUE.getTokenColor(context))) {
+            if (color.equals(TokenColor.BLUE.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.blue_token);
-            } else if (color.equals(MainActivity.TokenColor.WHITE.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.WHITE.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.white_token);
-            } else if (color.equals(MainActivity.TokenColor.GREEN.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.GREEN.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.green_token);
-            } else if (color.equals(MainActivity.TokenColor.BLACK.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.BLACK.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.black_token);
-            } else if (color.equals(MainActivity.TokenColor.RED.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.RED.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.red_token);
-            } else if (color.equals(MainActivity.TokenColor.PEARL.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.PEARL.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.pearl_token);
-            } else if (color.equals(MainActivity.TokenColor.GOLD.getTokenColor(context))) {
+            } else if (color.equals(TokenColor.GOLD.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.gold_token);
             }
 

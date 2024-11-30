@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
+import com.example.mainboardsplendor.TokenColor;
 import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
 import com.example.mainboardsplendor.databinding.LayoutTokenBagPlayerBinding;
@@ -63,11 +64,11 @@ public class UserController {
         return user;
     }
 
-    public HashMap<MainActivity.TokenColor, Integer> getOwnedToken(){
+    public HashMap<TokenColor, Integer> getOwnedToken(){
         return user.getOwnedTokens();
     }
 
-    public HashMap<MainActivity.TokenColor, Integer> getOwnedDiscount(){
+    public HashMap<TokenColor, Integer> getOwnedDiscount(){
         return user.getOwnedDiscount();
     }
 }

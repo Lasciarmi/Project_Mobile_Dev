@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mainboardsplendor.MainActivity;
+import com.example.mainboardsplendor.TokenColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int crowns;
     private int level;
     private int Image;
-    private HashMap<MainActivity.TokenColor, Integer> price;
+    private HashMap<TokenColor, Integer> price;
 
     public Card(@NonNull Context context) {
         super(context);
@@ -66,11 +67,11 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
         this.crowns = crowns;
     }
 
-    public HashMap<MainActivity.TokenColor, Integer> getPrice() {
+    public HashMap<TokenColor, Integer> getPrice() {
         return price;
     }
 
-    public void setPrice(HashMap<MainActivity.TokenColor, Integer> price) {
+    public void setPrice(HashMap<TokenColor, Integer> price) {
         this.price = price;
     }
 

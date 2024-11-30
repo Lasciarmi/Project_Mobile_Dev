@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.example.mainboardsplendor.MainActivity;
+import com.example.mainboardsplendor.TokenColor;
 
 import java.util.HashMap;
 
@@ -13,8 +14,8 @@ public class User implements Parcelable {
 
     private String username;
 
-    private HashMap<MainActivity.TokenColor, Integer> ownedTokens;
-    private HashMap<MainActivity.TokenColor, Integer> ownedDiscount;
+    private HashMap<TokenColor, Integer> ownedTokens;
+    private HashMap<TokenColor, Integer> ownedDiscount;
 
     //Objective
     private int CardsPoint;
@@ -48,21 +49,21 @@ public class User implements Parcelable {
         this.ownedTokens = new HashMap<>();
         this.ownedDiscount = new HashMap<>();
 
-        ownedTokens.put(MainActivity.TokenColor.BLUE, 0);
-        ownedTokens.put(MainActivity.TokenColor.WHITE, 0);
-        ownedTokens.put(MainActivity.TokenColor.GREEN, 0);
-        ownedTokens.put(MainActivity.TokenColor.BLACK, 0);
-        ownedTokens.put(MainActivity.TokenColor.RED, 0);
-        ownedTokens.put(MainActivity.TokenColor.PEARL, 0);
-        ownedTokens.put(MainActivity.TokenColor.GOLD, 0);
+        ownedTokens.put(TokenColor.BLUE, 0);
+        ownedTokens.put(TokenColor.WHITE, 0);
+        ownedTokens.put(TokenColor.GREEN, 0);
+        ownedTokens.put(TokenColor.BLACK, 0);
+        ownedTokens.put(TokenColor.RED, 0);
+        ownedTokens.put(TokenColor.PEARL, 0);
+        ownedTokens.put(TokenColor.GOLD, 0);
 
-        ownedDiscount.put(MainActivity.TokenColor.BLUE, 0);
-        ownedDiscount.put(MainActivity.TokenColor.WHITE, 0);
-        ownedDiscount.put(MainActivity.TokenColor.GREEN, 0);
-        ownedDiscount.put(MainActivity.TokenColor.BLACK, 0);
-        ownedDiscount.put(MainActivity.TokenColor.RED, 0);
-        ownedDiscount.put(MainActivity.TokenColor.PEARL, 0);
-        ownedDiscount.put(MainActivity.TokenColor.GOLD, 0);
+        ownedDiscount.put(TokenColor.BLUE, 0);
+        ownedDiscount.put(TokenColor.WHITE, 0);
+        ownedDiscount.put(TokenColor.GREEN, 0);
+        ownedDiscount.put(TokenColor.BLACK, 0);
+        ownedDiscount.put(TokenColor.RED, 0);
+        ownedDiscount.put(TokenColor.PEARL, 0);
+        ownedDiscount.put(TokenColor.GOLD, 0);
     }
 
     protected User(Parcel in) {
@@ -88,7 +89,7 @@ public class User implements Parcelable {
         }
     };
 
-    public void addToken2Bag(MainActivity.TokenColor token, int quantity) {
+    public void addToken2Bag(TokenColor token, int quantity) {
         if (ownedTokens.containsKey(token)) {
             int currentQuantity = (int) ownedTokens.get(token);
             ownedTokens.put(token, currentQuantity + quantity);
@@ -97,17 +98,17 @@ public class User implements Parcelable {
         }
     }
 
-    public HashMap<MainActivity.TokenColor, Integer> getOwnedTokens() {
+    public HashMap<TokenColor, Integer> getOwnedTokens() {
         return ownedTokens;
     }
-    public HashMap<MainActivity.TokenColor, Integer> getOwnedDiscount() {
+    public HashMap<TokenColor, Integer> getOwnedDiscount() {
         return ownedDiscount;
     }
-    public void setOwnedDiscount(HashMap<MainActivity.TokenColor, Integer> ownedDiscount) {
+    public void setOwnedDiscount(HashMap<TokenColor, Integer> ownedDiscount) {
         this.ownedDiscount = ownedDiscount;
     }
 
-    public void setOwnedTokens(HashMap<MainActivity.TokenColor, Integer> ownedTokens) {
+    public void setOwnedTokens(HashMap<TokenColor, Integer> ownedTokens) {
         this.ownedTokens = ownedTokens;
     }
     public void setCardsPoint(int cardsPoint) {
