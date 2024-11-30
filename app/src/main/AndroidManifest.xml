@@ -13,13 +13,13 @@
         android:theme="@style/Theme.MainBoardSplendor"
         tools:targetApi="31">
         <activity
-            android:name=".RulesActivity"
+            android:name=".view.RulesActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateUserActivity"
+            android:name=".view.CreateUserActivity"
             android:exported="false" />
         <activity
-            android:name=".StartUpActivity"
+            android:name=".view.StartUpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="false" />
     </application>
 

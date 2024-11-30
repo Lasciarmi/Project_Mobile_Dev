@@ -14,9 +14,9 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import com.example.mainboardsplendor.MainActivity;
+import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.TokenColor;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
@@ -152,6 +152,47 @@ public class TokenController {
         }
     }
 
+    public Integer getImageToken(TokenColor tokenColor){
+        switch (tokenColor){
+            case BLUE:
+                return R.drawable.blue_token;
+            case WHITE:
+                return R.drawable.white_token;
+            case GREEN:
+                return R.drawable.green_token;
+            case BLACK:
+                return R.drawable.black_token;
+            case RED:
+                return R.drawable.red_token;
+            case PEARL:
+                return R.drawable.pearl_token;
+            case GOLD:
+                return R.drawable.gold_token;
+            default:
+                return null;
+        }
+    }
+
+    public TokenColor mapColorToTokenColor(Color color) {
+        int colorValue = color.toArgb();
+        if (colorValue == ContextCompat.getColor(context, R.color.color4blueToken)) {
+            return TokenColor.BLUE;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.white)) {
+            return TokenColor.WHITE;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.color4greenToken)) {
+            return TokenColor.GREEN;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.black)) {
+            return TokenColor.BLACK;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.color4redToken)) {
+            return TokenColor.RED;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.color4pearlToken)) {
+            return TokenColor.PEARL;
+        } else if (colorValue == ContextCompat.getColor(context, R.color.color4goldToken)) {
+            return TokenColor.GOLD;
+        }
+        return null;
+    }
+
     public void refreshTokenEvent(){
         for (int i=0; i < splendorDuelBoard.getChildCount(); i++){
             View chilView = splendorDuelBoard.getChildAt(i);
@@ -205,19 +246,19 @@ public class TokenController {
                 disableAllGoldTokens(splendorDuelBoard);
 
                 // Menampilkan Toast dalam thread utama jika diperlukan
-                if (context != null) {
-                    String message = "Add 1 Token\n" +
-                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
-                            "Selected Tokens isValid?: " + token.getValid();
-                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-                    TextView textView = new TextView(context);
-                    textView.setText(message);
-                    textView.setPadding(16, 16, 16, 16);
-                    textView.setBackgroundColor(Color.BLACK);
-                    textView.setTextColor(Color.WHITE);
-                    toast.setView(textView);
-                    toast.show();
-                }
+//                if (context != null) {
+//                    String message = "Add 1 Token\n" +
+//                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
+//                            "Selected Tokens isValid?: " + token.getValid();
+//                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+//                    TextView textView = new TextView(context);
+//                    textView.setText(message);
+//                    textView.setPadding(16, 16, 16, 16);
+//                    textView.setBackgroundColor(Color.BLACK);
+//                    textView.setTextColor(Color.WHITE);
+//                    toast.setView(textView);
+//                    toast.show();
+//                }
             }
 
 
@@ -237,19 +278,19 @@ public class TokenController {
                 }
 
                 // Menampilkan Toast dalam thread utama jika diperlukan
-                if (context != null) {
-                    String message = "Add 1 Token\n" +
-                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
-                            "Selected Tokens isValid?: " + token.getValid();
-                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-                    TextView textView = new TextView(context);
-                    textView.setText(message);
-                    textView.setPadding(16, 16, 16, 16);
-                    textView.setBackgroundColor(Color.BLACK);
-                    textView.setTextColor(Color.WHITE);
-                    toast.setView(textView);
-                    toast.show();
-                }
+//                if (context != null) {
+//                    String message = "Add 1 Token\n" +
+//                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
+//                            "Selected Tokens isValid?: " + token.getValid();
+//                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+//                    TextView textView = new TextView(context);
+//                    textView.setText(message);
+//                    textView.setPadding(16, 16, 16, 16);
+//                    textView.setBackgroundColor(Color.BLACK);
+//                    textView.setTextColor(Color.WHITE);
+//                    toast.setView(textView);
+//                    toast.show();
+//                }
             }
 
             refreshValidToken();
@@ -262,9 +303,8 @@ public class TokenController {
         }
     }
 
-    public void testToast(List<View> view){
+    public void resetSelectedToken(List<View> view){
         if (selectedToken != null) {
-            Toast.makeText(context, "Selected token size: " + selectedToken.size(), Toast.LENGTH_SHORT).show();
             removedView.addAll(view);
             refreshValidToken();
         } else {
@@ -606,4 +646,5 @@ public class TokenController {
     public List<Token> getSelectedToken(){
         return selectedToken;
     }
+
 }

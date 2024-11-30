@@ -5,8 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.example.mainboardsplendor.MainActivity;
-import com.example.mainboardsplendor.TokenColor;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 
 import java.util.HashMap;
 
@@ -89,12 +88,12 @@ public class User implements Parcelable {
         }
     };
 
-    public void addToken2Bag(TokenColor token, int quantity) {
+    public void addToken2Bag(TokenColor token) {
         if (ownedTokens.containsKey(token)) {
             int currentQuantity = (int) ownedTokens.get(token);
-            ownedTokens.put(token, currentQuantity + quantity);
+            ownedTokens.put(token, currentQuantity + 1);
         } else {
-            ownedTokens.put(token, quantity);
+            ownedTokens.put(token, 1);
         }
     }
 

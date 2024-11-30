@@ -1,18 +1,21 @@
 package com.example.mainboardsplendor.controller;
 
 import android.graphics.Typeface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import com.example.mainboardsplendor.MainActivity;
+import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.TokenColor;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
-import com.example.mainboardsplendor.databinding.LayoutTokenBagPlayerBinding;
-import com.example.mainboardsplendor.databinding.LayoutTokenBoardBinding;
-import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.model.User;
 
 import java.util.HashMap;
@@ -69,7 +72,28 @@ public class UserController {
         return user.getOwnedTokens();
     }
 
+    public void setOwnedToken(TokenColor tokenColor){
+        user.addToken2Bag(tokenColor);
+    }
+
     public HashMap<TokenColor, Integer> getOwnedDiscount(){
         return user.getOwnedDiscount();
+    }
+
+    public void setTokenBagPlayer(TokenColor tokenColor, GridLayout tokenGridLayout, int tokenImage){
+        Toast.makeText(mainActivity, "TokenColor "+ tokenColor + " : " + getOwnedToken().get(tokenColor), Toast.LENGTH_SHORT).show();
+
+        View view = LayoutInflater.from(mainActivity).inflate(R.layout.custom_token, tokenGridLayout, false);
+        ImageView tokenView = view.findViewById(R.id.token_view);
+        CardView cardView = view.findViewById(R.id.cardView_token);
+
+        // Set Image token
+        tokenView.setImageResource(tokenImage);
+        // Set bg CardView token
+        int colorCurrentToken = tokenColor.getTokenColorInt(mainActivity);
+        cardView.setCardBackgroundColor(colorCurrentToken);
+        view.setVisibility(View.VISIBLE);
+        tokenGridLayout.addView(view);
+
     }
 }
