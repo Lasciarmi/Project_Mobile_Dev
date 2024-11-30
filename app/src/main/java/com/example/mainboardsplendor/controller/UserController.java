@@ -51,13 +51,13 @@ public class UserController {
         scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(user.getTokensStack()));
 
         try{
-            if(playerName.getTypeface().getStyle() == Typeface.BOLD) {
-                playerName.setTextColor(TokenColor.BLUE.getTokenColorInt(mainActivity));
-                playerName.setTypeface(null, Typeface.NORMAL);
-            }
-            else if(playerName.getTypeface().getStyle() == Typeface.NORMAL){
+            if(user.getCurrent()) {
                 playerName.setTextColor(TokenColor.FIRST_PLAYER.getTokenColorInt(mainActivity));
                 playerName.setTypeface(null, Typeface.BOLD);
+            }
+            else{
+                playerName.setTextColor(TokenColor.BLACK.getTokenColorInt(mainActivity));
+                playerName.setTypeface(null, Typeface.NORMAL);
             }
         }
         catch (NullPointerException e){

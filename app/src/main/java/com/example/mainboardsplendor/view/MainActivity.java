@@ -383,6 +383,7 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
+        cardController.refreshValidCard(getCurrentPlayerController());
     }
 
 }
