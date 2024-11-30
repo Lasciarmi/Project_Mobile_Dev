@@ -665,4 +665,8 @@ public class CardController {
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
     }
+
+//    public Card getSelectedCard() {
+//        return selectedCard;
+//    }
 }

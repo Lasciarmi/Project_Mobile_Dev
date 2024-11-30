@@ -26,6 +26,16 @@ public class User implements Parcelable {
     private int reserveCard;
     private int tokensStack;
 
+    private boolean isCurrent;
+
+    public boolean getCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
+    }
+
     public User(String username) {
         this.username = username;
         this.CardsPoint = 0;
@@ -34,6 +44,7 @@ public class User implements Parcelable {
         this.Scroll = 0;
         this.reserveCard = 0;
         this.tokensStack = 0;
+        this.isCurrent = false;
         this.ownedTokens = new HashMap<>();
         this.ownedDiscount = new HashMap<>();
 
@@ -107,9 +118,6 @@ public class User implements Parcelable {
         this.username = username;
     }
 
-    public void setTokensPoint(int tokensPoint) {
-        this.CardsPoint = tokensPoint;
-    }
 
     public void setCrowns(int crowns) {
         this.crowns = crowns;

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Card> listCardLevel2 = new ArrayList<>();
     private List<Card> listCardLevel1 = new ArrayList<>();
     private List<RoyalCard> listRoyalCard = new ArrayList<>();
+    private List<Token> selectedToken = new ArrayList<>();
     private HashMap ownedTokensPlayer1;
     private HashMap ownedTokensPlayer2;
 
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     private GridLayout tokenGridLayout;
     private CardView taskBarTakeToken;
+
+    private int numToken = 0;
 
     public enum TokenColor {
         BLUE(R.color.color4blueToken),
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,15 +108,13 @@ public class MainActivity extends AppCompatActivity {
         // Get Player 1 and 2 Username
         Intent intent = getIntent();
         user1 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_1));
+        // Todo: yang dapat player 1 yang set current true
+        user1.setCurrent(true);
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
 
         // Init name player
         user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag, this);
         user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag, this);
-
-        // Set Current Player to Player 1
-        user2Controller.setPlayerBold();
-        changeCurrentPlayer();
 
         // Init tokenBag
         tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
@@ -132,6 +135,11 @@ public class MainActivity extends AppCompatActivity {
         int rowCount =tokenGridLayout.getRowCount();
         int colCount = tokenGridLayout.getColumnCount();
         tokenController.InitTokenBoard(rowCount, colCount);
+
+        selectedToken = tokenController.getSelectedToken();
+        takeButton.setOnClickListener(v -> {
+            takeButtonAction();
+        });
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
         binding.taskBar.taskBarTakeGems.setVisibility(View.INVISIBLE);
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
@@ -274,6 +282,35 @@ public class MainActivity extends AppCompatActivity {
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
     }
 
+    // Method for add Card Stack on bag player
+    private void takeButtonAction() {
+        // Create a list to hold the views to remove
+        List<View> viewsToRemove = new ArrayList<>();
+        List<Token> tokensToRemove = new ArrayList<>();
+
+        // Collect views to remove and tokens to remove in separate lists
+        for (Token token : selectedToken) {
+            View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
+            view.getId();
+            if (view != null) {
+                viewsToRemove.add(view); // Add the view to the list
+            }
+            tokensToRemove.add(token); // Add the token to the list for removal
+        }
+
+        // Remove the collected views after the loop
+        for (View view : viewsToRemove) {
+//            tokenGridLayout.removeView(view);
+            view.setVisibility(View.INVISIBLE);
+        }
+
+        // Remove the selected tokens from the list
+        selectedToken.removeAll(tokensToRemove);
+
+        tokenController.testToast(viewsToRemove);
+        tokenController.refreshTokenEvent();
+    }
+
     private void updateScoreBoard(User player, LayoutScorePlayerBoardBinding scoreBoardPlayer) {
         // TODO: 11/19/2024 : last edited by theo
         scoreBoardPlayer.playerName.setText(player.getUsername());
@@ -306,10 +343,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeCurrentPlayer() {
-        if (currentPlayer == user1Controller.getUser()) {
-            currentPlayer = user2Controller.getUser();
+        if (user1.getCurrent()) {
+            user1.setCurrent(false);
+            user2.setCurrent(true);
         } else {
-            currentPlayer = user1Controller.getUser();
+            user2.setCurrent(false);
+            user1.setCurrent(true);
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();

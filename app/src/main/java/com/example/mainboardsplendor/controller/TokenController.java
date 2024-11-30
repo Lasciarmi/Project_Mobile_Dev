@@ -2,6 +2,7 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,8 @@ public class TokenController {
     public List<Token> selectedToken = new ArrayList<>();
     private GridLayout splendorDuelBoard;
     private CardView taskBarTakeToken;
+
+    private List<View> removedView = new ArrayList<>();
 
     public TokenController(List<Token> tokenBag, GridLayout splendorDuelBoard, CardView taskBarTakeToken, Context context, MainActivity mainActivity) {
         this.tokenBag = tokenBag;
@@ -137,7 +140,8 @@ public class TokenController {
             location.add(col);
 //            Log.d("MainActivity", "Setting location: " + location.toString());
             tokenImage.setLocation(location);
-            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
+            setOnClickListenerToken(tokenImage);
+//            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
 //            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             splendorDuelBoard.addView(view);
@@ -145,6 +149,18 @@ public class TokenController {
             // Mark Slot
             isFilled[row][col] = true;
         }
+    }
+
+    public void refreshTokenEvent(){
+        for (int i=0; i < splendorDuelBoard.getChildCount(); i++){
+            View chilView = splendorDuelBoard.getChildAt(i);
+            Token token = chilView.findViewById(R.id.token_view);
+            setOnClickListenerToken(token);
+        }
+    }
+
+    public void setOnClickListenerToken(Token token){
+        token.setOnClickListener(view1 -> selectToken(token));
     }
 
     private void selectToken(Token token) {
@@ -245,19 +261,66 @@ public class TokenController {
         }
     }
 
-    private void refreshValidToken(){
+    public void testToast(List<View> view){
+        if (selectedToken != null) {
+            Toast.makeText(context, "Selected token size: " + selectedToken.size(), Toast.LENGTH_SHORT).show();
+            removedView.addAll(view);
+            refreshValidToken();
+        } else {
+            selectedToken = new ArrayList<>();
+        }
+    }
+
+    public void refreshValidToken(){
         if (selectedToken.isEmpty()) {
             for (int i = 0; i < movementPattern.length; i++) {
+                Log.d("refreshValidToken", "Checking child view at index: " + i);
+
+                // Ensure that the movementPattern array has valid values for row and col
+                if (i >= movementPattern.length) {
+                    Log.e("Error", "Index " + i + " exceeds movementPattern length.");
+                    continue;
+                }
+
                 int row = movementPattern[i][0];
                 int col = movementPattern[i][1];
 
                 View chilView = splendorDuelBoard.getChildAt(i);
-                CardView cardView = (CardView) chilView;
-                Token currentToken = cardView.findViewById(R.id.token_view);
-                currentToken.setClickable(true);
-                currentToken.setValid(true);
-                currentToken.setIsSelected(false);
-                cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+
+                if (chilView == null) {
+                    Log.e("Error", "Child view at index " + i + " is null.");
+                    continue;
+                }
+
+                if (removedView.contains(chilView)) {
+                    Log.d("refreshValidToken", "Skipping removed view at index " + i);
+                    continue;
+                }
+
+                // Check if chilView is a CardView before casting
+                if (chilView instanceof CardView) {
+                    CardView cardView = (CardView) chilView;
+
+                    // Ensure cardView is not null
+                    if (cardView != null) {
+                        Token currentToken = cardView.findViewById(R.id.token_view);
+
+                        if (currentToken != null) {
+                            currentToken.setClickable(true);
+                            currentToken.setValid(true);
+                            currentToken.setIsSelected(false);
+
+                            cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+                            Log.d("refreshValidToken", "Token at index " + i + " updated.");
+                        } else {
+                            Log.e("Error", "Token view is null for CardView at index " + i);
+                        }
+                    } else {
+                        Log.e("Error", "CardView at index " + i + " is null.");
+                    }
+                } else {
+                    Log.e("Error", "Child view at index " + i + " is not a CardView.");
+                }
             }
         }
         else if (selectedToken.size() == 1) {
@@ -299,6 +362,9 @@ public class TokenController {
                     updateTokenView(chilView);
                 } else {
                     View chilView = splendorDuelBoard.getChildAt(i);
+                    if (chilView == null) {
+                        continue;
+                    }
                     CardView cardView = (CardView) chilView;
                     Token currentToken = cardView.findViewById(R.id.token_view);
                     currentToken.setClickable(false);
@@ -336,6 +402,9 @@ public class TokenController {
                     } else {
                         // Non-hint lokasi
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -366,6 +435,9 @@ public class TokenController {
                     } else {
                         // Non-hint lokasi
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -421,6 +493,9 @@ public class TokenController {
                     else {
                         // Non-hint locations
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -447,6 +522,9 @@ public class TokenController {
                     continue;
                 } else {
                     View chilView = splendorDuelBoard.getChildAt(i);
+                    if (chilView == null) {
+                        continue;
+                    }
                     CardView cardView = (CardView) chilView;
                     Token currentToken = cardView.findViewById(R.id.token_view);
                     currentToken.setClickable(false);
@@ -489,6 +567,9 @@ public class TokenController {
     }
 
     private void updateTokenView(View view){
+        if (view == null) {
+            return;
+        }
         CardView cardView = (CardView) view;
         Token currentToken = cardView.findViewById(R.id.token_view);
         if (!checkIsGoldToken(currentToken)){
@@ -499,7 +580,7 @@ public class TokenController {
         }
     }
 
-    private CardView getViewAt(int row, int col, GridLayout gridLayout) {
+    public CardView getViewAt(int row, int col, GridLayout gridLayout) {
         for (int i = 0; i < movementPattern.length; i++) {
             int[] position = movementPattern[i];
             int patternRow = position[0];
