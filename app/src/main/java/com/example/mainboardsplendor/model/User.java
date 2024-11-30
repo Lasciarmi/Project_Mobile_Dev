@@ -63,7 +63,6 @@ public class User implements Parcelable {
         ownedDiscount.put(TokenColor.BLACK, 0);
         ownedDiscount.put(TokenColor.RED, 0);
         ownedDiscount.put(TokenColor.PEARL, 0);
-        ownedDiscount.put(TokenColor.GOLD, 0);
     }
 
     protected User(Parcel in) {
@@ -74,7 +73,8 @@ public class User implements Parcelable {
         Scroll = in.readInt();
         reserveCard = in.readInt();
         tokensStack = in.readInt();
-        ownedTokens = in.readHashMap(Token.class.getClassLoader());
+        ownedTokens = in.readHashMap(HashMap.class.getClassLoader());
+        ownedDiscount = in.readHashMap(HashMap.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

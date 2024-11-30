@@ -46,6 +46,7 @@ public class UserController {
         scoreBoardPlayer.totalReservedCardPlayer.setText(String.valueOf(user.getReserveCard()));
         scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(user.getTokensStack()));
 
+        // TODO: 11/30/2024 CHANGE TOKEN COLOR TO SPLENDOR COLOR AND REMOVE MAINACTIVITY FROM USERCONTROLLER 
         if(playerName.getTypeface().getStyle() == Typeface.BOLD) {
             playerName.setTextColor(ContextCompat.getColor(mainActivity, R.color.black));
             playerName.setTypeface(null, Typeface.NORMAL);

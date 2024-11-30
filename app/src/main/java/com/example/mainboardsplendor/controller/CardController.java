@@ -3,11 +3,13 @@ package com.example.mainboardsplendor.controller;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
@@ -55,36 +57,34 @@ public class CardController {
 
     public void refreshValidCard(UserController userController) {
 //      for each listcard in allListLevelCard
-        for (List<? extends AppCompatImageView> listcard : Arrays.asList(listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard)) {
+        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
 
 //          for each card in listcard
-            for (Object obj : listcard) {
-                Card card = (Card) obj;
+            for (int i=0; i < cardBoard.getChildCount(); i++) {
+                View view = cardBoard.getChildAt(i);
+                if (view instanceof Card) {
+                    Card card = (Card) view;
+                    HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
+                    HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
+                    HashMap<TokenColor, Integer> cardPrice = card.getPrice();
+                    int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
+                    int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
+                    int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
+                    int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
+                    int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
+                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
+                    int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
-                HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
-                HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
-                HashMap<TokenColor, Integer> cardPrice = card.getPrice();
-                if (
-                        cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE) &&
-                                cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE) &&
-                                cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN) &&
-                                cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK) &&
-                                cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED) &&
-                                cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL) &&
-                                cardPrice.get(TokenColor.GOLD) <= ownedToken.get(TokenColor.GOLD) + ownedDiscount.get(TokenColor.GOLD)
-                ){
-                    card.setClickable(true);
-                    card.setEnabled(true);
-                    card.setAlpha(1f);
+                    if (sum >= 0){
+                        card.setClickable(true);
+                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                    }
+                    else {
+                        card.setClickable(false);
+                        card.setBackgroundResource(0);
+                    }
                 }
-                else {
-                    card.setClickable(false);
-                    card.setEnabled(false);
-                    card.setAlpha(0.2f);
-//                    card.setOnClickListener(view -> {
-//                        Toast.makeText(context, "THIS", Toast.LENGTH_SHORT).show();
-//                    });
-                }
+
             }
 
         }
@@ -611,8 +611,6 @@ public class CardController {
         card.setOnClickListener(view -> {
             Toast.makeText(context, "THIS", Toast.LENGTH_SHORT).show();
         });
-        card.setClickable(true);
-        card.setEnabled(true);
         return card;
     }
 
