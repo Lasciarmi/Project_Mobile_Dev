@@ -1,6 +1,7 @@
 package com.example.mainboardsplendor.controller;
 
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
@@ -49,14 +50,18 @@ public class UserController {
         scoreBoardPlayer.totalReservedCardPlayer.setText(String.valueOf(user.getReserveCard()));
         scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(user.getTokensStack()));
 
-        // TODO: 11/30/2024 CHANGE TOKEN COLOR TO SPLENDOR COLOR AND REMOVE MAINACTIVITY FROM USERCONTROLLER 
-        if(playerName.getTypeface().getStyle() == Typeface.BOLD) {
-            playerName.setTextColor(ContextCompat.getColor(mainActivity, R.color.black));
-            playerName.setTypeface(null, Typeface.NORMAL);
+        try{
+            if(playerName.getTypeface().getStyle() == Typeface.BOLD) {
+                playerName.setTextColor(TokenColor.BLUE.getTokenColorInt(mainActivity));
+                playerName.setTypeface(null, Typeface.NORMAL);
+            }
+            else if(playerName.getTypeface().getStyle() == Typeface.NORMAL){
+                playerName.setTextColor(TokenColor.FIRST_PLAYER.getTokenColorInt(mainActivity));
+                playerName.setTypeface(null, Typeface.BOLD);
+            }
         }
-        else if(playerName.getTypeface().getStyle() == Typeface.NORMAL){
-            playerName.setTextColor(ContextCompat.getColor(mainActivity, R.color.first_player));
-            playerName.setTypeface(null, Typeface.BOLD);
+        catch (NullPointerException e){
+            Log.d("ErrorNullPointerException", "setPlayerBoard: "+ e.getMessage());
         }
     }
 
