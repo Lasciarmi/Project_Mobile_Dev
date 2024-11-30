@@ -18,7 +18,6 @@ import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class TokenController {
@@ -111,19 +110,19 @@ public class TokenController {
 
             Color color = token.getColor();
             tokenImage.setColor(color);
-            if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)))) {
+            if (color.equals(MainActivity.TokenColor.BLUE.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.blue_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.white)))) {
+            } else if (color.equals(MainActivity.TokenColor.WHITE.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.white_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)))) {
+            } else if (color.equals(MainActivity.TokenColor.GREEN.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.green_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.black)))) {
+            } else if (color.equals(MainActivity.TokenColor.BLACK.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.black_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)))) {
+            } else if (color.equals(MainActivity.TokenColor.RED.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.red_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4pearlToken)))) {
+            } else if (color.equals(MainActivity.TokenColor.PEARL.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.pearl_token);
-            } else if (color.equals(Color.valueOf(mainActivity.getResources().getColor(R.color.color4goldToken)))) {
+            } else if (color.equals(MainActivity.TokenColor.GOLD.getTokenColor(context))) {
                 tokenImage.setImageResource(R.drawable.gold_token);
             }
 
@@ -461,6 +460,7 @@ public class TokenController {
     }
 
     private void disableAllGoldTokens(GridLayout gridLayout) {
+        refreshValidToken();
         for (int i = 0; i < gridLayout.getChildCount(); i++) {
             View childView = gridLayout.getChildAt(i);
             CardView cardView = (CardView) childView;

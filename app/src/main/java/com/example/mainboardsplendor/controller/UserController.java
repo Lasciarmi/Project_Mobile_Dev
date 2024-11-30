@@ -63,7 +63,11 @@ public class UserController {
         return user;
     }
 
-    public HashMap<Token, Integer> getOwnedToken(){
+    public HashMap<MainActivity.TokenColor, Integer> getOwnedToken(){
         return user.getOwnedTokens();
+    }
+
+    public HashMap<MainActivity.TokenColor, Integer> getOwnedDiscount(){
+        return user.getOwnedDiscount();
     }
 }

@@ -1,6 +1,8 @@
 package com.example.mainboardsplendor;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +61,33 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout tokenGridLayout;
     private CardView taskBarTakeToken;
 
+    public enum TokenColor {
+        BLUE(R.color.color4blueToken),
+        WHITE(R.color.white),
+        GREEN(R.color.color4greenToken),
+        BLACK(R.color.black),
+        RED(R.color.color4redToken),
+        PEARL(R.color.color4pearlToken),
+        GOLD(R.color.color4goldToken);
+
+        private final int colorResId;
+
+        // Constructor name must match the enum name (TokenColor)
+        TokenColor(int colorResId) {
+            this.colorResId = colorResId;
+        }
+
+        // Corrected method to return a Color object
+        public Color getTokenColor(Context context) {
+            int colorInt = ContextCompat.getColor(context, colorResId); // Retrieve color as an int
+            return Color.valueOf(colorInt); // Convert int to Color object
+        }
+        public Integer getTokenColorInt(Context context) {
+            // Retrieve color as an int
+            return ContextCompat.getColor(context, colorResId); // Convert int to Color object
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
         taskBarTakeToken = binding.taskBar.taskBarTakeGems;
         Button takeButton = taskBarTakeToken.findViewById(R.id.take_button);
 
-        ownedTokensPlayer1 =  user1Controller.getOwnedToken();
-        ownedTokensPlayer2 =  user2Controller.getOwnedToken();
-
 //        takeButton.setOnClickListener(v -> {
 //            List<Token> selectedTokens = tokenController.getSelectedToken();
 //            // Todo: tambah attribut currentPlayer untuk tahu siapa player aktifnya,
@@ -120,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCard();
         cardController.InitReservedCardBoard();
 
+        InitGridBag(binding);
+
+        cardController.refreshValidCard(user1Controller);
+    }
+
+    private void InitGridBag(ActivityMainBinding binding) {
         // Init Grid list_blue_token pada bag player
         for (int i = 0; i< 4; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.custom_token, binding.layoutPlayer1Bag.listBlueToken.listToken, false);
@@ -129,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.blue_token);
             // Set bg CardView token
-            int color4blueToken = ContextCompat.getColor(this, R.color.color4blueToken);
+            int color4blueToken = TokenColor.BLUE.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4blueToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listBlueToken.listToken.addView(view);
@@ -144,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.white_token);
             // Set bg CardView token
-            int color4whiteToken = ContextCompat.getColor(this, R.color.white);
+            int color4whiteToken = TokenColor.WHITE.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4whiteToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listWhiteToken.listToken.addView(view);
@@ -160,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.green_token);
             // Set bg CardView token
-            int color4greenToken = ContextCompat.getColor(this, R.color.color4greenToken);
+            int color4greenToken = TokenColor.GREEN.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4greenToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listGreenToken.listToken.addView(view);
@@ -175,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.black_token);
             // Set bg CardView token
-            int color4blackToken = ContextCompat.getColor(this, R.color.black);
+            int color4blackToken = TokenColor.BLACK.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4blackToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listBlackToken.listToken.addView(view);
@@ -190,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.red_token);
             // Set bg CardView token
-            int color4redToken = ContextCompat.getColor(this, R.color.color4redToken);
+            int color4redToken = TokenColor.RED.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4redToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listRedToken.listToken.addView(view);
@@ -204,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.pearl_token);
             // Set bg CardView token
-            int color4pearlToken = ContextCompat.getColor(this, R.color.color4pearlToken);
+            int color4pearlToken = TokenColor.PEARL.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4pearlToken);
             view.setVisibility(View.VISIBLE);
             binding.layoutPlayer1Bag.listPearlToken.listToken.addView(view);
@@ -222,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             // Set Image token
             tokenView.setImageResource(R.drawable.gold_token);
             // Set bg CardView token
-            int color4goldToken = ContextCompat.getColor(this, R.color.color4goldToken);
+            int color4goldToken = TokenColor.GOLD.getTokenColorInt(this);
             cardView.setCardBackgroundColor(color4goldToken);
 //            cardView.setLayoutParams(layoutParams);
 //            cardView.setRadius(cornerRadiusInPx);
@@ -240,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
         addNewCard(binding.layoutPlayer1Bag.redCardStack);
-
     }
 
     private void updateScoreBoard(User player, LayoutScorePlayerBoardBinding scoreBoardPlayer) {
