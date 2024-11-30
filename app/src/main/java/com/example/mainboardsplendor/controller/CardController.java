@@ -34,7 +34,7 @@ public class CardController {
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
 
-    private Card selectedCard;
+    private Card selectedCard = null;
 
     private Context context;
     private MainActivity mainActivity;
@@ -72,9 +72,18 @@ public class CardController {
                     int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
                     int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
-                    if (sum >= 0){
+                    if (sum >= 0 && (selectedCard != null || selectedCard == card)){
                         card.setClickable(true);
                         card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        card.setOnClickListener(v -> {
+                            if (selectedCard == null) {
+                                selectedCard = card;
+                            }
+                            else {
+                                selectedCard = null;
+                            }
+                            refreshValidCard(userController);
+                        });
                     }
                     else {
                         card.setClickable(false);
@@ -605,9 +614,6 @@ public class CardController {
         card.setCrowns(crowns);
         card.setPrice(price);
         card.setImage(image);
-        card.setOnClickListener(view -> {
-            Toast.makeText(context, "THIS", Toast.LENGTH_SHORT).show();
-        });
         return card;
     }
 
@@ -662,7 +668,7 @@ public class CardController {
         return royalCards.remove(randomIndex);
     }
 
-//    public Card getSelectedCard() {
-//        return selectedCard;
-//    }
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
 }
