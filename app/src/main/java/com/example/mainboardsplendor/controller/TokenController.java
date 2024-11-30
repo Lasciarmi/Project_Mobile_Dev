@@ -141,7 +141,8 @@ public class TokenController {
             location.add(col);
 //            Log.d("MainActivity", "Setting location: " + location.toString());
             tokenImage.setLocation(location);
-            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
+            setOnClickListenerToken(tokenImage);
+//            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
 //            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             splendorDuelBoard.addView(view);
@@ -149,6 +150,18 @@ public class TokenController {
             // Mark Slot
             isFilled[row][col] = true;
         }
+    }
+
+    public void refreshTokenEvent(){
+        for (int i=0; i < splendorDuelBoard.getChildCount(); i++){
+            View chilView = splendorDuelBoard.getChildAt(i);
+            Token token = chilView.findViewById(R.id.token_view);
+            setOnClickListenerToken(token);
+        }
+    }
+
+    public void setOnClickListenerToken(Token token){
+        token.setOnClickListener(view1 -> selectToken(token));
     }
 
     private void selectToken(Token token) {
@@ -255,37 +268,56 @@ public class TokenController {
             removedView.addAll(view);
             refreshValidToken();
         } else {
-            Log.e("Error", "selectedToken is null");
+            selectedToken = new ArrayList<>();
         }
     }
 
     public void refreshValidToken(){
         if (selectedToken.isEmpty()) {
             for (int i = 0; i < movementPattern.length; i++) {
+                Log.d("refreshValidToken", "Checking child view at index: " + i);
+
+                // Ensure that the movementPattern array has valid values for row and col
+                if (i >= movementPattern.length) {
+                    Log.e("Error", "Index " + i + " exceeds movementPattern length.");
+                    continue;
+                }
+
                 int row = movementPattern[i][0];
                 int col = movementPattern[i][1];
 
-                // Ensure that the child view is not null
                 View chilView = splendorDuelBoard.getChildAt(i);
+
                 if (chilView == null) {
                     Log.e("Error", "Child view at index " + i + " is null.");
-                    continue; // Skip to next iteration if child is null
+                    continue;
                 }
 
                 if (removedView.contains(chilView)) {
-                    break; // Exit the loop if the view is in removedView
+                    Log.d("refreshValidToken", "Skipping removed view at index " + i);
+                    continue;
                 }
 
+                // Check if chilView is a CardView before casting
                 if (chilView instanceof CardView) {
                     CardView cardView = (CardView) chilView;
-                    Token currentToken = cardView.findViewById(R.id.token_view);
-                    if (currentToken != null) {
-                        currentToken.setClickable(true);
-                        currentToken.setValid(true);
-                        currentToken.setIsSelected(false);
-                        cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+
+                    // Ensure cardView is not null
+                    if (cardView != null) {
+                        Token currentToken = cardView.findViewById(R.id.token_view);
+
+                        if (currentToken != null) {
+                            currentToken.setClickable(true);
+                            currentToken.setValid(true);
+                            currentToken.setIsSelected(false);
+
+                            cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
+                            Log.d("refreshValidToken", "Token at index " + i + " updated.");
+                        } else {
+                            Log.e("Error", "Token view is null for CardView at index " + i);
+                        }
                     } else {
-                        Log.e("Error", "Token view is null for CardView at index " + i);
+                        Log.e("Error", "CardView at index " + i + " is null.");
                     }
                 } else {
                     Log.e("Error", "Child view at index " + i + " is not a CardView.");
@@ -331,6 +363,9 @@ public class TokenController {
                     updateTokenView(chilView);
                 } else {
                     View chilView = splendorDuelBoard.getChildAt(i);
+                    if (chilView == null) {
+                        continue;
+                    }
                     CardView cardView = (CardView) chilView;
                     Token currentToken = cardView.findViewById(R.id.token_view);
                     currentToken.setClickable(false);
@@ -368,6 +403,9 @@ public class TokenController {
                     } else {
                         // Non-hint lokasi
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -398,6 +436,9 @@ public class TokenController {
                     } else {
                         // Non-hint lokasi
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -453,6 +494,9 @@ public class TokenController {
                     else {
                         // Non-hint locations
                         View chilView = splendorDuelBoard.getChildAt(i);
+                        if (chilView == null) {
+                            continue;
+                        }
                         CardView cardView = (CardView) chilView;
                         Token currentToken = cardView.findViewById(R.id.token_view);
                         currentToken.setClickable(false);
@@ -479,6 +523,9 @@ public class TokenController {
                     continue;
                 } else {
                     View chilView = splendorDuelBoard.getChildAt(i);
+                    if (chilView == null) {
+                        continue;
+                    }
                     CardView cardView = (CardView) chilView;
                     Token currentToken = cardView.findViewById(R.id.token_view);
                     currentToken.setClickable(false);
@@ -520,6 +567,9 @@ public class TokenController {
     }
 
     private void updateTokenView(View view){
+        if (view == null) {
+            return;
+        }
         CardView cardView = (CardView) view;
         Token currentToken = cardView.findViewById(R.id.token_view);
         if (!checkIsGoldToken(currentToken)){

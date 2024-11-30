@@ -82,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
         user1.setCurrent(true);
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
 
+        user1Controller = new UserController(user1, binding.scoreBoardPlayer1, binding.layoutPlayer1Bag);
+        user2Controller = new UserController(user2, binding.scoreBoardPlayer2, binding.layoutPlayer2Bag);
+
+
+
         // Init tokenBag
         tokenGridLayout = binding.tokenBoard.splendorDuelBoard;
         taskBarTakeToken = binding.taskBar.taskBarTakeGems;
@@ -255,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
+            view.getId();
             if (view != null) {
                 viewsToRemove.add(view); // Add the view to the list
             }
@@ -263,13 +269,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Remove the collected views after the loop
         for (View view : viewsToRemove) {
-            tokenGridLayout.removeView(view);
+//            tokenGridLayout.removeView(view);
+            view.setVisibility(View.INVISIBLE);
         }
 
         // Remove the selected tokens from the list
         selectedToken.removeAll(tokensToRemove);
 
         tokenController.testToast(viewsToRemove);
+        tokenController.refreshTokenEvent();
     }
 
     private void updateScoreBoard(User player, LayoutScorePlayerBoardBinding scoreBoardPlayer) {
