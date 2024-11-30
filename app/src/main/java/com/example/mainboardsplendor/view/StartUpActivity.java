@@ -1,4 +1,4 @@
-package com.example.mainboardsplendor;
+package com.example.mainboardsplendor.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.databinding.ActivityStartUpBinding;
 
 public class StartUpActivity extends AppCompatActivity {

@@ -7,10 +7,8 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.mainboardsplendor.MainActivity;
-import com.example.mainboardsplendor.TokenColor;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Card extends androidx.appcompat.widget.AppCompatImageView {

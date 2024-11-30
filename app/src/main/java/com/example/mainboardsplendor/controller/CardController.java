@@ -2,22 +2,18 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.example.mainboardsplendor.MainActivity;
+import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.TokenColor;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
-import com.example.mainboardsplendor.model.Token;
-import com.example.mainboardsplendor.model.User;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

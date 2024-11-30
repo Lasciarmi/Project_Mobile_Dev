@@ -1,9 +1,11 @@
-package com.example.mainboardsplendor;
+package com.example.mainboardsplendor.enumeration;
 
 import android.content.Context;
 import android.graphics.Color;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.mainboardsplendor.R;
 
 public enum TokenColor {
     BLUE(R.color.color4blueToken),
