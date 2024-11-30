@@ -36,19 +36,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-/*
-    private int quantityCardLevel3 = 10;
-    private int quantityCardLevel2 = 20;
-    private int quantityCardLevel1 = 25;
-*/
     private List<Token> tokenBag = new ArrayList<>();
     private List<Card> listCardLevel3 = new ArrayList<>();
     private List<Card> listCardLevel2 = new ArrayList<>();
     private List<Card> listCardLevel1 = new ArrayList<>();
     private List<RoyalCard> listRoyalCard = new ArrayList<>();
     private List<Token> selectedToken = new ArrayList<>();
-    private HashMap ownedTokensPlayer1;
-    private HashMap ownedTokensPlayer2;
 
     private User user1;
     private User user2;
@@ -58,12 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private UserController user2Controller;
     private CardController cardController;
 
-    private User currentPlayer;
-
     private GridLayout tokenGridLayout;
     private CardView taskBarTakeToken;
-
-    private int numToken = 0;
 
     public enum TokenColor {
         BLUE(R.color.color4blueToken),
@@ -121,12 +110,6 @@ public class MainActivity extends AppCompatActivity {
         taskBarTakeToken = binding.taskBar.taskBarTakeGems;
         Button takeButton = taskBarTakeToken.findViewById(R.id.take_button);
 
-//        takeButton.setOnClickListener(v -> {
-//            List<Token> selectedTokens = tokenController.getSelectedToken();
-//            // Todo: tambah attribut currentPlayer untuk tahu siapa player aktifnya,
-//            //  beri indikator seperti warna nama playernya berubah/ teks pemberitahuan player aktif pada taskbar
-//            // check current player baru ambil token
-//        });
         tokenController = new TokenController(tokenBag, tokenGridLayout, taskBarTakeToken,this, this);
 
         tokenController.initTokenBag();
@@ -309,17 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
         tokenController.testToast(viewsToRemove);
         tokenController.refreshTokenEvent();
-    }
-
-    private void updateScoreBoard(User player, LayoutScorePlayerBoardBinding scoreBoardPlayer) {
-        // TODO: 11/19/2024 : last edited by theo
-        scoreBoardPlayer.playerName.setText(player.getUsername());
-        scoreBoardPlayer.poinPlayer.setText(String.valueOf(player.getCardsPoint()));
-        scoreBoardPlayer.crownPlayer.setText(String.valueOf(player.getCrowns()));
-        scoreBoardPlayer.cardPoinPlayer.setText(String.valueOf(player.getMostSameCardColorValue()));
-        scoreBoardPlayer.totalPrivilegePlayer.setText(String.valueOf(player.getScroll()));
-        scoreBoardPlayer.totalReservedCardPlayer.setText(String.valueOf(player.getReserveCard()));
-        scoreBoardPlayer.totalTokenPlayer.setText(String.valueOf(player.getTokensStack()));
     }
 
     // Method for add Card Stack
