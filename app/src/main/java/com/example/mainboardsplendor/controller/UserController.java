@@ -21,9 +21,10 @@ public class UserController {
         this.tokenBagPlayer = layoutPlayerBag;
     }
 
-    public void setPlayerBoard() {
+    public void setPlayerBoard(int i) {
         scoreBoardPlayer.playerName.setText(user.getUsername());
         tokenBagPlayer.playerNameBot.setText(user.getUsername());
+        scoreBoardPlayer.totalPrivilegePlayer.setText("1");
     }
 
     public HashMap<Token, Integer> getOwnedToken(){

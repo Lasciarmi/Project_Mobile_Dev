@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.mainboardsplendor.MainActivity;
 import com.example.mainboardsplendor.R;
@@ -562,12 +561,6 @@ public class CardController {
         card.setCrowns(crowns);
         card.setPrice(price);
         card.setImage(image);
-//        card.setOnClickListener(view -> {
-//            if (card.isValidToPick()) {
-//                selectedCard = card;
-//                Toast.makeText(context, String.valueOf(card.getPrice()), Toast.LENGTH_SHORT).show();
-//            }
-//        });
         return card;
     }
 
@@ -618,8 +611,4 @@ public class CardController {
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
     }
-
-//    public Card getSelectedCard() {
-//        return selectedCard;
-//    }
 }

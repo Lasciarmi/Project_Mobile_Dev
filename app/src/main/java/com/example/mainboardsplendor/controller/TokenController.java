@@ -2,7 +2,6 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,23 +29,21 @@ public class TokenController {
     private static final int quantityRedToken = 4;
     private static final int quantityPearlToken = 2;
     private static final int quantityGoldToken = 3;
-    private int[][] movementPattern = {
-            {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
-            {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
-            {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
-            {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
-            {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
-    };
 
     private List<Token> tokenBag;
-    private final List<CardView> tokenPick = new ArrayList<>();
     private Context context;
     private MainActivity mainActivity;
     public List<Token> selectedToken = new ArrayList<>();
     private GridLayout splendorDuelBoard;
     private CardView taskBarTakeToken;
 
-    private List<View> removedView = new ArrayList<>();
+    int[][] movementPattern = {
+            {2, 2}, {3, 2}, {3, 1}, {2, 1}, {1, 1},
+            {1, 2}, {1, 3}, {2, 3}, {3, 3}, {4, 3},
+            {4, 2}, {4, 1}, {4, 0}, {3, 0}, {2, 0},
+            {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
+            {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
+    };
 
     public TokenController(List<Token> tokenBag, GridLayout splendorDuelBoard, CardView taskBarTakeToken, Context context, MainActivity mainActivity) {
         this.tokenBag = tokenBag;
@@ -249,47 +246,19 @@ public class TokenController {
         }
     }
 
-    public void testToast(List<View> view){
-        if (selectedToken != null) {
-            Toast.makeText(context, "Selected token size: " + selectedToken.size(), Toast.LENGTH_SHORT).show();
-            removedView.addAll(view);
-            refreshValidToken();
-        } else {
-            Log.e("Error", "selectedToken is null");
-        }
-    }
-
-    public void refreshValidToken(){
+    private void refreshValidToken(){
         if (selectedToken.isEmpty()) {
             for (int i = 0; i < movementPattern.length; i++) {
                 int row = movementPattern[i][0];
                 int col = movementPattern[i][1];
 
-                // Ensure that the child view is not null
                 View chilView = splendorDuelBoard.getChildAt(i);
-                if (chilView == null) {
-                    Log.e("Error", "Child view at index " + i + " is null.");
-                    continue; // Skip to next iteration if child is null
-                }
-
-                if (removedView.contains(chilView)) {
-                    break; // Exit the loop if the view is in removedView
-                }
-
-                if (chilView instanceof CardView) {
-                    CardView cardView = (CardView) chilView;
-                    Token currentToken = cardView.findViewById(R.id.token_view);
-                    if (currentToken != null) {
-                        currentToken.setClickable(true);
-                        currentToken.setValid(true);
-                        currentToken.setIsSelected(false);
-                        cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
-                    } else {
-                        Log.e("Error", "Token view is null for CardView at index " + i);
-                    }
-                } else {
-                    Log.e("Error", "Child view at index " + i + " is not a CardView.");
-                }
+                CardView cardView = (CardView) chilView;
+                Token currentToken = cardView.findViewById(R.id.token_view);
+                currentToken.setClickable(true);
+                currentToken.setValid(true);
+                currentToken.setIsSelected(false);
+                cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
             }
         }
         else if (selectedToken.size() == 1) {
@@ -530,7 +499,7 @@ public class TokenController {
         }
     }
 
-    public CardView getViewAt(int row, int col, GridLayout gridLayout) {
+    private CardView getViewAt(int row, int col, GridLayout gridLayout) {
         for (int i = 0; i < movementPattern.length; i++) {
             int[] position = movementPattern[i];
             int patternRow = position[0];
