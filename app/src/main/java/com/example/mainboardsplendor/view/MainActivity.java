@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCard();
 
         cardController.InitReservedCardBoard();
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
 
         // check valid card (TODO: DELETE)
 //        cardController.refreshValidCard(user1Controller);
@@ -180,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
 
-        cardController.refreshValidCrownCard(user1);
     }
 
     private GridLayout getCardReservedPlayer(){

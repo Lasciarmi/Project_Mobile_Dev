@@ -90,28 +90,28 @@ public class CardController {
         }
     }
 
-    public void refreshValidCrownCard(User user) {
+    public void refreshValidCrownCard(UserController userController) {
 //      for each listcard in allListLevelCard
             for (int i=0; i < reservedCardBoard.getChildCount(); i++) {
                 View view = reservedCardBoard.getChildAt(i);
-                RoyalCard royalCard = view.findViewById(R.id.royal_card);
-                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
-//                if (view instanceof RoyalCard) {
-//                    RoyalCard royalCard = (RoyalCard) view;
-//                    int ownedCrown = user.getCrowns();
+//                RoyalCard royalCard = view.findViewById(R.id.royal_card);
+//                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                if (view instanceof RoyalCard) {
+                    RoyalCard royalCard = (RoyalCard) view;
+                    int ownedCrown = userController.getCrowns();
 //
-//                    if (ownedCrown == 3 || ownedCrown == 6){
-//                        royalCard.setClickable(true);
-//                        royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
-//                        royalCard.setOnClickListener(v -> {
-////                            royaleCardClicked(userController, royalCard);
-//                        });
-//                    }
-//                    else {
-//                        royalCard.setClickable(false);
-//                        royalCard.setBackgroundResource(0);
-//                    }
-//                }
+                    if (ownedCrown == 3 || ownedCrown == 6){
+                        royalCard.setClickable(true);
+                        royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        royalCard.setOnClickListener(v -> {
+                            royaleCardClicked(userController, royalCard);
+                        });
+                    }
+                    else {
+                        royalCard.setClickable(false);
+                        royalCard.setBackgroundResource(0);
+                    }
+                }
 
         }
     }
@@ -739,11 +739,10 @@ public class CardController {
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
             params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
 
-            ImageView imageView = new ImageView(context);
-            imageView.setImageResource(royalCard.getImage());
-            imageView.setLayoutParams(params);
+            royalCard.setImageResource(royalCard.getImage());
+            royalCard.setLayoutParams(params);
 
-            reservedCardBoard.addView(imageView);
+            reservedCardBoard.addView(royalCard);
         }
     }
 

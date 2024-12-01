@@ -144,4 +144,8 @@ public class UserController {
         // TODO: 12/1/2024 DONT FORGET 
     }
 
+    public int getCrowns(){
+        return user.getCrowns();
+    }
+
 }
