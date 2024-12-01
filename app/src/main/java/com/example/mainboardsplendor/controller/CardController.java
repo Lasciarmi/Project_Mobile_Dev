@@ -57,57 +57,91 @@ public class CardController {
 
     public void refreshValidCard(UserController userController, TokenColor tokenColor) {
 //      for each listcard in allListLevelCard
-        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
+        try {
+            for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
 
-            if (tokenColor.equals(TokenColor.GOLD)){
-                for (int i=0; i < cardBoard.getChildCount(); i++) {
-                    View view = cardBoard.getChildAt(i);
-                    if(view instanceof Card){
-                        Card card = (Card) view;
-                        card.setClickable(true);
-                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                if (tokenColor != null) {
+                    if (tokenColor.equals(TokenColor.GOLD)) {
+                        for (int i = 0; i < cardBoard.getChildCount(); i++) {
+                            View view = cardBoard.getChildAt(i);
+                            if (view instanceof Card) {
+                                Card card = (Card) view;
+                                if (selectedCard == null || selectedCard == card) {
+                                    card.setClickable(true);
+                                    card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                                    card.setOnClickListener(v -> {
+                                        cardClickedJoker(userController, card, tokenColor);
+                                    });
+                                } else {
+                                    card.setClickable(false);
+                                    card.setBackgroundResource(0);
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    //          for each card in listcard
+                    for (int i=0; i < cardBoard.getChildCount(); i++) {
+                        View view = cardBoard.getChildAt(i);
+                        if (view instanceof Card) {
+                            Card card = (Card) view;
+                            card.setClickable(false);
+                            card.setBackgroundResource(0);
+                            HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
+                            HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
+                            HashMap<TokenColor, Integer> cardPrice = card.getPrice();
+                            int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
+                            int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
+                            int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
+                            int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
+                            int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
+                            int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
+                            int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
+
+                            if (sum >= 0 && (selectedCard == null || selectedCard == card)){
+                                card.setClickable(true);
+                                card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                                card.setOnClickListener(v -> {
+                                    cardClicked(userController, card);
+                                });
+                            }
+                            else {
+                                card.setClickable(false);
+                                card.setBackgroundResource(0);
+                            }
+                        }
+
                     }
                     mainActivity.setTaskBar(ActiveTaskBar.CARD);
                 }
             }
-//          for each card in listcard
-            for (int i=0; i < cardBoard.getChildCount(); i++) {
-                View view = cardBoard.getChildAt(i);
-                if (view instanceof Card) {
-                    Card card = (Card) view;
-                    HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
-                    HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
-                    HashMap<TokenColor, Integer> cardPrice = card.getPrice();
-                    int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
-                    int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
-                    int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
-                    int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
-                    int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
-                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
-                    int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
-
-                    if (sum >= 0 && (selectedCard == null || selectedCard == card)){
-                        card.setClickable(true);
-                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
-                        card.setOnClickListener(v -> {
-                            if (selectedCard == null){
-                                this.selectedCard = card;
-                            }
-                            else{
-                                this.selectedCard = null;
-                            }
-                            refreshValidCard(userController, TokenColor.WHITE);
-                        });
-                    }
-                    else {
-                        card.setClickable(false);
-                        card.setBackgroundResource(0);
-                    }
-                }
-
-            }
-
         }
+        catch (NullPointerException e){
+            Log.d("NullPointerException", "refreshValidCard: "+e.getMessage());
+        }
+    }
+
+    private void cardClickedJoker(UserController userController, Card card, TokenColor tokenColor) {
+        if (selectedCard == null){
+            this.selectedCard = card;
+        }
+        else{
+            this.selectedCard = null;
+        }
+        refreshValidCard(userController, tokenColor);
+    }
+
+    private void cardClicked(UserController userController, Card card) {
+        if (selectedCard == null){
+            mainActivity.setTaskBar(ActiveTaskBar.CARD);
+            this.selectedCard = card;
+        }
+        else{
+            mainActivity.setTaskBar(ActiveTaskBar.NONE);
+            this.selectedCard = null;
+        }
+        refreshValidCard(userController, null);
     }
 
     public void InitCardTopDeck() {

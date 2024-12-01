@@ -2,7 +2,6 @@ package com.example.mainboardsplendor.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.databinding.CustomTaskBarBinding;
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.controller.CardController;
@@ -47,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private List<RoyalCard> listRoyalCard = new ArrayList<>();
     private List<Token> selectedToken = new ArrayList<>();
     private Card selectedCard;
+    private boolean dontChangePlayer = false;
 
     private User user1;
     private User user2;
@@ -76,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout redTokenBagPlayer2;
     private GridLayout pearlTokenBagPlayer1;
     private GridLayout pearlTokenBagPlayer2;
-    private GridLayout goldTokenBagPlayer1;
-    private GridLayout goldTokenBagPlayer2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +111,21 @@ public class MainActivity extends AppCompatActivity {
         setTaskBar(ActiveTaskBar.NONE);
 
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
-        // TAKE BUTTON ON CLICK LISTENER
+        Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
+        Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
+
+        // BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
-            takeButtonAction();
+            takeTokenButtonAction();
         });
+//        purchaseCardButton.setOnClickListener(v -> {
+//            // TODO: 12/1/2024
+//            purchaseButtonAction();
+//        });
+//        usePrivilegeButton.setOnClickListener(v -> {
+//            // TODO: 12/1/2024
+//        });
+
 
         // Init TokenBag on Board
         tokenController = new TokenController(tokenBag, tokenGridLayout,this, this);
@@ -162,8 +170,28 @@ public class MainActivity extends AppCompatActivity {
         redTokenBagPlayer2 = binding.layoutPlayer2Bag.listRedToken.listToken;
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
-        goldTokenBagPlayer1 = binding.layoutPlayer1Bag.listGoldToken.listToken;
-        goldTokenBagPlayer2 = binding.layoutPlayer2Bag.listGoldToken.listToken;
+    }
+
+    private void purchaseButtonAction() {
+        if (selectedCard != null){
+
+            UserController currentPlayerController = getCurrentPlayerController();
+
+            if (selectedToken != null){
+                for (Token token : selectedToken) {
+                    TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
+                    if (tokenColor.equals(TokenColor.GOLD)){
+                        // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
+                    }
+                }
+            }
+            else{
+                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu 3 objective ditambah, discount user ditambah, layout di masukkin ke player area, baru selectedCard dibuat null
+                currentPlayerController.setOwnedCard(selectedCard);
+                selectedCard = null;
+            }
+
+        }
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
@@ -171,14 +199,19 @@ public class MainActivity extends AppCompatActivity {
             case GEMS:
                 taskBarTakeToken.setVisibility(View.VISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
+                TextView textToken= taskBarTakeToken.findViewById(R.id.text_task1);
+                Button textTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
+                textToken.setText("You must select a Token");
+                textTokenButton.setText("Take Selected Token");
                 break;
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
-
-                TextView textView= taskBarTakeToken.findViewById(R.id.text_task1);
-                textView.setText("You must select a Token or purchase a card");
-
+                TextView textCard = taskBarPurchaseCard.findViewById(R.id.text_task1);
+                Button textCardButon = taskBarPurchaseCard.findViewById(R.id.task_button);
+                textCard.setText("You must select a card");
+                textCardButon.setText("Take Selected Card");
+                //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
@@ -201,14 +234,13 @@ public class MainActivity extends AppCompatActivity {
             if(user1.getCurrent()) return redTokenBagPlayer1; else return redTokenBagPlayer2;
         } else if (color == TokenColor.PEARL){
             if(user1.getCurrent()) return pearlTokenBagPlayer1; else return pearlTokenBagPlayer2;
-        } else if (color == TokenColor.GOLD) {
-            if(user1.getCurrent()) return goldTokenBagPlayer1; else return goldTokenBagPlayer2;
         }
         return null;
     }
 
+    // Method for add Token Stack on bag player
+    private void takeTokenButtonAction() {
     // Method for add Card Stack on bag player
-    private void takeButtonAction() {
 
         int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
 
@@ -227,47 +259,56 @@ public class MainActivity extends AppCompatActivity {
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
-
-            if (tokenColor == TokenColor.GOLD && currentPlayerController.getUser().getOwnedGoldToken() >= 3) {
-                Toast.makeText(this, "You can't hold more than 3 gold tokens!", Toast.LENGTH_SHORT).show();
-                return;
+            if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
+                if (currentPlayerController.getUser().getReserveCard() == 3) {
+                    Toast.makeText(this, "You can't hold more than 3 Reserved Card!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                setTaskBar(ActiveTaskBar.CARD);
+                cardController.refreshValidCard(currentPlayerController, tokenColor);
+                this.dontChangePlayer = true;
             }
+            else{
+                this.dontChangePlayer = false;
+                currentPlayerController.setOwnedToken(tokenColor);
 
-            currentPlayerController.setOwnedToken(tokenColor);
+                GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
+                int tokenImage = tokenController.getImageToken(tokenColor);
 
-            GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
-            int tokenImage = tokenController.getImageToken(tokenColor);
-
-            currentPlayerController.setTokenBagPlayer(tokenColor, tokenBagGridLayout, tokenImage);
-            View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
-            view.getId();
-            if (view != null) {
-                viewsToRemove.add(view); // Add the view to the list
+                currentPlayerController.setTokenBagPlayer(tokenColor, tokenBagGridLayout, tokenImage);
+                View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
+                view.getId();
+                if (view != null) {
+                    viewsToRemove.add(view); // Add the view to the list
+                }
+                tokensToRemove.add(token); // Add the token to the list for removal
+                setTaskBar(ActiveTaskBar.NONE);
             }
-            tokensToRemove.add(token); // Add the token to the list for removal
         }
 
+        if (!dontChangePlayer){
+            for (View view : viewsToRemove) {
+    //            tokenGridLayout.removeView(view);
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            // Remove the selected tokens from the list
+            selectedToken.removeAll(tokensToRemove);
+
+            tokenController.resetSelectedToken(viewsToRemove);
+            tokenController.refreshTokenEvent();
+
+            getCurrentPlayerController().setPlayerBoard();
+
+            victoryCondition();
+            changeCurrentPlayer();
+        }
         // Remove the collected views after the loop
-        for (View view : viewsToRemove) {
-//            tokenGridLayout.removeView(view);
-            view.setVisibility(View.INVISIBLE);
-        }
 
-        // Remove the selected tokens from the list
-        selectedToken.removeAll(tokensToRemove);
-
-        tokenController.resetSelectedToken(viewsToRemove);
-        tokenController.refreshTokenEvent();
-
-
-        getCurrentPlayerController().setPlayerBoard();
-
-        victoryCondition();
-        changeCurrentPlayer();
     }
 
     // Method for add Card Stack
-    public void addNewCard(FrameLayout redCardStack) {
+    public void addNewCard(FrameLayout currentCardStack) {
         ImageView card = new ImageView(this);
         card.setImageResource(R.drawable.blank_card);
 
@@ -279,11 +320,11 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
-        params.topMargin = redCardStack.getChildCount() * cardSpacing;
+        params.topMargin = currentCardStack.getChildCount() * cardSpacing;
         card.setLayoutParams(params);
 
         // Tambahkan kartu ke dalam redCardStack
-        redCardStack.addView(card);
+        currentCardStack.addView(card);
     }
 
     private UserController getCurrentPlayerController() {
@@ -303,10 +344,7 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
-
-//        cardController.refreshValidCard(getCurrentPlayerController());
-
-        cardController.refreshValidCard(getCurrentPlayerController(), TokenColor.WHITE);
+        cardController.refreshValidCard(getCurrentPlayerController(), null);
     }
 
     public void victoryCondition(){

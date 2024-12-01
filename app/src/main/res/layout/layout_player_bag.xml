@@ -93,17 +93,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"/>
 
-            <include
-                android:id="@+id/list_gold_token"
-                layout="@layout/layout_token_bag_player"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"/>
-
         </LinearLayout>
         <!-- End List Token-->
 

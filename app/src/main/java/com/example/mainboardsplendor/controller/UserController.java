@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
@@ -83,15 +84,9 @@ public class UserController {
         user.addToken2Bag(tokenColor);
     }
 
-//    public void setOwnedToken(List<Token> selectedToken, User user) {
-//        for (int i = 0; i < selectedToken.size(); i++) {
-//            if (user.getOwnedTokens().containsKey(selectedToken.get(i))) {
-//                user.getOwnedTokens().put(selectedToken.get(i), user.getOwnedTokens().get(selectedToken.get(i)) + 1);
-//            } else {
-//                user.getOwnedTokens().put(selectedToken.get(i), 1);
-//            }
-//        }
-//    }
+    public void setPointPerCardColor(TokenColor tokenColor){
+        user.addPoint2CardColor(tokenColor);
+    }
 
     public HashMap<TokenColor, Integer> getOwnedDiscount(){
         return user.getOwnedDiscount();
@@ -112,6 +107,9 @@ public class UserController {
         view.setVisibility(View.VISIBLE);
         tokenGridLayout.addView(view);
 
+    }
+
+    public void setOwnedCard(Card selectedCard) {
     }
 
 
