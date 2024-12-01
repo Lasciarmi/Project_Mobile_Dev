@@ -3,8 +3,6 @@ package com.example.mainboardsplendor.view;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -126,10 +124,9 @@ public class MainActivity extends AppCompatActivity {
         takeTokenButton.setOnClickListener(v -> {
             takeTokenButtonAction();
         });
-//        purchaseCardButton.setOnClickListener(v -> {
-//            // TODO: 12/1/2024
-//            purchaseButtonAction();
-//        });
+        purchaseCardButton.setOnClickListener(v -> {
+            purchaseButtonAction();
+        });
 //        usePrivilegeButton.setOnClickListener(v -> {
 //            // TODO: 12/1/2024
 //        });
@@ -158,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitCardBoard();
 
         // Init ReversedCard
-        cardController.InitReservedCard();
+        cardController.InitRoyalCard();
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
@@ -207,6 +204,21 @@ public class MainActivity extends AppCompatActivity {
                 view.setVisibility(View.VISIBLE);
 
                 cardReservedGridLayout.addView(view);
+
+                // buang token
+                View tokenView = tokenController.getViewAt(selectedToken.get(0).getLocation().get(0), selectedToken.get(0).getLocation().get(1), tokenGridLayout);
+                tokenView.setVisibility(View.INVISIBLE);
+                selectedToken.remove(0);
+                List<View> viewsToRemove = new ArrayList<>();
+                viewsToRemove.add(tokenView);
+                tokenController.resetSelectedToken(viewsToRemove);
+                tokenController.refreshTokenEvent();
+
+                // buang card
+
+                currentPlayerController.setPlayerBoard();
+                victoryCondition();
+                changeCurrentPlayer();
 
             }
             else{

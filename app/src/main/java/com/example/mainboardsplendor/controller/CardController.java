@@ -2,14 +2,9 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.view.MainActivity;
@@ -635,6 +630,7 @@ public class CardController {
     private void InitCard(List<Card> cards, GridLayout cardBoard, int rowCount) {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
+            card.setCurrentGridLayout(cardBoard);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(2, 0, 2, 0);
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
@@ -674,7 +670,7 @@ public class CardController {
         myHashPrice.put(TokenColor.PEARL, listPrice[5]);
     }
 
-    public void InitReservedCard(){
+    public void InitRoyalCard(){
         RoyalCard royalCard_1 = AddRoyalCard(2, 3, R.drawable.royal_card_1);
         RoyalCard royalCard_2 = AddRoyalCard(3, 3, R.drawable.royal_card_2);
         RoyalCard royalCard_3 = AddRoyalCard(2, 3, R.drawable.royal_card_3);
