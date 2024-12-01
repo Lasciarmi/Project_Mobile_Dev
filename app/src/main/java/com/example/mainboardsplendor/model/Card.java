@@ -3,6 +3,7 @@ package com.example.mainboardsplendor.model;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.widget.GridLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int Image;
     private boolean isSelected = false;
     private HashMap<TokenColor, Integer> price;
+    private GridLayout currentGridLayout;
 
     public Card(@NonNull Context context) {
         super(context);
@@ -102,5 +104,13 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public GridLayout getCurrentGridLayout() {
+        return currentGridLayout;
+    }
+
+    public void setCurrentGridLayout(GridLayout currentGridLayout) {
+        this.currentGridLayout = currentGridLayout;
     }
 }
