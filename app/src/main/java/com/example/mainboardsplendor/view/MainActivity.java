@@ -150,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
+        GridLayout royalCard = binding.cardBoard.royalCard; //tes
+        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Init ReversedCard
         cardController.InitReservedCard();
+
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
@@ -177,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         redTokenBagPlayer2 = binding.layoutPlayer2Bag.listRedToken.listToken;
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
+
+        cardController.refreshValidCrownCard(user1);
     }
 
     private GridLayout getCardReservedPlayer(){
@@ -288,7 +292,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 setTaskBar(ActiveTaskBar.CARD);
-                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+//                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+
                 this.dontChangePlayer = true;
             }
             else{
@@ -373,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
     public void victoryCondition(){
         if (getCurrentPlayerController().getUser().getCardsPoint() == 20){
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 20 point");
-        } else if (getCurrentPlayerController().getUser().getCrowns() == 3) {
+        } else if (getCurrentPlayerController().getUser().getCrowns() == 10) {
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 3 crown");
         } else if (getCurrentPlayerController().getUser().getMostSameCardColorValue() == 10) {
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 10 same card color");
