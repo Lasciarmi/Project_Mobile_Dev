@@ -2,6 +2,7 @@ package com.example.mainboardsplendor.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout cardReservedPlayer1;
     private GridLayout cardReservedPlayer2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         cardReservedPlayer1 = binding.layoutPlayer1Bag.cardReservedPlayer;
         cardReservedPlayer2 = binding.layoutPlayer2Bag.cardReservedPlayer;
+
 
         // BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
@@ -182,11 +185,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void purchaseButtonAction() {
-        if (cardController.getSelectedCard() != null){
+        this.selectedCard = cardController.getSelectedCard();
+        if (selectedCard != null){
 
             UserController currentPlayerController = getCurrentPlayerController();
 
-            if (selectedToken != null){
+            if (!selectedToken.isEmpty()){
 
                 // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
                 currentPlayerController.setOwnedToken(TokenColor.GOLD);
@@ -222,12 +226,30 @@ public class MainActivity extends AppCompatActivity {
 
             }
             else{
-                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu selectedCard dibuat null
+                // TODO: 12/1/2024 Theo, remove from grid layout
                 currentPlayerController.setOwnedCard(selectedCard);
-                selectedCard = null;
+                FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
+                addNewCard(currentFrameLayout);
+                
             }
-
+            cardController.cardClicked(getCurrentPlayerController(), selectedCard);
+            this.selectedCard = cardController.getSelectedCard();
         }
+    }
+
+    public FrameLayout getCurrentFrameLayout(Color color){
+        if(color.equals(TokenColor.BLUE.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.blueCardStack; else return binding.layoutPlayer2Bag.blueCardStack;
+        } else if (color.equals(TokenColor.WHITE.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.whiteCardStack; else return binding.layoutPlayer2Bag.whiteCardStack;
+        } else if (color.equals(TokenColor.GREEN.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.greenCardStack; else return binding.layoutPlayer2Bag.greenCardStack;
+        } else if (color.equals(TokenColor.BLACK.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.blackCardStack; else return binding.layoutPlayer2Bag.blackCardStack;
+        } else if (color.equals(TokenColor.RED.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.redCardStack; else return binding.layoutPlayer2Bag.redCardStack;
+        }
+        return null;
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
@@ -346,20 +368,21 @@ public class MainActivity extends AppCompatActivity {
     // Method for add Card Stack
     public void addNewCard(FrameLayout currentCardStack) {
         ImageView card = new ImageView(this);
-        card.setImageResource(R.drawable.blank_card);
+        card.setImageResource(selectedCard.getImage());
 
         int cardSpacing = 70; // Sesuaikan agar hanya sebagian atas yang terlihat
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
+//                FrameLayout.LayoutParams.WRAP_CONTENT,
+//                FrameLayout.LayoutParams.WRAP_CONTENT
+                200,300
         );
 
         // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
         params.topMargin = currentCardStack.getChildCount() * cardSpacing;
         card.setLayoutParams(params);
 
-        // Tambahkan kartu ke dalam redCardStack
+        // Tambahkan kartu ke dalam currentCardStack
         currentCardStack.addView(card);
     }
 

@@ -127,7 +127,7 @@ public class CardController {
         refreshForReverseCard(userController, tokenColor);
     }
 
-    private void cardClicked(UserController userController, Card card) {
+    public void cardClicked(UserController userController, Card card) {
         if (selectedCard == null){
             mainActivity.setTaskBar(ActiveTaskBar.CARD);
             this.selectedCard = card;

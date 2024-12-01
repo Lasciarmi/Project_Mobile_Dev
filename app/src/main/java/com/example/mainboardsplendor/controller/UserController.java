@@ -141,7 +141,16 @@ public class UserController {
         }
         
 //        Tambah image card di area player
-        // TODO: 12/1/2024 DONT FORGET 
+        GridLayout cardBoard = selectedCard.getCurrentGridLayout();
+        for (int i=0; i < cardBoard.getChildCount(); i++) {
+            View view = cardBoard.getChildAt(i);
+            if (view instanceof Card) {
+                Card card = (Card) view;
+                if (card == selectedCard){
+
+                }
+            }
+        }
     }
 
 }
