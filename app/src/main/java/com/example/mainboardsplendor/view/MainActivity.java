@@ -2,8 +2,6 @@ package com.example.mainboardsplendor.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -74,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout redTokenBagPlayer2;
     private GridLayout pearlTokenBagPlayer1;
     private GridLayout pearlTokenBagPlayer2;
-    private GridLayout goldTokenBagPlayer1;
-    private GridLayout goldTokenBagPlayer2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TAKE BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
-            takeButtonAction();
+            takeTokenButtonAction();
         });
 
 
@@ -163,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
         redTokenBagPlayer2 = binding.layoutPlayer2Bag.listRedToken.listToken;
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
-        goldTokenBagPlayer1 = binding.layoutPlayer1Bag.listGoldToken.listToken;
-        goldTokenBagPlayer2 = binding.layoutPlayer2Bag.listGoldToken.listToken;
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
@@ -207,14 +201,12 @@ public class MainActivity extends AppCompatActivity {
             if(user1.getCurrent()) return redTokenBagPlayer1; else return redTokenBagPlayer2;
         } else if (color == TokenColor.PEARL){
             if(user1.getCurrent()) return pearlTokenBagPlayer1; else return pearlTokenBagPlayer2;
-        } else if (color == TokenColor.GOLD) {
-            if(user1.getCurrent()) return goldTokenBagPlayer1; else return goldTokenBagPlayer2;
         }
         return null;
     }
 
     // Method for add Card Stack on bag player
-    private void takeButtonAction() {
+    private void takeTokenButtonAction() {
         // Create a list to hold the views to remove
         List<View> viewsToRemove = new ArrayList<>();
         List<Token> tokensToRemove = new ArrayList<>();
