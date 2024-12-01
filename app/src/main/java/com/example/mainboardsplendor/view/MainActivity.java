@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout tokenGridLayout;
 
     private CardView taskBarTakeToken;
-//    private CustomTaskBarBinding taskBarTakeToken;
-//    private CustomTaskBarBinding taskBarPurchaseCard;
     private CardView taskBarPurchaseCard;
     private CardView taskBarUsePrivilege;
     private CardView taskBarReplenishBoard;
@@ -220,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 viewsToRemove.add(tokenView);
                 tokenController.resetSelectedToken(viewsToRemove);
                 tokenController.refreshTokenEvent();
+
             }
             else{
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
@@ -333,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 setTaskBar(ActiveTaskBar.CARD);
-//                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
 
                 this.dontChangePlayer = true;
             }
@@ -383,11 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
         int cardSpacing = 70; // Sesuaikan agar hanya sebagian atas yang terlihat
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-//                FrameLayout.LayoutParams.WRAP_CONTENT,
-//                FrameLayout.LayoutParams.WRAP_CONTENT
-                200,300
-        );
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(200,300);
 
         // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
         params.topMargin = currentCardStack.getChildCount() * cardSpacing;
