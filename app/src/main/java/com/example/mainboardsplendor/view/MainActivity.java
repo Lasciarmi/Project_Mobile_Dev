@@ -115,10 +115,10 @@ public class MainActivity extends AppCompatActivity {
         takeTokenButton.setOnClickListener(v -> {
             takeTokenButtonAction();
         });
-        purchaseCardButton.setOnClickListener(v -> {
-            // TODO: 12/1/2024  
-            purchaseButtonAction();
-        });
+//        purchaseCardButton.setOnClickListener(v -> {
+//            // TODO: 12/1/2024
+//            purchaseButtonAction();
+//        });
 //        usePrivilegeButton.setOnClickListener(v -> {
 //            // TODO: 12/1/2024  
 //        });
@@ -182,7 +182,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             else{
-                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu selectedCard dibuat null
+                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu 3 objective ditambah, discount user ditambah, layout di masukkin ke player area, baru selectedCard dibuat null
+                currentPlayerController.setOwnedCard(selectedCard);
+                selectedCard = null;
             }
 
         }
@@ -232,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    // Method for add Card Stack on bag player
+    // Method for add Token Stack on bag player
     private void takeTokenButtonAction() {
         // Create a list to hold the views to remove
         List<View> viewsToRemove = new ArrayList<>();
@@ -284,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method for add Card Stack
-    public void addNewCard(FrameLayout redCardStack) {
+    public void addNewCard(FrameLayout currentCardStack) {
         ImageView card = new ImageView(this);
         card.setImageResource(R.drawable.blank_card);
 
@@ -296,11 +298,11 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
-        params.topMargin = redCardStack.getChildCount() * cardSpacing;
+        params.topMargin = currentCardStack.getChildCount() * cardSpacing;
         card.setLayoutParams(params);
 
         // Tambahkan kartu ke dalam redCardStack
-        redCardStack.addView(card);
+        currentCardStack.addView(card);
     }
 
     private UserController getCurrentPlayerController() {

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -100,5 +101,8 @@ public class UserController {
         view.setVisibility(View.VISIBLE);
         tokenGridLayout.addView(view);
 
+    }
+
+    public void setOwnedCard(Card selectedCard) {
     }
 }
