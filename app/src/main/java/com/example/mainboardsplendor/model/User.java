@@ -18,6 +18,8 @@ public class User implements Parcelable {
     private HashMap<TokenColor, Integer> ownedTokens;
     private HashMap<TokenColor, Integer> ownedDiscount;
 
+    private HashMap<TokenColor, Integer> mostSameCardValuePerColor;
+
     //Objective
     private int CardsPoint;
     private int crowns;
@@ -51,6 +53,7 @@ public class User implements Parcelable {
         this.isCurrent = false;
         this.ownedTokens = new HashMap<>();
         this.ownedDiscount = new HashMap<>();
+        this.mostSameCardValuePerColor = new HashMap<>();
 
         ownedTokens.put(TokenColor.BLUE, 0);
         ownedTokens.put(TokenColor.WHITE, 0);
@@ -60,12 +63,18 @@ public class User implements Parcelable {
         ownedTokens.put(TokenColor.PEARL, 0);
         ownedTokens.put(TokenColor.GOLD, 0);
 
-        ownedDiscount.put(TokenColor.BLUE, 10);
-        ownedDiscount.put(TokenColor.WHITE, 10);
-        ownedDiscount.put(TokenColor.GREEN, 10);
-        ownedDiscount.put(TokenColor.BLACK, 10);
-        ownedDiscount.put(TokenColor.RED, 10);
-        ownedDiscount.put(TokenColor.PEARL, 10);
+        ownedDiscount.put(TokenColor.BLUE, 0);
+        ownedDiscount.put(TokenColor.WHITE, 0);
+        ownedDiscount.put(TokenColor.GREEN, 0);
+        ownedDiscount.put(TokenColor.BLACK, 0);
+        ownedDiscount.put(TokenColor.RED, 0);
+        ownedDiscount.put(TokenColor.PEARL, 0);
+
+        mostSameCardValuePerColor.put(TokenColor.BLUE, 0);
+        mostSameCardValuePerColor.put(TokenColor.WHITE, 0);
+        mostSameCardValuePerColor.put(TokenColor.GREEN, 0);
+        mostSameCardValuePerColor.put(TokenColor.BLACK, 0);
+        mostSameCardValuePerColor.put(TokenColor.RED, 0);
     }
 
     protected User(Parcel in) {
@@ -78,6 +87,7 @@ public class User implements Parcelable {
         tokensStack = in.readInt();
         ownedTokens = in.readHashMap(HashMap.class.getClassLoader());
         ownedDiscount = in.readHashMap(HashMap.class.getClassLoader());
+        mostSameCardValuePerColor = in.readHashMap(HashMap.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -102,6 +112,18 @@ public class User implements Parcelable {
 
     private void incrementToken(TokenColor token) {
         ownedTokens.put(token, ownedTokens.getOrDefault(token, 0) + 1);
+    }
+
+    public boolean addPoint2CardColor(TokenColor token) {
+        if (getTotalTokens() >= bagCapacity) {
+            return false;
+        }
+        incrementPoint(token);
+        return true;
+    }
+
+    private void incrementPoint(TokenColor token) {
+        mostSameCardValuePerColor.put(token, mostSameCardValuePerColor.getOrDefault(token, 0) + 1);
     }
 
     public int getTotalTokens() {
