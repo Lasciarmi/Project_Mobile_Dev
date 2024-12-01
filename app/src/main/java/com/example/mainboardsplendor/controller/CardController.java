@@ -118,6 +118,10 @@ public class CardController {
         mainActivity.setTaskBar(ActiveTaskBar.CARD);
     }
 
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
     private void cardClickedJoker(UserController userController, Card card, TokenColor tokenColor) {
         if (selectedCard == null){
             this.selectedCard = card;

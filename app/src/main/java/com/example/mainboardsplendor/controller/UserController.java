@@ -33,6 +33,7 @@ public class UserController {
     private MainActivity mainActivity;
     private TextView playerName;
 
+
     public UserController(User user, LayoutScorePlayerBoardBinding scoreBoardPlayer, LayoutPlayerBagBinding layoutPlayerBag, MainActivity mainActivity) {
         this.user = user;
         this.scoreBoardPlayer = scoreBoardPlayer;
@@ -108,6 +109,10 @@ public class UserController {
         view.setVisibility(View.VISIBLE);
         tokenGridLayout.addView(view);
 
+    }
+
+    public int getSumReservedCard(){
+        return user.getReserveCard();
     }
 
     public void setOwnedCard(Card selectedCard) {

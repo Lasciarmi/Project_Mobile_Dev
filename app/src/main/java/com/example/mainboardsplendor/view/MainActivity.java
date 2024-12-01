@@ -3,6 +3,8 @@ package com.example.mainboardsplendor.view;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private User user1;
     private User user2;
 
-    private TokenController tokenController;
+    public TokenController tokenController;
     private UserController user1Controller;
     private UserController user2Controller;
     private CardController cardController;
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout redTokenBagPlayer2;
     private GridLayout pearlTokenBagPlayer1;
     private GridLayout pearlTokenBagPlayer2;
+
+    private GridLayout cardReservedPlayer1;
+    private GridLayout cardReservedPlayer2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
         Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
         Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
+
+        cardReservedPlayer1 = binding.layoutPlayer1Bag.cardReservedPlayer;
+        cardReservedPlayer2 = binding.layoutPlayer2Bag.cardReservedPlayer;
 
         // BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
@@ -172,23 +180,37 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
     }
 
+    private GridLayout getCardReservedPlayer(){
+        if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
+    }
+
     private void purchaseButtonAction() {
-        if (selectedCard != null){
+        if (cardController.getSelectedCard() != null){
 
             UserController currentPlayerController = getCurrentPlayerController();
 
             if (selectedToken != null){
-                for (Token token : selectedToken) {
-                    TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
-                    if (tokenColor.equals(TokenColor.GOLD)){
-                        // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
-                    }
-                }
+
+                // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
+                currentPlayerController.setOwnedToken(TokenColor.GOLD);
+                GridLayout cardReservedGridLayout = getCardReservedPlayer();
+                View view = LayoutInflater.from(this).inflate(
+                        R.layout.layout_reseved_card_player, cardReservedGridLayout, false);
+
+                Card cardReserved = view.findViewById(R.id.card_reserved);
+                CardView cardView = view.findViewById(R.id.joker_token);
+                Token tokenReserved = cardView.findViewById(R.id.token_view);
+
+                cardReserved.setImageResource(cardController.getSelectedCard().getImage());
+                tokenReserved.setImageResource(R.drawable.gold_token);
+
+                view.setVisibility(View.VISIBLE);
+
+                cardReservedGridLayout.addView(view);
+
             }
             else{
-                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu 3 objective ditambah, discount user ditambah, layout di masukkin ke player area, baru selectedCard dibuat null
-                currentPlayerController.setOwnedCard(selectedCard);
-                selectedCard = null;
+                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu selectedCard dibuat null
             }
 
         }
