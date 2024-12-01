@@ -3,8 +3,6 @@ package com.example.mainboardsplendor.view;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //    private CustomTaskBarBinding taskBarPurchaseCard;
     private CardView taskBarPurchaseCard;
     private CardView taskBarUsePrivilege;
+    private CardView taskBarReplenishBoard;
 
     private GridLayout blueTokenBagPlayer1;
     private GridLayout blueTokenBagPlayer2;
@@ -113,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         taskBarTakeToken = binding.taskBar.takeGemsTaskBar.cardViewTaskBar;
         taskBarPurchaseCard = binding.taskBar.purchaseCardTaskBar.cardViewTaskBar;
         taskBarUsePrivilege = binding.taskBar.taskBarUsePrivilege;
+        taskBarReplenishBoard = binding.taskBar.replenishBoardTaskBar.cardViewTaskBar;
         setTaskBar(ActiveTaskBar.NONE);
 
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
@@ -240,10 +240,21 @@ public class MainActivity extends AppCompatActivity {
                 textCardButon.setText("Take Selected Card");
                 //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
-            case NONE:
+
+            case SCROLL:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
+                taskBarUsePrivilege.setVisibility(View.VISIBLE);
+                break;
+                case NONE:
+                taskBarTakeToken.setVisibility(View.GONE);
+                taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.GONE);
+                taskBarReplenishBoard.setVisibility(View.VISIBLE);
+                TextView textView = taskBarReplenishBoard.findViewById(R.id.text_task1);
+                Button button = taskBarReplenishBoard.findViewById(R.id.task_button);
+                textView.setText("Before taking your mandatory action, you can ");
+                button.setText("Replenish the Board");
                 break;
         }
     }
