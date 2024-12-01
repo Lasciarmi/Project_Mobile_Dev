@@ -3,12 +3,13 @@ package com.example.mainboardsplendor.model;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
+import com.example.mainboardsplendor.enumeration.TokenColor;
+
+import java.util.HashMap;
 
 public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
@@ -17,8 +18,9 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int discount;
     private int crowns;
     private int level;
-    //
-    private ArrayList<Integer> price;
+    private int Image;
+    private boolean isSelected = false;
+    private HashMap<TokenColor, Integer> price;
 
     public Card(@NonNull Context context) {
         super(context);
@@ -30,6 +32,24 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public Card(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public int getImage() {
+        return Image;
+    }
+
+    public void setImage(int image) {
+        Image = image;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public Color getColor() {
@@ -56,12 +76,16 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
         this.crowns = crowns;
     }
 
-    public ArrayList<Integer> getPrice() {
+    public HashMap<TokenColor, Integer> getPrice() {
         return price;
     }
 
-    public void setPrice(ArrayList<Integer> price) {
+    public void setPrice(HashMap<TokenColor, Integer> price) {
         this.price = price;
+    }
+
+    public boolean isValidToPick() {
+        return true;
     }
 
     public int getLevel() {

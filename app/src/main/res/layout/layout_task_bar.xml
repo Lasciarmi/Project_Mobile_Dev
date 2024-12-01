@@ -9,43 +9,53 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/task_bar_take_gems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:cardBackgroundColor="@color/white">
+        <include
+            android:id="@+id/take_gems_task_bar"
+            layout="@layout/custom_task_bar"
+            android:visibility="gone"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
+        <include
+            android:id="@+id/purchase_card_task_bar"
+            layout="@layout/custom_task_bar"
+            android:visibility="gone"/>
 
-                <TextView
-                    android:id="@+id/text_task1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="You "
-                    android:textColor="@color/red_vintage"/>
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/task_bar_take_gems"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="visible"-->
+<!--            app:cardBackgroundColor="@color/white">-->
 
-                <TextView
-                    android:id="@+id/text_task2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="must take token(s)"
-                    android:textColor="@color/black" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:orientation="horizontal">-->
 
-                <Button
-                    android:id="@+id/take_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Take Selected Token"
-                    android:textSize="10sp"
-                    android:layout_marginStart="10dp" />
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/text_task1"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="You "-->
+<!--                    android:textColor="@color/red_vintage"/>-->
 
-        </androidx.cardview.widget.CardView>
+<!--                <TextView-->
+<!--                    android:id="@+id/text_task2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="must take token(s)"-->
+<!--                    android:textColor="@color/black" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/take_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Take Selected Token"-->
+<!--                    android:textSize="10sp"-->
+<!--                    android:layout_marginStart="10dp" />-->
+<!--            </LinearLayout>-->
+
+<!--        </androidx.cardview.widget.CardView>-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/task_bar_use_privilege"

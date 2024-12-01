@@ -30,17 +30,19 @@
                 android:layout_marginStart="12dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="100dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/blank_card"/>
+                    android:src="@drawable/card_back_level3"/>
 
                 <TextView
                     android:id="@+id/total_deck_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="10"/>
+                    android:text="10"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
             </FrameLayout>
 
             <FrameLayout
@@ -49,17 +51,19 @@
                 android:layout_marginStart="12dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="105dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/blank_card"/>
+                    android:src="@drawable/card_back_level2"/>
 
                 <TextView
                     android:id="@+id/total_deck_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="20"/>
+                    android:text="20"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
             </FrameLayout>
 
             <FrameLayout
@@ -68,16 +72,18 @@
                 android:layout_marginStart="12dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="65dp"
+                    android:layout_height="105dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/blank_card"/>
+                    android:src="@drawable/card_back_level1"/>
 
                 <TextView
                     android:id="@+id/total_deck_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:text="25"/>
             </FrameLayout>
 
