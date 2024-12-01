@@ -631,6 +631,7 @@ public class CardController {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
             card.setCurrentGridLayout(cardBoard);
+            card.setCardIndexOnGridLayout(i);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(2, 0, 2, 0);
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
@@ -710,5 +711,30 @@ public class CardController {
         Random random = new Random();
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
+    }
+
+    private List<Card> getListCardByLevel(Card card){
+        if (card.getLevel() == 1) return listCardLevel1;
+        else if (card.getLevel() == 2) return listCardLevel2;
+        else return listCardLevel3;
+    }
+
+    public void removeAndAddNewCardInBoard(Card selectedCard) {
+        GridLayout currentGridLayout = selectedCard.getCurrentGridLayout();
+        int cardIndexOnGridLayout = selectedCard.getCardIndexOnGridLayout();
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.setMargins(2, 0, 2, 0);
+        params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
+        params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
+
+        Card card = PickRandomCard(getListCardByLevel(selectedCard));
+        card.setImageResource(card.getImage());
+        card.setLayoutParams(params);
+        card.setCurrentGridLayout(currentGridLayout);
+        card.setCardIndexOnGridLayout(cardIndexOnGridLayout);
+
+        currentGridLayout.removeView(selectedCard);
+        currentGridLayout.addView(card, cardIndexOnGridLayout);
     }
 }

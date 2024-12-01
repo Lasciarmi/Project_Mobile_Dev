@@ -112,13 +112,45 @@ public class UserController {
     }
 
     public void setOwnedCard(Card selectedCard) {
+//        Kurangi owned token di object user
+        HashMap<TokenColor, Integer> ownedToken = user.getOwnedTokens();
+        HashMap<TokenColor, Integer> ownedDiscount = user.getOwnedDiscount();
+        HashMap<TokenColor, Integer> cardPrice = selectedCard.getPrice();
+
+        int blueDisounted = (cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) > 0) ? cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) : 0;
+        int whiteDisounted = (cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) > 0) ? cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) : 0;
+        int greenDisounted = (cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) > 0) ? cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) : 0;
+        int blackDisounted = (cardPrice.get(TokenColor.BLACK)-ownedDiscount.get(TokenColor.BLACK) > 0) ? cardPrice.get(TokenColor.BLACK)-ownedDiscount.get(TokenColor.BLACK) : 0;
+        int redDisounted = (cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) > 0) ? cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) : 0;
+
+        int bluePuts = ownedToken.get(TokenColor.BLUE) - blueDisounted;
+        int whitePuts = ownedToken.get(TokenColor.WHITE) - whiteDisounted;
+        int greenPuts = ownedToken.get(TokenColor.GREEN) - greenDisounted;
+        int blackPuts = ownedToken.get(TokenColor.BLACK) - blackDisounted;
+        int redPuts = ownedToken.get(TokenColor.RED) - redDisounted;
+        int pearlPuts = ownedToken.get(TokenColor.PEARL) - cardPrice.get(TokenColor.PEARL);
+
+        int sum4DecreaseGoldPuts = ((bluePuts > 0) ? 0 : bluePuts)
+                + ((whitePuts > 0) ? 0 : whitePuts)
+                + ((greenPuts > 0) ? 0 : greenPuts)
+                + ((blackPuts > 0) ? 0 : blackPuts)
+                + ((redPuts > 0) ? 0 : redPuts)
+                + ((pearlPuts > 0) ? 0 : pearlPuts);
+
+        ownedToken.put(TokenColor.BLUE, ((bluePuts > 0) ? bluePuts : 0));
+        ownedToken.put(TokenColor.WHITE, ((whitePuts > 0) ? whitePuts : 0));
+        ownedToken.put(TokenColor.GREEN, ((greenPuts > 0) ? greenPuts : 0));
+        ownedToken.put(TokenColor.BLACK, ((blackPuts > 0) ? blackPuts : 0));
+        ownedToken.put(TokenColor.RED, ((redPuts > 0) ? redPuts : 0));
+        ownedToken.put(TokenColor.PEARL, ((pearlPuts > 0) ? pearlPuts : 0));
+        ownedToken.put(TokenColor.GOLD, ownedToken.get(TokenColor.GOLD)-sum4DecreaseGoldPuts);
+
 //        Tambah point objective di object user
         user.setCardsPoint(user.getCardsPoint()+selectedCard.getCardValue());
 //        Tambah crown objective di object user
         user.setCrowns(user.getCrowns()+selectedCard.getCrowns());
 
 //        Tambah discount dan value card yang sama di object user bergantung warnanya
-        HashMap<TokenColor, Integer> ownedDiscount = user.getOwnedDiscount();
         HashMap<TokenColor, Integer> mostSameCardValuePerColor = user.getMostSameCardValuePerColor();
         if(selectedCard.getColor().equals(TokenColor.BLUE.getTokenColor(mainActivity))){
             ownedDiscount.put(TokenColor.BLUE, ownedDiscount.get(TokenColor.BLUE) + selectedCard.getDiscount());
@@ -138,18 +170,6 @@ public class UserController {
         } else if (selectedCard.getColor().equals(TokenColor.PEARL.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
             mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
-        }
-        
-//        Tambah image card di area player
-        GridLayout cardBoard = selectedCard.getCurrentGridLayout();
-        for (int i=0; i < cardBoard.getChildCount(); i++) {
-            View view = cardBoard.getChildAt(i);
-            if (view instanceof Card) {
-                Card card = (Card) view;
-                if (card == selectedCard){
-
-                }
-            }
         }
     }
 

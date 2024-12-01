@@ -220,20 +220,19 @@ public class MainActivity extends AppCompatActivity {
 
                 // buang card
 
-                currentPlayerController.setPlayerBoard();
-                victoryCondition();
-                changeCurrentPlayer();
 
             }
             else{
-                // TODO: 12/1/2024 Theo, remove from grid layout
-                currentPlayerController.setOwnedCard(selectedCard);
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
                 addNewCard(currentFrameLayout);
-                
+                currentPlayerController.setOwnedCard(selectedCard);
             }
+            cardController.removeAndAddNewCardInBoard(selectedCard);
             cardController.cardClicked(getCurrentPlayerController(), selectedCard);
             this.selectedCard = cardController.getSelectedCard();
+            currentPlayerController.setPlayerBoard();
+            victoryCondition();
+            changeCurrentPlayer();
         }
     }
 

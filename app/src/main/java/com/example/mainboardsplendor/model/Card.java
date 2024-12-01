@@ -23,6 +23,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private boolean isSelected = false;
     private HashMap<TokenColor, Integer> price;
     private GridLayout currentGridLayout;
+    private int cardIndexOnGridLayout;
 
     public Card(@NonNull Context context) {
         super(context);
@@ -68,6 +69,14 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setCardValue(int cardValue) {
         this.cardValue = cardValue;
+    }
+
+    public int getCardIndexOnGridLayout() {
+        return cardIndexOnGridLayout;
+    }
+
+    public void setCardIndexOnGridLayout(int cardIndexOnGridLayout) {
+        this.cardIndexOnGridLayout = cardIndexOnGridLayout;
     }
 
     public int getCrowns() {
