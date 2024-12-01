@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         cardController.refreshValidCrownCard(getCurrentPlayerController());
 
         // check valid card (TODO: DELETE)
-//        cardController.refreshValidCard(user1Controller);
         cardController.refreshValidCard(user1Controller);
 
         // Binding all token bag player
@@ -197,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (!selectedToken.isEmpty()){
 
-                // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
                 currentPlayerController.setOwnedToken(TokenColor.GOLD);
                 GridLayout cardReservedGridLayout = getCardReservedPlayer();
                 View view = LayoutInflater.from(this).inflate(
@@ -222,10 +220,6 @@ public class MainActivity extends AppCompatActivity {
                 viewsToRemove.add(tokenView);
                 tokenController.resetSelectedToken(viewsToRemove);
                 tokenController.refreshTokenEvent();
-
-                // buang card
-
-
             }
             else{
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
