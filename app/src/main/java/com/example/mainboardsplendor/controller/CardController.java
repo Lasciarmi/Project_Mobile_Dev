@@ -65,37 +65,37 @@ public class CardController {
                         card.setClickable(true);
                         card.setBackgroundResource(R.drawable.image_border_card_clickable);
                     }
-                    mainActivity.setTaskBar(ActiveTaskBar.CARD);
                 }
-            }
-//          for each card in listcard
-            for (int i=0; i < cardBoard.getChildCount(); i++) {
-                View view = cardBoard.getChildAt(i);
-                if (view instanceof Card) {
-                    Card card = (Card) view;
-                    HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
-                    HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
-                    HashMap<TokenColor, Integer> cardPrice = card.getPrice();
-                    int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
-                    int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
-                    int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
-                    int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
-                    int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
-                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
-                    int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
+            } else {
+                //          for each card in listcard
+                for (int i=0; i < cardBoard.getChildCount(); i++) {
+                    View view = cardBoard.getChildAt(i);
+                    if (view instanceof Card) {
+                        Card card = (Card) view;
+                        HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
+                        HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
+                        HashMap<TokenColor, Integer> cardPrice = card.getPrice();
+                        int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
+                        int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
+                        int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
+                        int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
+                        int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
+                        int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
+                        int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
-                    if (sum >= 0){
-                        card.setClickable(true);
-                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        if (sum >= 0){
+                            card.setClickable(true);
+                            card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        }
+                        else {
+                            card.setClickable(false);
+                            card.setBackgroundResource(0);
+                        }
                     }
-                    else {
-                        card.setClickable(false);
-                        card.setBackgroundResource(0);
-                    }
+
                 }
-
+                mainActivity.setTaskBar(ActiveTaskBar.CARD);
             }
-
         }
     }
 

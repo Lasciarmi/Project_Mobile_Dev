@@ -1,16 +1,13 @@
 package com.example.mainboardsplendor.view;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +17,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mainboardsplendor.R;
-import com.example.mainboardsplendor.databinding.CustomTaskBarBinding;
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.controller.CardController;
@@ -144,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
-        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
+//        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -168,12 +164,19 @@ public class MainActivity extends AppCompatActivity {
             case GEMS:
                 taskBarTakeToken.setVisibility(View.VISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
+                TextView textToken= taskBarTakeToken.findViewById(R.id.text_task1);
+                Button textTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
+                textToken.setText("You must select a Token");
+                textTokenButton.setText("Take Selected Token");
                 break;
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
-                TextView textView= taskBarTakeToken.findViewById(R.id.text_task1);
-                textView.setText("You must select a Token or purchase a card");
+                TextView textCard = taskBarPurchaseCard.findViewById(R.id.text_task1);
+                Button textCardButon = taskBarPurchaseCard.findViewById(R.id.task_button);
+                textCard.setText("You must select a card");
+                textCardButon.setText("Take Selected Card");
+                //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         tokenController.resetSelectedToken(viewsToRemove);
         tokenController.refreshTokenEvent();
 
-        changeCurrentPlayer();
+        changeCurrentPlayer(); // todo: jika ambil gold token, tidak changeCurrentPlayer tapi aksi tombol ambil kartu lalu changeCurrentPlayer
     }
 
     // Method for add Card Stack
