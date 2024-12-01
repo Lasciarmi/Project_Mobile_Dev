@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Card> listCardLevel1 = new ArrayList<>();
     private List<RoyalCard> listRoyalCard = new ArrayList<>();
     private List<Token> selectedToken = new ArrayList<>();
+    private Card selectedCard;
 
     private User user1;
     private User user2;
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this);
+        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();

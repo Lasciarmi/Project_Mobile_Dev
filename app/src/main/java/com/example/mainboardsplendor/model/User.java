@@ -58,7 +58,7 @@ public class User implements Parcelable {
         ownedTokens.put(TokenColor.BLACK, 0);
         ownedTokens.put(TokenColor.RED, 0);
         ownedTokens.put(TokenColor.PEARL, 0);
-        ownedTokens.put(TokenColor.GOLD, 0);
+        ownedTokens.put(TokenColor.GOLD, 10);
 
         ownedDiscount.put(TokenColor.BLUE, 0);
         ownedDiscount.put(TokenColor.WHITE, 0);
