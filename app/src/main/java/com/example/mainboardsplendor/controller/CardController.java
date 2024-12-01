@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
+import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -78,13 +79,7 @@ public class CardController {
                         card.setClickable(true);
                         card.setBackgroundResource(R.drawable.image_border_card_clickable);
                         card.setOnClickListener(v -> {
-                            if (selectedCard == null){
-                                this.selectedCard = card;
-                            }
-                            else{
-                                this.selectedCard = null;
-                            }
-                            refreshValidCard(userController);
+                            cardClicked(userController, card);
                         });
                     }
                     else {
@@ -96,6 +91,18 @@ public class CardController {
             }
 
         }
+    }
+
+    private void cardClicked(UserController userController, Card card) {
+        if (selectedCard == null){
+            mainActivity.setTaskBar(ActiveTaskBar.CARD);
+            this.selectedCard = card;
+        }
+        else{
+            mainActivity.setTaskBar(ActiveTaskBar.NONE);
+            this.selectedCard = null;
+        }
+        refreshValidCard(userController);
     }
 
     public void InitCardTopDeck() {

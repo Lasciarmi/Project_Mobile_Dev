@@ -3,6 +3,7 @@ package com.example.mainboardsplendor.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -112,11 +113,23 @@ public class MainActivity extends AppCompatActivity {
         taskBarUsePrivilege = binding.taskBar.taskBarUsePrivilege;
         setTaskBar(ActiveTaskBar.NONE);
 
+        TextView taskBarTakeTokenTitle = taskBarTakeToken.findViewById(R.id.text_task1);
+        TextView taskBarPurchaseCardTitle = taskBarPurchaseCard.findViewById(R.id.text_task1);
+        TextView taskBarUsePrivilegeTitle = taskBarUsePrivilege.findViewById(R.id.text_task1);
+
+        taskBarTakeTokenTitle.setText("You must take token(s)");
+        taskBarPurchaseCardTitle.setText("You must purchase a card");
+        taskBarUsePrivilegeTitle.setText("You must use a privilege");
+
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
+        Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
+        Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
+
         // TAKE BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
             takeButtonAction();
         });
+
 
         // Init TokenBag on Board
         tokenController = new TokenController(tokenBag, tokenGridLayout,this, this);
