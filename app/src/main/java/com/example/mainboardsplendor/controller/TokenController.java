@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.example.mainboardsplendor.databinding.CustomTaskBarBinding;
+import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -44,16 +46,16 @@ public class TokenController {
     private MainActivity mainActivity;
     public List<Token> selectedToken = new ArrayList<>();
     private GridLayout splendorDuelBoard;
-    private CardView taskBarTakeToken;
+//    private CardView taskBarTakeToken;
 
     private List<View> removedView = new ArrayList<>();
 
-    public TokenController(List<Token> tokenBag, GridLayout splendorDuelBoard, CardView taskBarTakeToken, Context context, MainActivity mainActivity) {
+    public TokenController(List<Token> tokenBag, GridLayout splendorDuelBoard, Context context, MainActivity mainActivity) {
         this.tokenBag = tokenBag;
         this.context = context;
         this.mainActivity = mainActivity;
         this.splendorDuelBoard = splendorDuelBoard;
-        this.taskBarTakeToken = taskBarTakeToken;
+//        this.taskBarTakeToken = taskBarTakeToken;
     }
 
     public void initTokenBag() {
@@ -206,6 +208,7 @@ public class TokenController {
     }
 
     private void selectToken(Token token) {
+        mainActivity.setTaskBar(ActiveTaskBar.GEMS);
         Boolean selected = token.getSelected();
         Boolean valid = token.getValid();
 
@@ -296,10 +299,8 @@ public class TokenController {
             refreshValidToken();
         }
 
-        if(!selectedToken.isEmpty()){
-            taskBarTakeToken.setVisibility(View.VISIBLE);
-        } else {
-            taskBarTakeToken.setVisibility(View.INVISIBLE);
+        if(selectedToken.isEmpty()) {
+            mainActivity.setTaskBar(ActiveTaskBar.NONE);
         }
     }
 
