@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#493628"
-    tools:context=".RulesActivity">
+    tools:context=".view.RulesActivity">
 
     <ImageView
         android:id="@+id/logo_splendor"

@@ -2,16 +2,24 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.mainboardsplendor.MainActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.content.ContextCompat;
+
+import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
+import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
+import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -26,6 +34,7 @@ public class CardController {
     private List<Card> listCardLevel2;
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
+
     private Card selectedCard;
 
     private Context context;
@@ -44,84 +53,130 @@ public class CardController {
         this.mainActivity = mainActivity;
     }
 
+    public void refreshValidCard(UserController userController, TokenColor tokenColor) {
+//      for each listcard in allListLevelCard
+        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
+
+            if (tokenColor.equals(TokenColor.GOLD)){
+                for (int i=0; i < cardBoard.getChildCount(); i++) {
+                    View view = cardBoard.getChildAt(i);
+                    if(view instanceof Card){
+                        Card card = (Card) view;
+                        card.setClickable(true);
+                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                    }
+                    mainActivity.setTaskBar(ActiveTaskBar.CARD);
+                }
+            }
+//          for each card in listcard
+            for (int i=0; i < cardBoard.getChildCount(); i++) {
+                View view = cardBoard.getChildAt(i);
+                if (view instanceof Card) {
+                    Card card = (Card) view;
+                    HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
+                    HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
+                    HashMap<TokenColor, Integer> cardPrice = card.getPrice();
+                    int blue = (cardPrice.get(TokenColor.BLUE) <= ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)) ? 0 : (ownedToken.get(TokenColor.BLUE) + ownedDiscount.get(TokenColor.BLUE)-cardPrice.get(TokenColor.BLUE));
+                    int white = (cardPrice.get(TokenColor.WHITE) <= ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)) ? 0 : (ownedToken.get(TokenColor.WHITE) + ownedDiscount.get(TokenColor.WHITE)-cardPrice.get(TokenColor.WHITE));
+                    int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
+                    int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
+                    int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
+                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
+                    int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
+
+                    if (sum >= 0){
+                        card.setClickable(true);
+                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                    }
+                    else {
+                        card.setClickable(false);
+                        card.setBackgroundResource(0);
+                    }
+                }
+
+            }
+
+        }
+    }
+
     public void InitCardTopDeck() {
-        ArrayList<Integer> arrayList_price_card_black_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_3_1 = {0, 2, 0, 6, 2, 0};
-        AddPriceList(arrayList_price_card_black_level_3_1, list_price_card_black_level_3_1);
-        Card card_black_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 3, 1, 0, arrayList_price_card_black_level_3_1, R.drawable.card_black_level_3_1);
+        AddPriceHashMap(hashMap_price_card_black_level_3_1, list_price_card_black_level_3_1);
+        Card card_black_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 3, 1, 0, hashMap_price_card_black_level_3_1, R.drawable.card_black_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_black_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_3_2 = {0, 3, 5, 0, 3, 1};
-        AddPriceList(arrayList_price_card_black_level_3_2, list_price_card_black_level_3_2);
-        Card card_black_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 3, 1, 2, arrayList_price_card_black_level_3_2, R.drawable.card_black_level_3_2);
+        AddPriceHashMap(hashMap_price_card_black_level_3_2, list_price_card_black_level_3_2);
+        Card card_black_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 3, 1, 2, hashMap_price_card_black_level_3_2, R.drawable.card_black_level_3_2);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_3_1 = {6, 2, 2, 0, 0, 0};
-        AddPriceList(arrayList_price_card_blue_level_3_1, list_price_card_blue_level_3_1);
-        Card card_blue_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 3, 1, 0, arrayList_price_card_blue_level_3_1, R.drawable.card_blue_level_3_1);
+        AddPriceHashMap(hashMap_price_card_blue_level_3_1, list_price_card_blue_level_3_1);
+        Card card_blue_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 3, 1, 0, hashMap_price_card_blue_level_3_1, R.drawable.card_blue_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_3_2 = {0, 3, 3, 5, 0, 1};
-        AddPriceList(arrayList_price_card_blue_level_3_2, list_price_card_blue_level_3_2);
-        Card card_blue_level3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 3, 1, 2, arrayList_price_card_blue_level_3_2, R.drawable.card_blue_level_3_2);
+        AddPriceHashMap(hashMap_price_card_blue_level_3_2, list_price_card_blue_level_3_2);
+        Card card_blue_level3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 3, 1, 2, hashMap_price_card_blue_level_3_2, R.drawable.card_blue_level_3_2);
 
-        ArrayList<Integer> arrayList_price_card_green_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_3_1 = {2, 0, 6, 0, 2, 0};
-        AddPriceList(arrayList_price_card_green_level_3_1, list_price_card_green_level_3_1);
-        Card card_green_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 3, 1, 0, arrayList_price_card_green_level_3_1, R.drawable.card_green_level_3_1);
+        AddPriceHashMap(hashMap_price_card_green_level_3_1, list_price_card_green_level_3_1);
+        Card card_green_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 3, 1, 0, hashMap_price_card_green_level_3_1, R.drawable.card_green_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_green_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_3_2 = {3, 5, 0, 0, 3, 1};
-        AddPriceList(arrayList_price_card_green_level_3_2, list_price_card_green_level_3_2);
-        Card card_green_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 3, 1, 2, arrayList_price_card_green_level_3_2, R.drawable.card_green_level_3_2);
+        AddPriceHashMap(hashMap_price_card_green_level_3_2, list_price_card_green_level_3_2);
+        Card card_green_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 3, 1, 2, hashMap_price_card_green_level_3_2, R.drawable.card_green_level_3_2);
 
-        ArrayList<Integer> arrayList_price_card_normal_level_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_normal_level_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_normal_level_3 = {0, 8, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_normal_level_3, list_price_card_normal_level_3);
-        Card card_normal_level_3 = AddCard(6, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 0, 0, arrayList_price_card_normal_level_3, R.drawable.card_normal_level_3);
+        AddPriceHashMap(hashMap_price_card_normal_level_3, list_price_card_normal_level_3);
+        Card card_normal_level_3 = AddCard(6, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 0, 0, hashMap_price_card_normal_level_3, R.drawable.card_normal_level_3);
 
-        ArrayList<Integer> arrayList_price_card_red_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_3_1 = {0, 0, 2, 2, 6, 0};
-        AddPriceList(arrayList_price_card_red_level_3_1, list_price_card_red_level_3_1);
-        Card card_red_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 3, 1, 0, arrayList_price_card_red_level_3_1, R.drawable.card_red_level_3_1);
+        AddPriceHashMap(hashMap_price_card_red_level_3_1, list_price_card_red_level_3_1);
+        Card card_red_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 3, 1, 0, hashMap_price_card_red_level_3_1, R.drawable.card_red_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_red_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_3_2 = {5, 0, 3, 3, 0, 1};
-        AddPriceList(arrayList_price_card_red_level_3_2, list_price_card_red_level_3_2);
-        Card card_red_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 3, 1, 2, arrayList_price_card_red_level_3_2, R.drawable.card_red_level_3_2);
+        AddPriceHashMap(hashMap_price_card_red_level_3_2, list_price_card_red_level_3_2);
+        Card card_red_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 3, 1, 2, hashMap_price_card_red_level_3_2, R.drawable.card_red_level_3_2);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_3_1 = {0, 0, 0, 8, 0, 0};
-        AddPriceList(arrayList_price_card_ultra_level_3_1, list_price_card_ultra_level_3_1);
-        Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 0, arrayList_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
+        AddPriceHashMap(hashMap_price_card_ultra_level_3_1, list_price_card_ultra_level_3_1);
+        Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 0, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_3_2 = {0, 0, 0, 8, 0, 0};
-        AddPriceList(arrayList_price_card_ultra_level_3_2, list_price_card_ultra_level_3_2);
-        Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 3, arrayList_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_2);
+        AddPriceHashMap(hashMap_price_card_ultra_level_3_2, list_price_card_ultra_level_3_2);
+        Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 3, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_2);
 
-        ArrayList<Integer> arrayList_price_card_white_level_3_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_3_1 = {2, 6, 0, 2, 0, 0};
-        AddPriceList(arrayList_price_card_white_level_3_1, list_price_card_white_level_3_1);
-        Card card_white_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 3, 1, 0, arrayList_price_card_white_level_3_1, R.drawable.card_white_level_3_1);
+        AddPriceHashMap(hashMap_price_card_white_level_3_1, list_price_card_white_level_3_1);
+        Card card_white_level_3_1 = AddCard(4, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 3, 1, 0, hashMap_price_card_white_level_3_1, R.drawable.card_white_level_3_1);
 
-        ArrayList<Integer> arrayList_price_card_white_level_3_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_3_2 = {3, 0, 0, 3, 5, 1};
-        AddPriceList(arrayList_price_card_white_level_3_2, list_price_card_white_level_3_2);
-        Card card_white_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 3, 1, 2, arrayList_price_card_white_level_3_2, R.drawable.card_white_level_3_2);
+        AddPriceHashMap(hashMap_price_card_white_level_3_2, list_price_card_white_level_3_2);
+        Card card_white_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 3, 1, 2, hashMap_price_card_white_level_3_2, R.drawable.card_white_level_3_2);
 
         // Total 13 Cards
         listCardLevel3.add(card_black_level_3_1);
@@ -141,149 +196,149 @@ public class CardController {
     }
 
     public void InitCardMidDeck() {
-        ArrayList<Integer> arrayList_price_card_blue_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_2_1 = {0, 0, 4, 3, 0, 0};
-        AddPriceList(arrayList_price_card_blue_level_2_1, list_price_card_blue_level_2_1);
-        Card card_blue_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 0, arrayList_price_card_blue_level_2_1, R.drawable.card_blue_level_2_1);
+        AddPriceHashMap(hashMap_price_card_blue_level_2_1, list_price_card_blue_level_2_1);
+        Card card_blue_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 0, hashMap_price_card_blue_level_2_1, R.drawable.card_blue_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_2_2 = {4, 2, 0, 0, 0, 1};
-        AddPriceList(arrayList_price_card_blue_level_2_2, list_price_card_blue_level_2_2);
-        Card card_blue_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 0, arrayList_price_card_blue_level_2_2, R.drawable.card_blue_level_2_2);
+        AddPriceHashMap(hashMap_price_card_blue_level_2_2, list_price_card_blue_level_2_2);
+        Card card_blue_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 0, hashMap_price_card_blue_level_2_2, R.drawable.card_blue_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_2_3 = {0, 2, 0, 2, 2, 1};
-        AddPriceList(arrayList_price_card_blue_level_2_3, list_price_card_blue_level_2_3);
-        Card card_blue_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 1, arrayList_price_card_blue_level_2_3, R.drawable.card_blue_level_2_3);
+        AddPriceHashMap(hashMap_price_card_blue_level_2_3, list_price_card_blue_level_2_3);
+        Card card_blue_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 1, 1, hashMap_price_card_blue_level_2_3, R.drawable.card_blue_level_2_3);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_2_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_2_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_2_4 = {0, 0, 5, 0, 2, 0};
-        AddPriceList(arrayList_price_card_blue_level_2_4, list_price_card_blue_level_2_4);
-        Card card_blue_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 2, 0, arrayList_price_card_blue_level_2_4, R.drawable.card_blue_level_2_4);
+        AddPriceHashMap(hashMap_price_card_blue_level_2_4, list_price_card_blue_level_2_4);
+        Card card_blue_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 2, 2, 0, hashMap_price_card_blue_level_2_4, R.drawable.card_blue_level_2_4);
 
-        ArrayList<Integer> arrayList_price_card_white_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_2_1 = {4, 0, 0, 0, 3, 0};
-        AddPriceList(arrayList_price_card_white_level_2_1, list_price_card_white_level_2_1);
-        Card card_white_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 0, arrayList_price_card_white_level_2_1, R.drawable.card_white_level_2_1);
+        AddPriceHashMap(hashMap_price_card_white_level_2_1, list_price_card_white_level_2_1);
+        Card card_white_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 0, hashMap_price_card_white_level_2_1, R.drawable.card_white_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_white_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_2_2 = {0, 4, 0, 2, 0, 1};
-        AddPriceList(arrayList_price_card_white_level_2_2, list_price_card_white_level_2_2);
-        Card card_white_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 0, arrayList_price_card_white_level_2_2, R.drawable.card_white_level_2_2);
+        AddPriceHashMap(hashMap_price_card_white_level_2_2, list_price_card_white_level_2_2);
+        Card card_white_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 0, hashMap_price_card_white_level_2_2, R.drawable.card_white_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_white_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_2_3 = {0, 0, 2, 2, 2, 1};
-        AddPriceList(arrayList_price_card_white_level_2_3, list_price_card_white_level_2_3);
-        Card card_white_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 1, arrayList_price_card_white_level_2_3, R.drawable.card_white_level_2_3);
+        AddPriceHashMap(hashMap_price_card_white_level_2_3, list_price_card_white_level_2_3);
+        Card card_white_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 1, 1, hashMap_price_card_white_level_2_3, R.drawable.card_white_level_2_3);
 
-        ArrayList<Integer> arrayList_price_card_white_level_2_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_2_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_2_4 = {5, 0, 2, 0, 0, 0};
-        AddPriceList(arrayList_price_card_white_level_2_4, list_price_card_white_level_2_4);
-        Card card_white_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 2, 0, arrayList_price_card_white_level_2_4, R.drawable.card_white_level_2_4);
+        AddPriceHashMap(hashMap_price_card_white_level_2_4, list_price_card_white_level_2_4);
+        Card card_white_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 2, 2, 0, hashMap_price_card_white_level_2_4, R.drawable.card_white_level_2_4);
 
-        ArrayList<Integer> arrayList_price_card_green_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_2_1 = {0, 3, 0, 0, 4, 0};
-        AddPriceList(arrayList_price_card_green_level_2_1, list_price_card_green_level_2_1);
-        Card card_green_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 0, arrayList_price_card_green_level_2_1, R.drawable.card_green_level_2_1);
+        AddPriceHashMap(hashMap_price_card_green_level_2_1, list_price_card_green_level_2_1);
+        Card card_green_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 0, hashMap_price_card_green_level_2_1, R.drawable.card_green_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_green_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_2_2 = {2, 0, 4, 0, 0, 1};
-        AddPriceList(arrayList_price_card_green_level_2_2, list_price_card_green_level_2_2);
-        Card card_green_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 0, arrayList_price_card_green_level_2_2, R.drawable.card_green_level_2_2);
+        AddPriceHashMap(hashMap_price_card_green_level_2_2, list_price_card_green_level_2_2);
+        Card card_green_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 0, hashMap_price_card_green_level_2_2, R.drawable.card_green_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_green_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_2_3 = {2, 2, 0, 2, 0, 1};
-        AddPriceList(arrayList_price_card_green_level_2_3, list_price_card_green_level_2_3);
-        Card card_green_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 1, arrayList_price_card_green_level_2_3, R.drawable.card_green_level_2_3);
+        AddPriceHashMap(hashMap_price_card_green_level_2_3, list_price_card_green_level_2_3);
+        Card card_green_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 1, 1, hashMap_price_card_green_level_2_3, R.drawable.card_green_level_2_3);
 
-        ArrayList<Integer> arrayList_price_card_green_level_2_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_2_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_2_4 = {0, 0, 0, 2, 5, 0};
-        AddPriceList(arrayList_price_card_green_level_2_4, list_price_card_green_level_2_4);
-        Card card_green_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 2, 0, arrayList_price_card_green_level_2_4, R.drawable.card_green_level_2_4);
+        AddPriceHashMap(hashMap_price_card_green_level_2_4, list_price_card_green_level_2_4);
+        Card card_green_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 2, 2, 0, hashMap_price_card_green_level_2_4, R.drawable.card_green_level_2_4);
 
-        ArrayList<Integer> arrayList_price_card_black_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_2_1 = {0, 4, 3, 0, 0, 0};
-        AddPriceList(arrayList_price_card_black_level_2_1, list_price_card_black_level_2_1);
-        Card card_black_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 0, arrayList_price_card_black_level_2_1, R.drawable.card_black_level_2_1);
+        AddPriceHashMap(hashMap_price_card_black_level_2_1, list_price_card_black_level_2_1);
+        Card card_black_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 0, hashMap_price_card_black_level_2_1, R.drawable.card_black_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_black_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_2_2 = {0, 0, 0, 4, 2, 1};
-        AddPriceList(arrayList_price_card_black_level_2_2, list_price_card_black_level_2_2);
-        Card card_black_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 0, arrayList_price_card_black_level_2_2, R.drawable.card_black_level_2_2);
+        AddPriceHashMap(hashMap_price_card_black_level_2_2, list_price_card_black_level_2_2);
+        Card card_black_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 0, hashMap_price_card_black_level_2_2, R.drawable.card_black_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_black_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_2_3 = {2, 0, 2, 0, 2, 1};
-        AddPriceList(arrayList_price_card_black_level_2_3, list_price_card_black_level_2_3);
-        Card card_black_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 1, arrayList_price_card_black_level_2_3, R.drawable.card_black_level_2_3);
+        AddPriceHashMap(hashMap_price_card_black_level_2_3, list_price_card_black_level_2_3);
+        Card card_black_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 1, 1, hashMap_price_card_black_level_2_3, R.drawable.card_black_level_2_3);
 
-        ArrayList<Integer> arrayList_price_card_black_level_2_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_2_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_2_4 = {2, 5, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_black_level_2_4, list_price_card_black_level_2_4);
-        Card card_black_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 2, 0, arrayList_price_card_black_level_2_4, R.drawable.card_black_level_2_4);
+        AddPriceHashMap(hashMap_price_card_black_level_2_4, list_price_card_black_level_2_4);
+        Card card_black_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 2, 2, 0, hashMap_price_card_black_level_2_4, R.drawable.card_black_level_2_4);
 
-        ArrayList<Integer> arrayList_price_card_red_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_2_1 = {3, 0, 0, 4, 0, 0};
-        AddPriceList(arrayList_price_card_red_level_2_1, list_price_card_red_level_2_1);
-        Card card_red_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 0, arrayList_price_card_red_level_2_1, R.drawable.card_red_level_2_1);
+        AddPriceHashMap(hashMap_price_card_red_level_2_1, list_price_card_red_level_2_1);
+        Card card_red_level_2_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 0, hashMap_price_card_red_level_2_1, R.drawable.card_red_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_red_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_2_2 = {0, 0, 2, 0, 4, 1};
-        AddPriceList(arrayList_price_card_red_level_2_2, list_price_card_red_level_2_2);
-        Card card_red_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 0, arrayList_price_card_red_level_2_2, R.drawable.card_red_level_2_2);
+        AddPriceHashMap(hashMap_price_card_red_level_2_2, list_price_card_red_level_2_2);
+        Card card_red_level_2_2 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 0, hashMap_price_card_red_level_2_2, R.drawable.card_red_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_red_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_2_3 = {2, 2, 2, 0, 0, 1};
-        AddPriceList(arrayList_price_card_red_level_2_3, list_price_card_red_level_2_3);
-        Card card_red_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 1, arrayList_price_card_red_level_2_3, R.drawable.card_red_level_2_3);
+        AddPriceHashMap(hashMap_price_card_red_level_2_3, list_price_card_red_level_2_3);
+        Card card_red_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 1, 1, hashMap_price_card_red_level_2_3, R.drawable.card_red_level_2_3);
 
-        ArrayList<Integer> arrayList_price_card_red_level_2_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_2_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_2_4 = {0, 0, 0, 5, 2, 0};
-        AddPriceList(arrayList_price_card_red_level_2_4, list_price_card_red_level_2_4);
-        Card card_red_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 2, 0, arrayList_price_card_red_level_2_4, R.drawable.card_red_level_2_4);
+        AddPriceHashMap(hashMap_price_card_red_level_2_4, list_price_card_red_level_2_4);
+        Card card_red_level_2_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 2, 2, 0, hashMap_price_card_red_level_2_4, R.drawable.card_red_level_2_4);
 
-        ArrayList<Integer> arrayList_price_card_normal_level_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_normal_level_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_normal_level_2 = {6, 0, 0, 0, 0, 1};
-        AddPriceList(arrayList_price_card_normal_level_2, list_price_card_normal_level_2);
-        Card card_normal_level_2 = AddCard(5, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 0, 0, arrayList_price_card_normal_level_2, R.drawable.card_normal_level_2);
+        AddPriceHashMap(hashMap_price_card_normal_level_2, list_price_card_normal_level_2);
+        Card card_normal_level_2 = AddCard(5, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 0, 0, hashMap_price_card_normal_level_2, R.drawable.card_normal_level_2);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_2_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_2_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_2_1 = {6, 0, 0, 0, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_2_1, list_price_card_ultra_level_2_1);
-        Card card_ultra_level_2_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, arrayList_price_card_ultra_level_2_1, R.drawable.card_ultra_level_2_1);
+        AddPriceHashMap(hashMap_price_card_ultra_level_2_1, list_price_card_ultra_level_2_1);
+        Card card_ultra_level_2_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, hashMap_price_card_ultra_level_2_1, R.drawable.card_ultra_level_2_1);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_2_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_2_2 = {0, 0, 6, 0, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_2_2, list_price_card_ultra_level_2_2);
-        Card card_ultra_level_2_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, arrayList_price_card_ultra_level_2_2, R.drawable.card_ultra_level_2_2);
+        AddPriceHashMap(hashMap_price_card_ultra_level_2_2, list_price_card_ultra_level_2_2);
+        Card card_ultra_level_2_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, hashMap_price_card_ultra_level_2_2, R.drawable.card_ultra_level_2_2);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_2_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_2_3 = {0, 0, 6, 0, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_2_3, list_price_card_ultra_level_2_3);
-        Card card_ultra_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 0, arrayList_price_card_ultra_level_2_3, R.drawable.card_ultra_level_2_3);
+        AddPriceHashMap(hashMap_price_card_ultra_level_2_3, list_price_card_ultra_level_2_3);
+        Card card_ultra_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 0, hashMap_price_card_ultra_level_2_3, R.drawable.card_ultra_level_2_3);
 
         // Total 24 Cards
         listCardLevel2.add(card_blue_level_2_1);
@@ -313,185 +368,185 @@ public class CardController {
     }
 
     public void InitCardBotDeck() {
-        ArrayList<Integer> arrayList_price_card_blue_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_1_1 = {0, 0, 0, 3, 2, 0};
-        AddPriceList(arrayList_price_card_blue_level_1_1, list_price_card_blue_level_1_1);
-        Card card_blue_level_1_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, arrayList_price_card_blue_level_1_1, R.drawable.card_blue_level_1_1);
+        AddPriceHashMap(hashMap_price_card_blue_level_1_1, list_price_card_blue_level_1_1);
+        Card card_blue_level_1_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, hashMap_price_card_blue_level_1_1, R.drawable.card_blue_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_1_2 = {0, 1, 1, 1, 1, 0};
-        AddPriceList(arrayList_price_card_blue_level_1_2, list_price_card_blue_level_1_2);
-        Card card_blue_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, arrayList_price_card_blue_level_1_2, R.drawable.card_blue_level_1_2);
+        AddPriceHashMap(hashMap_price_card_blue_level_1_2, list_price_card_blue_level_1_2);
+        Card card_blue_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, hashMap_price_card_blue_level_1_2, R.drawable.card_blue_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_1_3 = {0, 2, 0, 2, 0, 0};
-        AddPriceList(arrayList_price_card_blue_level_1_3, list_price_card_blue_level_1_3);
-        Card card_blue_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, arrayList_price_card_blue_level_1_3, R.drawable.card_blue_level_1_3);
+        AddPriceHashMap(hashMap_price_card_blue_level_1_3, list_price_card_blue_level_1_3);
+        Card card_blue_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, hashMap_price_card_blue_level_1_3, R.drawable.card_blue_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_1_4 = {0, 0, 2, 0, 2, 1};
-        AddPriceList(arrayList_price_card_blue_level_1_4, list_price_card_blue_level_1_4);
-        Card card_blue_level_1_4 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, arrayList_price_card_blue_level_1_4, R.drawable.card_blue_level_1_4);
+        AddPriceHashMap(hashMap_price_card_blue_level_1_4, list_price_card_blue_level_1_4);
+        Card card_blue_level_1_4 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 0, hashMap_price_card_blue_level_1_4, R.drawable.card_blue_level_1_4);
 
-        ArrayList<Integer> arrayList_price_card_blue_level_1_5 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_blue_level_1_5 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_blue_level_1_5 = {0, 0, 3, 0, 0, 0};
-        AddPriceList(arrayList_price_card_blue_level_1_5, list_price_card_blue_level_1_5);
-        Card card_blue_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 1, arrayList_price_card_blue_level_1_5, R.drawable.card_blue_level_1_5);
+        AddPriceHashMap(hashMap_price_card_blue_level_1_5, list_price_card_blue_level_1_5);
+        Card card_blue_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)), 1, 1, 1, hashMap_price_card_blue_level_1_5, R.drawable.card_blue_level_1_5);
 
-        ArrayList<Integer> arrayList_price_card_white_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_1_1 = {0, 0, 0, 2, 2, 0};
-        AddPriceList(arrayList_price_card_white_level_1_1, list_price_card_white_level_1_1);
-        Card card_white_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, arrayList_price_card_white_level_1_1, R.drawable.card_white_level_1_1);
+        AddPriceHashMap(hashMap_price_card_white_level_1_1, list_price_card_white_level_1_1);
+        Card card_white_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, hashMap_price_card_white_level_1_1, R.drawable.card_white_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_white_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_1_2 = {2, 0, 2, 0, 0, 1};
-        AddPriceList(arrayList_price_card_white_level_1_2, list_price_card_white_level_1_2);
-        Card card_white_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, arrayList_price_card_white_level_1_2, R.drawable.card_white_level_1_2);
+        AddPriceHashMap(hashMap_price_card_white_level_1_2, list_price_card_white_level_1_2);
+        Card card_white_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, hashMap_price_card_white_level_1_2, R.drawable.card_white_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_white_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_1_3 = {1, 0, 1, 1, 1, 0};
-        AddPriceList(arrayList_price_card_white_level_1_3, list_price_card_white_level_1_3);
-        Card card_white_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, arrayList_price_card_white_level_1_3, R.drawable.card_white_level_1_3);
+        AddPriceHashMap(hashMap_price_card_white_level_1_3, list_price_card_white_level_1_3);
+        Card card_white_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, hashMap_price_card_white_level_1_3, R.drawable.card_white_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_white_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_1_4 = {0, 0, 2, 0, 3, 0};
-        AddPriceList(arrayList_price_card_white_level_1_4, list_price_card_white_level_1_4);
-        Card card_white_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, arrayList_price_card_white_level_1_4, R.drawable.card_white_level_1_4);
+        AddPriceHashMap(hashMap_price_card_white_level_1_4, list_price_card_white_level_1_4);
+        Card card_white_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 0, hashMap_price_card_white_level_1_4, R.drawable.card_white_level_1_4);
 
-        ArrayList<Integer> arrayList_price_card_white_level_1_5 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_white_level_1_5 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_white_level_1_5 = {3, 0, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_white_level_1_5, list_price_card_white_level_1_5);
-        Card card_white_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 1, arrayList_price_card_white_level_1_5, R.drawable.card_white_level_1_5);
+        AddPriceHashMap(hashMap_price_card_white_level_1_5, list_price_card_white_level_1_5);
+        Card card_white_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.white)), 1, 1, 1, hashMap_price_card_white_level_1_5, R.drawable.card_white_level_1_5);
 
-        ArrayList<Integer> arrayList_price_card_green_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_1_1 = {2, 2, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_green_level_1_1, list_price_card_green_level_1_1);
-        Card card_green_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, arrayList_price_card_green_level_1_1, R.drawable.card_green_level_1_1);
+        AddPriceHashMap(hashMap_price_card_green_level_1_1, list_price_card_green_level_1_1);
+        Card card_green_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, hashMap_price_card_green_level_1_1, R.drawable.card_green_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_green_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_1_2 = {0, 0, 0, 2, 2, 1};
-        AddPriceList(arrayList_price_card_green_level_1_2, list_price_card_green_level_1_2);
-        Card card_green_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, arrayList_price_card_green_level_1_2, R.drawable.card_green_level_1_2);
+        AddPriceHashMap(hashMap_price_card_green_level_1_2, list_price_card_green_level_1_2);
+        Card card_green_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, hashMap_price_card_green_level_1_2, R.drawable.card_green_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_green_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_1_3 = {1, 1, 0, 1, 1, 0};
-        AddPriceList(arrayList_price_card_green_level_1_3, list_price_card_green_level_1_3);
-        Card card_green_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, arrayList_price_card_green_level_1_3, R.drawable.card_green_level_1_3);
+        AddPriceHashMap(hashMap_price_card_green_level_1_3, list_price_card_green_level_1_3);
+        Card card_green_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, hashMap_price_card_green_level_1_3, R.drawable.card_green_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_green_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_1_4 = {0, 3, 0, 2, 0, 0};
-        AddPriceList(arrayList_price_card_green_level_1_4, list_price_card_green_level_1_4);
-        Card card_green_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, arrayList_price_card_green_level_1_4, R.drawable.card_green_level_1_4);
+        AddPriceHashMap(hashMap_price_card_green_level_1_4, list_price_card_green_level_1_4);
+        Card card_green_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 0, hashMap_price_card_green_level_1_4, R.drawable.card_green_level_1_4);
 
-        ArrayList<Integer> arrayList_price_card_green_level_1_5 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_green_level_1_5 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_green_level_1_5 = {0, 0, 0, 0, 3, 0};
-        AddPriceList(arrayList_price_card_green_level_1_5, list_price_card_green_level_1_5);
-        Card card_green_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 1, arrayList_price_card_green_level_1_5, R.drawable.card_green_level_1_5);
+        AddPriceHashMap(hashMap_price_card_green_level_1_5, list_price_card_green_level_1_5);
+        Card card_green_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4greenToken)), 1, 1, 1, hashMap_price_card_green_level_1_5, R.drawable.card_green_level_1_5);
 
-        ArrayList<Integer> arrayList_price_card_black_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_1_1 = {0, 0, 2, 0, 2, 0};
-        AddPriceList(arrayList_price_card_black_level_1_1, list_price_card_black_level_1_1);
-        Card card_black_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, arrayList_price_card_black_level_1_1, R.drawable.card_black_level_1_1);
+        AddPriceHashMap(hashMap_price_card_black_level_1_1, list_price_card_black_level_1_1);
+        Card card_black_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, hashMap_price_card_black_level_1_1, R.drawable.card_black_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_black_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_1_2 = {2, 2, 0, 0, 0, 1};
-        AddPriceList(arrayList_price_card_black_level_1_2, list_price_card_black_level_1_2);
-        Card card_black_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, arrayList_price_card_black_level_1_2, R.drawable.card_black_level_1_2);
+        AddPriceHashMap(hashMap_price_card_black_level_1_2, list_price_card_black_level_1_2);
+        Card card_black_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, hashMap_price_card_black_level_1_2, R.drawable.card_black_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_black_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_1_3 = {1, 1, 1, 0, 1, 0};
-        AddPriceList(arrayList_price_card_black_level_1_3, list_price_card_black_level_1_3);
-        Card card_black_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, arrayList_price_card_black_level_1_3, R.drawable.card_black_level_1_3);
+        AddPriceHashMap(hashMap_price_card_black_level_1_3, list_price_card_black_level_1_3);
+        Card card_black_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, hashMap_price_card_black_level_1_3, R.drawable.card_black_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_black_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_1_4 = {2, 0, 3, 0, 0, 0};
-        AddPriceList(arrayList_price_card_black_level_1_4, list_price_card_black_level_1_4);
-        Card card_black_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, arrayList_price_card_black_level_1_4, R.drawable.card_black_level_1_4);
+        AddPriceHashMap(hashMap_price_card_black_level_1_4, list_price_card_black_level_1_4);
+        Card card_black_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 0, hashMap_price_card_black_level_1_4, R.drawable.card_black_level_1_4);
 
-        ArrayList<Integer> arrayList_price_card_black_level_1_5 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_black_level_1_5 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_black_level_1_5 = {0, 3, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_black_level_1_5, list_price_card_black_level_1_5);
-        Card card_black_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 1, arrayList_price_card_black_level_1_5, R.drawable.card_black_level_1_5);
+        AddPriceHashMap(hashMap_price_card_black_level_1_5, list_price_card_black_level_1_5);
+        Card card_black_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.black)), 1, 1, 1, hashMap_price_card_black_level_1_5, R.drawable.card_black_level_1_5);
 
-        ArrayList<Integer> arrayList_price_card_red_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_1_1 = {2, 0, 2, 0, 0, 0};
-        AddPriceList(arrayList_price_card_red_level_1_1, list_price_card_red_level_1_1);
-        Card card_red_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, arrayList_price_card_red_level_1_1, R.drawable.card_red_level_1_1);
+        AddPriceHashMap(hashMap_price_card_red_level_1_1, list_price_card_red_level_1_1);
+        Card card_red_level_1_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, hashMap_price_card_red_level_1_1, R.drawable.card_red_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_red_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_1_2 = {0, 2, 0, 2, 0, 1};
-        AddPriceList(arrayList_price_card_red_level_1_2, list_price_card_red_level_1_2);
-        Card card_red_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, arrayList_price_card_red_level_1_2, R.drawable.card_red_level_1_2);
+        AddPriceHashMap(hashMap_price_card_red_level_1_2, list_price_card_red_level_1_2);
+        Card card_red_level_1_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, hashMap_price_card_red_level_1_2, R.drawable.card_red_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_red_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_1_3 = {1, 1, 1, 1, 0, 0};
-        AddPriceList(arrayList_price_card_red_level_1_3, list_price_card_red_level_1_3);
-        Card card_red_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1,0, arrayList_price_card_red_level_1_3, R.drawable.card_red_level_1_3);
+        AddPriceHashMap(hashMap_price_card_red_level_1_3, list_price_card_red_level_1_3);
+        Card card_red_level_1_3 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1,0, hashMap_price_card_red_level_1_3, R.drawable.card_red_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_red_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_1_4 = {3, 2, 0, 0, 0, 0};
-        AddPriceList(arrayList_price_card_red_level_1_4, list_price_card_red_level_1_4);
-        Card card_red_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, arrayList_price_card_red_level_1_4, R.drawable.card_red_level_1_4);
+        AddPriceHashMap(hashMap_price_card_red_level_1_4, list_price_card_red_level_1_4);
+        Card card_red_level_1_4 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 0, hashMap_price_card_red_level_1_4, R.drawable.card_red_level_1_4);
 
-        ArrayList<Integer> arrayList_price_card_red_level_1_5 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_red_level_1_5 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_red_level_1_5 = {0, 0, 0, 3, 0, 0};
-        AddPriceList(arrayList_price_card_red_level_1_5, list_price_card_red_level_1_5);
-        Card card_red_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 1, arrayList_price_card_red_level_1_5, R.drawable.card_red_level_1_5);
+        AddPriceHashMap(hashMap_price_card_red_level_1_5, list_price_card_red_level_1_5);
+        Card card_red_level_1_5 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4redToken)), 1, 1, 1, hashMap_price_card_red_level_1_5, R.drawable.card_red_level_1_5);
 
-        ArrayList<Integer> arrayList_price_card_normal_level_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_normal_level_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_normal_level_1 = {0, 0, 0, 0, 4, 1};
-        AddPriceList(arrayList_price_card_normal_level_1, list_price_card_normal_level_1);
-        Card card_normal_level_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 0, 0, arrayList_price_card_normal_level_1, R.drawable.card_normal_level_1);
+        AddPriceHashMap(hashMap_price_card_normal_level_1, list_price_card_normal_level_1);
+        Card card_normal_level_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 0, 0, hashMap_price_card_normal_level_1, R.drawable.card_normal_level_1);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_1_1 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_1 = {0, 0, 0, 4, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_1_1, list_price_card_ultra_level_1_1);
-        Card card_ultra_level_1_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, arrayList_price_card_ultra_level_1_1, R.drawable.card_ultra_level_1_1);
+        AddPriceHashMap(hashMap_price_card_ultra_level_1_1, list_price_card_ultra_level_1_1);
+        Card card_ultra_level_1_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, hashMap_price_card_ultra_level_1_1, R.drawable.card_ultra_level_1_1);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_1_2 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_2 = {0, 2, 2, 1, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_1_2, list_price_card_ultra_level_1_2);
-        Card card_ultra_level_1_2 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, arrayList_price_card_ultra_level_1_2, R.drawable.card_ultra_level_1_2);
+        AddPriceHashMap(hashMap_price_card_ultra_level_1_2, list_price_card_ultra_level_1_2);
+        Card card_ultra_level_1_2 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, hashMap_price_card_ultra_level_1_2, R.drawable.card_ultra_level_1_2);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_1_3 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_3 = {2, 0, 0, 1, 2, 1};
-        AddPriceList(arrayList_price_card_ultra_level_1_3, list_price_card_ultra_level_1_3);
-        Card card_ultra_level_1_3 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1,1, 0, arrayList_price_card_ultra_level_1_3, R.drawable.card_ultra_level_1_3);
+        AddPriceHashMap(hashMap_price_card_ultra_level_1_3, list_price_card_ultra_level_1_3);
+        Card card_ultra_level_1_3 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1,1, 0, hashMap_price_card_ultra_level_1_3, R.drawable.card_ultra_level_1_3);
 
-        ArrayList<Integer> arrayList_price_card_ultra_level_1_4 = new ArrayList<>();
+        HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_4 = {0, 4, 0, 0, 0, 1};
-        AddPriceList(arrayList_price_card_ultra_level_1_4, list_price_card_ultra_level_1_4);
-        Card card_ultra_level_1_4 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 1, arrayList_price_card_ultra_level_1_4, R.drawable.card_ultra_level_1_4);
+        AddPriceHashMap(hashMap_price_card_ultra_level_1_4, list_price_card_ultra_level_1_4);
+        Card card_ultra_level_1_4 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 1, hashMap_price_card_ultra_level_1_4, R.drawable.card_ultra_level_1_4);
 
         // Total 30 cards
         listCardLevel1.add(card_blue_level_1_1);
@@ -553,7 +608,7 @@ public class CardController {
         return listCard.remove(randomIndex);
     }
 
-    private Card AddCard(int cardValue, Color color, int level, int discount, int crowns, ArrayList<Integer> price, int image){
+    private Card AddCard(int cardValue, Color color, int level, int discount, int crowns, HashMap<TokenColor, Integer> price, int image){
         Card card = new Card(context);
         card.setCardValue(cardValue);
         card.setColor(color);
@@ -563,18 +618,18 @@ public class CardController {
         card.setPrice(price);
         card.setImage(image);
         card.setOnClickListener(view -> {
-            if (card.isValidToPick()) {
-                selectedCard = card;
-                Toast.makeText(context, String.valueOf(card.getColor()), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(context, "THIS", Toast.LENGTH_SHORT).show();
         });
         return card;
     }
 
-    public void AddPriceList(ArrayList<Integer> myListPrice, int[] listPrice){
-        for (int i=0; i < listPrice.length; i++){
-            myListPrice.add(listPrice[i]);
-        }
+    public void AddPriceHashMap(HashMap<TokenColor, Integer> myHashPrice, int[] listPrice){
+        myHashPrice.put(TokenColor.BLUE, listPrice[0]);
+        myHashPrice.put(TokenColor.WHITE, listPrice[1]);
+        myHashPrice.put(TokenColor.GREEN, listPrice[2]);
+        myHashPrice.put(TokenColor.BLACK, listPrice[3]);
+        myHashPrice.put(TokenColor.RED, listPrice[4]);
+        myHashPrice.put(TokenColor.PEARL, listPrice[5]);
     }
 
     public void InitReservedCard(){
@@ -618,4 +673,8 @@ public class CardController {
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
     }
+
+//    public Card getSelectedCard() {
+//        return selectedCard;
+//    }
 }

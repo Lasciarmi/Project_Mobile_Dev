@@ -144,7 +144,11 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
+<<<<<<< HEAD
         cardController.refreshValidCard(user1Controller);
+=======
+        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
+>>>>>>> mc
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -172,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
+<<<<<<< HEAD
+=======
+                TextView textView= taskBarTakeToken.findViewById(R.id.text_task1);
+                textView.setText("You must select a Token or purchase a card");
+>>>>>>> mc
                 break;
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
@@ -202,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Method for add Card Stack on bag player
     private void takeButtonAction() {
+<<<<<<< HEAD
         int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
 
         // Check if the player exceeds maximum bag capacity
@@ -210,6 +220,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+=======
+>>>>>>> mc
         // Create a list to hold the views to remove
         List<View> viewsToRemove = new ArrayList<>();
         List<Token> tokensToRemove = new ArrayList<>();
@@ -220,6 +232,12 @@ public class MainActivity extends AppCompatActivity {
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
+<<<<<<< HEAD
+=======
+            if (tokenColor.equals(TokenColor.GOLD)){
+                cardController.refreshValidCard(currentPlayerController, tokenColor);
+            }
+>>>>>>> mc
             currentPlayerController.setOwnedToken(tokenColor);
 
             GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
@@ -246,8 +264,11 @@ public class MainActivity extends AppCompatActivity {
         tokenController.resetSelectedToken(viewsToRemove);
         tokenController.refreshTokenEvent();
 
+<<<<<<< HEAD
         getCurrentPlayerController().setPlayerBoard();
 
+=======
+>>>>>>> mc
         changeCurrentPlayer();
     }
 
@@ -288,7 +309,11 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
+<<<<<<< HEAD
         cardController.refreshValidCard(getCurrentPlayerController());
+=======
+        cardController.refreshValidCard(getCurrentPlayerController(), TokenColor.WHITE);
+>>>>>>> mc
     }
 
 }

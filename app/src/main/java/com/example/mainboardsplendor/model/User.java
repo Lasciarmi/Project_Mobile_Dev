@@ -7,13 +7,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.mainboardsplendor.enumeration.TokenColor;
+
 import java.util.HashMap;
 
 public class User implements Parcelable {
 
     private String username;
 
-    private HashMap<Token, Integer> ownedTokens;
+    private HashMap<TokenColor, Integer> ownedTokens;
+    private HashMap<TokenColor, Integer> ownedDiscount;
 
     //Objective
     private int CardsPoint;
@@ -45,7 +48,24 @@ public class User implements Parcelable {
         this.Scroll = 0;
         this.reserveCard = 0;
         this.tokensStack = 0;
+        this.isCurrent = false;
         this.ownedTokens = new HashMap<>();
+        this.ownedDiscount = new HashMap<>();
+
+        ownedTokens.put(TokenColor.BLUE, 0);
+        ownedTokens.put(TokenColor.WHITE, 0);
+        ownedTokens.put(TokenColor.GREEN, 0);
+        ownedTokens.put(TokenColor.BLACK, 0);
+        ownedTokens.put(TokenColor.RED, 0);
+        ownedTokens.put(TokenColor.PEARL, 0);
+        ownedTokens.put(TokenColor.GOLD, 0);
+
+        ownedDiscount.put(TokenColor.BLUE, 0);
+        ownedDiscount.put(TokenColor.WHITE, 0);
+        ownedDiscount.put(TokenColor.GREEN, 0);
+        ownedDiscount.put(TokenColor.BLACK, 0);
+        ownedDiscount.put(TokenColor.RED, 0);
+        ownedDiscount.put(TokenColor.PEARL, 0);
     }
 
     protected User(Parcel in) {
@@ -56,7 +76,8 @@ public class User implements Parcelable {
         Scroll = in.readInt();
         reserveCard = in.readInt();
         tokensStack = in.readInt();
-        ownedTokens = in.readHashMap(Token.class.getClassLoader());
+        ownedTokens = in.readHashMap(HashMap.class.getClassLoader());
+        ownedDiscount = in.readHashMap(HashMap.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -87,18 +108,23 @@ public class User implements Parcelable {
         return getOwnedTokens().values().stream().mapToInt(Integer::intValue).sum();
     }
 
-    public HashMap<TokenColor, Integer> getOwnedTokens() {
-        return ownedTokens;
-    }
-
     public void InitOwnedTokens(HashMap<Token, Integer> ownedTokens, Token token) {
         ownedTokens.put(token, 0);
     }
 
-    public void addToken2Bag(Token token) {
-            ownedTokens.put(token, ownedTokens.get(token) + 1);
+    public HashMap<TokenColor, Integer> getOwnedTokens() {
+        return ownedTokens;
+    }
+    public HashMap<TokenColor, Integer> getOwnedDiscount() {
+        return ownedDiscount;
+    }
+    public void setOwnedDiscount(HashMap<TokenColor, Integer> ownedDiscount) {
+        this.ownedDiscount = ownedDiscount;
     }
 
+    public void setOwnedTokens(HashMap<TokenColor, Integer> ownedTokens) {
+        this.ownedTokens = ownedTokens;
+    }
     public void setCardsPoint(int cardsPoint) {
         CardsPoint = cardsPoint;
     }
@@ -107,9 +133,6 @@ public class User implements Parcelable {
         this.username = username;
     }
 
-    public void setTokensPoint(int tokensPoint) {
-        this.CardsPoint = tokensPoint;
-    }
 
     public void setCrowns(int crowns) {
         this.crowns = crowns;
