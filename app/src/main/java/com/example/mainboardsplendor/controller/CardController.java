@@ -118,14 +118,10 @@ public class CardController {
     }
 
     private void cardClickedJoker(UserController userController, Card card, TokenColor tokenColor) {
-        if (selectedCard == null){
-            this.selectedCard = card;
-        }
-        else{
-            this.selectedCard = null;
-        }
-        refreshForReverseCard(userController, tokenColor);
+        this.selectedCard = (this.selectedCard == card) ? null : card;
+        refreshForReverseCard(userController, tokenColor); //
     }
+
 
     private void cardClicked(UserController userController, Card card) {
         if (selectedCard == null){
@@ -627,10 +623,33 @@ public class CardController {
         InitCard(listCardLevel1, cardStoreBot, 5);
     }
 
+    public void setCardGridLayout(){
+        for(Card card : listCardLevel3){
+            card.setCurrentGridLayout(cardStoreTop);
+        }
+        for(Card card : listCardLevel2){
+            card.setCurrentGridLayout(cardStoreMid);
+        }
+        for(Card card : listCardLevel1) {
+            card.setCurrentGridLayout(cardStoreBot);
+        }
+    }
+
+    public List<Card> getListCard(GridLayout gridLayout){
+        if (gridLayout.equals(cardStoreTop)) {
+            return listCardLevel3;
+        } else if (gridLayout.equals(cardStoreMid)) {
+            return listCardLevel2;
+        } else if (gridLayout.equals(cardStoreBot)) {
+            return listCardLevel1;
+        }
+        return null;
+    }
+
     private void InitCard(List<Card> cards, GridLayout cardBoard, int rowCount) {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
-            card.setCurrentGridLayout(cardBoard);
+//            card.setCurrentGridLayout(cardBoard);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(2, 0, 2, 0);
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
@@ -643,7 +662,7 @@ public class CardController {
         }
     }
 
-    private Card PickRandomCard(List<Card> listCard){
+    public Card PickRandomCard(List<Card> listCard){
         Random random = new Random();
         int randomIndex = random.nextInt(listCard.size());
         return listCard.remove(randomIndex);
@@ -698,11 +717,10 @@ public class CardController {
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
             params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
 
-            ImageView imageView = new ImageView(context);
-            imageView.setImageResource(royalCard.getImage());
-            imageView.setLayoutParams(params);
+            royalCard.setImageResource(royalCard.getImage());
+            royalCard.setLayoutParams(params);
 
-            reservedCardBoard.addView(imageView);
+            reservedCardBoard.addView(royalCard);
         }
     }
 
@@ -711,4 +729,6 @@ public class CardController {
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
     }
+
+
 }

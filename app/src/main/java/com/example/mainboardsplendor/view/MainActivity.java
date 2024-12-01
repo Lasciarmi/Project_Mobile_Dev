@@ -3,6 +3,7 @@ package com.example.mainboardsplendor.view;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -79,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout cardReservedPlayer1;
     private GridLayout cardReservedPlayer2;
 
+    private GridLayout cardDeckTop;
+    private GridLayout cardDeckMid;
+    private GridLayout cardDeckBot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,10 +153,15 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
+        cardDeckTop = binding.cardBoard.cardStoreTop;
+        cardDeckMid = binding.cardBoard.cardStoreMid;
+        cardDeckBot = binding.cardBoard.cardStoreBot;
+
+        cardController = new CardController(cardDeckTop, cardDeckMid, cardDeckBot, binding.cardBoard.royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();
+        cardController.setCardGridLayout();
         cardController.InitCardBoard();
 
         // Init ReversedCard
@@ -187,38 +197,105 @@ public class MainActivity extends AppCompatActivity {
             UserController currentPlayerController = getCurrentPlayerController();
 
             if (selectedToken != null){
+                    currentPlayerController.setOwnedToken(TokenColor.GOLD);
+
+                    // get card reserved Done
+                    GridLayout cardReservedGridLayout = getCardReservedPlayer();
+                    View view = LayoutInflater.from(this).inflate(
+                            R.layout.layout_reseved_card_player, cardReservedGridLayout, false);
+
+                    Card cardReserved = view.findViewById(R.id.card_reserved);
+                    CardView cardView = view.findViewById(R.id.joker_token);
+                    Token tokenReserved = cardView.findViewById(R.id.token_view);
+
+                    cardReserved.setImageResource(cardController.getSelectedCard().getImage());
+                    tokenReserved.setImageResource(R.drawable.gold_token);
+
+                    view.setVisibility(View.VISIBLE);
+
+                    cardReservedGridLayout.addView(view);
+
+                    // buang token Done
+                    View tokenView = tokenController.getViewAt(selectedToken.get(0).getLocation().get(0), selectedToken.get(0).getLocation().get(1), tokenGridLayout);
+                    tokenView.setVisibility(View.INVISIBLE);
+                    selectedToken.remove(0);
+                    List<View> viewsToRemove = new ArrayList<>();
+                    viewsToRemove.add(tokenView);
+                    tokenController.resetSelectedToken(viewsToRemove);
+                    tokenController.refreshTokenEvent();
+
+                    // buang card
+                    selectedCard = cardController.getSelectedCard();
+                    if (selectedCard == null) {
+                        Toast.makeText(this, "No card selected", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    GridLayout currentGridLayout = selectedCard.getCurrentGridLayout();
+                    if (currentGridLayout == null) {
+                        Log.e("GridLayoutError", "currentGridLayout tidak ditemukan.");
+                        Toast.makeText(this, "No currentGridLayout", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int childIndex = -1;
+
+                    for (int i = 0; i < currentGridLayout.getChildCount(); i++) {
+                        View child = currentGridLayout.getChildAt(i);
+                        if (child == selectedCard) {
+                            childIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (childIndex == -1){
+                        Log.e("CardNotFound", "selectedCard tidak ditemukan dalam GridLayout.");
+                        return;
+                    }
+
+// Ambil LayoutParams dari selectedCard
+                    GridLayout.LayoutParams oldParams = (GridLayout.LayoutParams) selectedCard.getLayoutParams();
+                    if (oldParams == null) {
+                        Log.e("LayoutParamsError", "oldParams tidak ditemukan.");
+                        return;
+                    }
+
+                    if (childIndex != -1) {
+                        currentGridLayout.removeViewAt(childIndex);
+                        Log.d("RemoveViewDebug", "selectedCard berhasil dihapus dari currentGridLayout pada index: " + childIndex);
+                    } else {
+                        Log.e("RemoveViewError", "selectedCard tidak ditemukan di currentGridLayout.");
+                        return;
+                    }
+
+// Tambahkan kartu baru ke posisi sebelumnya
+
+                    List<Card> listCard = cardController.getListCard(currentGridLayout);
+                    if (listCard == null || listCard.isEmpty()) {
+                        Log.e("CardListError", "listCard kosong atau null.");
+                        return;
+                    }
+
+                    Card newCard = cardController.PickRandomCard(listCard);
+                    if (newCard == null) {
+                        Log.e("NewCardError", "Gagal mengambil kartu baru.");
+                        return;
+                    }
+
+                    newCard.setLayoutParams(oldParams);
+                    newCard.setVisibility(View.VISIBLE);
+                    currentGridLayout.addView(newCard, childIndex);
+
+                    Log.d("AddViewDebug", "newCard berhasil ditambahkan pada index: " + childIndex);
+
+                    currentGridLayout.requestLayout();
+                    currentGridLayout.invalidate();
+
+
+                    Log.d("AddViewDebug", "newCard berhasil ditambahkan pada index: " + childIndex);
 
                 // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
-                currentPlayerController.setOwnedToken(TokenColor.GOLD);
-                GridLayout cardReservedGridLayout = getCardReservedPlayer();
-                View view = LayoutInflater.from(this).inflate(
-                        R.layout.layout_reseved_card_player, cardReservedGridLayout, false);
 
-                Card cardReserved = view.findViewById(R.id.card_reserved);
-                CardView cardView = view.findViewById(R.id.joker_token);
-                Token tokenReserved = cardView.findViewById(R.id.token_view);
-
-                cardReserved.setImageResource(cardController.getSelectedCard().getImage());
-                tokenReserved.setImageResource(R.drawable.gold_token);
-
-                view.setVisibility(View.VISIBLE);
-
-                cardReservedGridLayout.addView(view);
-
-                // buang token
-                View tokenView = tokenController.getViewAt(selectedToken.get(0).getLocation().get(0), selectedToken.get(0).getLocation().get(1), tokenGridLayout);
-                tokenView.setVisibility(View.INVISIBLE);
-                selectedToken.remove(0);
-                List<View> viewsToRemove = new ArrayList<>();
-                viewsToRemove.add(tokenView);
-                tokenController.resetSelectedToken(viewsToRemove);
-                tokenController.refreshTokenEvent();
-
-                // buang card
-
-                currentPlayerController.setPlayerBoard();
-                victoryCondition();
-                changeCurrentPlayer();
 
             }
             else{
