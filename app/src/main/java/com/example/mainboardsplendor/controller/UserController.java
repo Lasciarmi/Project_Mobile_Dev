@@ -86,10 +86,6 @@ public class UserController {
         user.addToken2Bag(tokenColor);
     }
 
-    public void setPointPerCardColor(TokenColor tokenColor){
-        user.addPoint2CardColor(tokenColor);
-    }
-
     public HashMap<TokenColor, Integer> getOwnedDiscount(){
         return user.getOwnedDiscount();
     }
@@ -118,25 +114,34 @@ public class UserController {
     public void setOwnedCard(Card selectedCard) {
 //        Tambah point objective di object user
         user.setCardsPoint(user.getCardsPoint()+selectedCard.getCardValue());
+//        Tambah crown objective di object user
         user.setCrowns(user.getCrowns()+selectedCard.getCrowns());
-//        user.setMostSameCardColorValue(user.getMostSameCardColorValue()+selectedCard.getMostSameCardColorValue());
 
-//        Tambah discount di object user
+//        Tambah discount dan value card yang sama di object user bergantung warnanya
         HashMap<TokenColor, Integer> ownedDiscount = user.getOwnedDiscount();
+        HashMap<TokenColor, Integer> mostSameCardValuePerColor = user.getMostSameCardValuePerColor();
         if(selectedCard.getColor().equals(TokenColor.BLUE.getTokenColor(mainActivity))){
             ownedDiscount.put(TokenColor.BLUE, ownedDiscount.get(TokenColor.BLUE) + selectedCard.getDiscount());
-
+            mostSameCardValuePerColor.put(TokenColor.BLUE, mostSameCardValuePerColor.get(TokenColor.BLUE) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.WHITE.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.WHITE, ownedDiscount.get(TokenColor.WHITE) + selectedCard.getDiscount());
+            mostSameCardValuePerColor.put(TokenColor.WHITE, mostSameCardValuePerColor.get(TokenColor.WHITE) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.GREEN.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.GREEN, ownedDiscount.get(TokenColor.GREEN) + selectedCard.getDiscount());
+            mostSameCardValuePerColor.put(TokenColor.GREEN, mostSameCardValuePerColor.get(TokenColor.GREEN) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.BLACK.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.BLACK, ownedDiscount.get(TokenColor.BLACK) + selectedCard.getDiscount());
+            mostSameCardValuePerColor.put(TokenColor.BLACK, mostSameCardValuePerColor.get(TokenColor.BLACK) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.RED.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.RED, ownedDiscount.get(TokenColor.RED) + selectedCard.getDiscount());
+            mostSameCardValuePerColor.put(TokenColor.RED, mostSameCardValuePerColor.get(TokenColor.RED) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.PEARL.getTokenColor(mainActivity))) {
             ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
+            mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
         }
+        
+//        Tambah image card di area player
+        // TODO: 12/1/2024 DONT FORGET 
     }
 
 }

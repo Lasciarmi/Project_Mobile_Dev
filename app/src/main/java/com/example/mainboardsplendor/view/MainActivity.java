@@ -126,10 +126,9 @@ public class MainActivity extends AppCompatActivity {
         takeTokenButton.setOnClickListener(v -> {
             takeTokenButtonAction();
         });
-//        purchaseCardButton.setOnClickListener(v -> {
-//            // TODO: 12/1/2024
-//            purchaseButtonAction();
-//        });
+        purchaseCardButton.setOnClickListener(v -> {
+            purchaseButtonAction();
+        });
 //        usePrivilegeButton.setOnClickListener(v -> {
 //            // TODO: 12/1/2024
 //        });
@@ -211,6 +210,8 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu selectedCard dibuat null
+                currentPlayerController.setOwnedCard(selectedCard);
+                selectedCard = null;
             }
 
         }
