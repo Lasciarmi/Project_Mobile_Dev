@@ -25,6 +25,21 @@ public class User implements Parcelable {
     private int reserveCard;
     private int tokensStack;
 
+<<<<<<< Updated upstream
+=======
+    private boolean isCurrent;
+
+    private static final int bagCapacity = 10;
+
+    public boolean getCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
+    }
+
+>>>>>>> Stashed changes
     public User(String username) {
         this.username = username;
         this.CardsPoint = 0;
@@ -59,7 +74,27 @@ public class User implements Parcelable {
         }
     };
 
+<<<<<<< Updated upstream
     public HashMap<Token, Integer> getOwnedTokens() {
+=======
+    public boolean addToken2Bag(TokenColor token) {
+        if (getTotalTokens() >= bagCapacity) {
+            return false;
+        }
+        incrementToken(token);
+        return true;
+    }
+
+    private void incrementToken(TokenColor token) {
+        ownedTokens.put(token, ownedTokens.getOrDefault(token, 0) + 1);
+    }
+
+    public int getTotalTokens() {
+        return getOwnedTokens().values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public HashMap<TokenColor, Integer> getOwnedTokens() {
+>>>>>>> Stashed changes
         return ownedTokens;
     }
 
@@ -128,7 +163,11 @@ public class User implements Parcelable {
     }
 
     public int getTokensStack() {
-        return tokensStack;
+        int totalTokens = 0;
+        for (Integer count : ownedTokens.values()) {
+            totalTokens += count;
+        }
+        return totalTokens;
     }
 
     @Override
