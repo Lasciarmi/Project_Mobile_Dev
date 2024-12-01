@@ -260,15 +260,14 @@ public class MainActivity extends AppCompatActivity {
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
             if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
+                if (currentPlayerController.getUser().getReserveCard() == 3) {
+                    Toast.makeText(this, "You can't hold more than 3 Reserved Card!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 setTaskBar(ActiveTaskBar.CARD);
                 cardController.refreshValidCard(currentPlayerController, tokenColor);
                 this.dontChangePlayer = true;
             }
-            // TODO: 12/1/2024 Harusnya check kartu hutang, bukan jumlah gold
-//            if (tokenColor == TokenColor.GOLD && currentPlayerController.getUser().getOwnedGoldToken() >= 3) {
-//                Toast.makeText(this, "You can't hold more than 3 gold tokens!", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
             else{
                 this.dontChangePlayer = false;
                 currentPlayerController.setOwnedToken(tokenColor);

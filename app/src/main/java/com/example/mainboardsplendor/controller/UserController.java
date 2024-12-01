@@ -84,6 +84,10 @@ public class UserController {
         user.addToken2Bag(tokenColor);
     }
 
+    public void setPointPerCardColor(TokenColor tokenColor){
+        user.addPoint2CardColor(tokenColor);
+    }
+
     public HashMap<TokenColor, Integer> getOwnedDiscount(){
         return user.getOwnedDiscount();
     }

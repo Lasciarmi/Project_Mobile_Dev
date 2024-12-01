@@ -86,6 +86,8 @@ public class CardController {
                         View view = cardBoard.getChildAt(i);
                         if (view instanceof Card) {
                             Card card = (Card) view;
+                            card.setClickable(false);
+                            card.setBackgroundResource(0);
                             HashMap<TokenColor, Integer> ownedToken = userController.getOwnedToken();
                             HashMap<TokenColor, Integer> ownedDiscount = userController.getOwnedDiscount();
                             HashMap<TokenColor, Integer> cardPrice = card.getPrice();
