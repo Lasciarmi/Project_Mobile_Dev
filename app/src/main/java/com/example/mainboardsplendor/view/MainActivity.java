@@ -281,11 +281,12 @@ public class MainActivity extends AppCompatActivity {
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.VISIBLE);
                 break;
-                case NONE:
-                taskBarTakeToken.setVisibility(View.GONE);
+
+            case NONE:
+                taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.GONE);
-                taskBarReplenishBoard.setVisibility(View.VISIBLE);
+                taskBarReplenishBoard.setVisibility(View.GONE);
                 TextView textView = taskBarReplenishBoard.findViewById(R.id.text_task1);
                 Button button = taskBarReplenishBoard.findViewById(R.id.task_button);
                 textView.setText("Before taking your mandatory action, you can ");

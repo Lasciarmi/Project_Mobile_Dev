@@ -45,7 +45,7 @@ public class User implements Parcelable {
     public User(String username) {
         this.username = username;
         this.CardsPoint = 0;
-        this.crowns = 3;
+        this.crowns = 0;
         this.mostSameCardColorValue = 0;
         this.Scroll = 0;
         this.reserveCard = 0;
