@@ -173,4 +173,8 @@ public class UserController {
         }
     }
 
+    public int getCrowns(){
+        return user.getCrowns();
+    }
+
 }

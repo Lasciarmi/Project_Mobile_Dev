@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //    private CustomTaskBarBinding taskBarPurchaseCard;
     private CardView taskBarPurchaseCard;
     private CardView taskBarUsePrivilege;
+    private CardView taskBarReplenishBoard;
 
     private GridLayout blueTokenBagPlayer1;
     private GridLayout blueTokenBagPlayer2;
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         taskBarTakeToken = binding.taskBar.takeGemsTaskBar.cardViewTaskBar;
         taskBarPurchaseCard = binding.taskBar.purchaseCardTaskBar.cardViewTaskBar;
         taskBarUsePrivilege = binding.taskBar.taskBarUsePrivilege;
+        taskBarReplenishBoard = binding.taskBar.replenishBoardTaskBar.cardViewTaskBar;
         setTaskBar(ActiveTaskBar.NONE);
 
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
@@ -151,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
+        GridLayout royalCard = binding.cardBoard.royalCard; //tes
+        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         // Init ReversedCard
         cardController.InitRoyalCard();
         cardController.InitReservedCardBoard();
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
 
         // check valid card (TODO: DELETE)
 //        cardController.refreshValidCard(user1Controller);
@@ -178,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         redTokenBagPlayer2 = binding.layoutPlayer2Bag.listRedToken.listToken;
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
+
     }
 
     private GridLayout getCardReservedPlayer(){
@@ -270,10 +275,21 @@ public class MainActivity extends AppCompatActivity {
                 textCardButon.setText("Take Selected Card");
                 //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
-            case NONE:
+
+            case SCROLL:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
+                taskBarUsePrivilege.setVisibility(View.VISIBLE);
+                break;
+                case NONE:
+                taskBarTakeToken.setVisibility(View.GONE);
+                taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.GONE);
+                taskBarReplenishBoard.setVisibility(View.VISIBLE);
+                TextView textView = taskBarReplenishBoard.findViewById(R.id.text_task1);
+                Button button = taskBarReplenishBoard.findViewById(R.id.task_button);
+                textView.setText("Before taking your mandatory action, you can ");
+                button.setText("Replenish the Board");
                 break;
         }
     }
@@ -322,7 +338,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 setTaskBar(ActiveTaskBar.CARD);
-                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+//                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+
                 this.dontChangePlayer = true;
             }
             else{
@@ -408,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     public void victoryCondition(){
         if (getCurrentPlayerController().getUser().getCardsPoint() == 20){
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 20 point");
-        } else if (getCurrentPlayerController().getUser().getCrowns() == 3) {
+        } else if (getCurrentPlayerController().getUser().getCrowns() == 10) {
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 3 crown");
         } else if (getCurrentPlayerController().getUser().getMostSameCardColorValue() == 10) {
             showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 10 same card color");

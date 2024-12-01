@@ -7,6 +7,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
+import com.example.mainboardsplendor.model.User;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -14,6 +15,7 @@ import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +32,7 @@ public class CardController {
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
     private Card selectedCard;
+    private RoyalCard selectedCrownCard;
 
     private Context context;
     private MainActivity mainActivity;
@@ -87,6 +90,33 @@ public class CardController {
         }
     }
 
+    public void refreshValidCrownCard(UserController userController) {
+//      for each listcard in allListLevelCard
+            for (int i=0; i < reservedCardBoard.getChildCount(); i++) {
+                View view = reservedCardBoard.getChildAt(i);
+//                RoyalCard royalCard = view.findViewById(R.id.royal_card);
+//                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                if (view instanceof RoyalCard) {
+                    RoyalCard royalCard = (RoyalCard) view;
+                    int ownedCrown = userController.getCrowns();
+//
+                    if (ownedCrown == 3 || ownedCrown == 6){
+                        royalCard.setClickable(true);
+                        royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        royalCard.setOnClickListener(v -> {
+                            royaleCardClicked(userController, royalCard);
+                        });
+                    }
+                    else {
+                        royalCard.setClickable(false);
+                        royalCard.setBackgroundResource(0);
+                    }
+                }
+
+        }
+    }
+
+
     public void refreshForReverseCard(UserController userController, TokenColor tokenColor) {
         for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
             if (tokenColor != null){
@@ -137,6 +167,18 @@ public class CardController {
             this.selectedCard = null;
         }
         refreshValidCard(userController);
+    }
+
+    private void royaleCardClicked(UserController userController, RoyalCard royalCard) {
+        if (selectedCrownCard == null){
+            mainActivity.setTaskBar(ActiveTaskBar.CARD);
+            this.selectedCrownCard = royalCard;
+        }
+        else{
+            mainActivity.setTaskBar(ActiveTaskBar.NONE);
+            this.selectedCrownCard = null;
+        }
+//        refreshValidCrownCard(userController);
     }
 
     public void InitCardTopDeck() {
@@ -699,11 +741,10 @@ public class CardController {
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
             params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
 
-            ImageView imageView = new ImageView(context);
-            imageView.setImageResource(royalCard.getImage());
-            imageView.setLayoutParams(params);
+            royalCard.setImageResource(royalCard.getImage());
+            royalCard.setLayoutParams(params);
 
-            reservedCardBoard.addView(imageView);
+            reservedCardBoard.addView(royalCard);
         }
     }
 
