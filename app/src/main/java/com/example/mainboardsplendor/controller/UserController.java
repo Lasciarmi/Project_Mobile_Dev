@@ -44,7 +44,7 @@ public class UserController {
 
         scoreBoardPlayer.playerName.setText(user.getUsername());
 
-        scoreBoardPlayer.poinPlayer.setText( String.valueOf(user.getCardsPoint()) );
+        scoreBoardPlayer.poinPlayer.setText(String.valueOf(user.getCardsPoint()));
         scoreBoardPlayer.crownPlayer.setText(String.valueOf(user.getCrowns()));
         scoreBoardPlayer.cardPoinPlayer.setText(String.valueOf(user.getMostSameCardColorValue()));
 
@@ -113,4 +113,9 @@ public class UserController {
         tokenGridLayout.addView(view);
 
     }
+
+
+
+
+
 }

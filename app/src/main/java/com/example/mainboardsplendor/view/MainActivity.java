@@ -1,5 +1,6 @@
 package com.example.mainboardsplendor.view;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -145,11 +146,8 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
-<<<<<<< HEAD
-        cardController.refreshValidCard(user1Controller);
-=======
+//        cardController.refreshValidCard(user1Controller);
         cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
->>>>>>> mc
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -177,11 +175,10 @@ public class MainActivity extends AppCompatActivity {
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
-<<<<<<< HEAD
-=======
+
                 TextView textView= taskBarTakeToken.findViewById(R.id.text_task1);
                 textView.setText("You must select a Token or purchase a card");
->>>>>>> mc
+
                 break;
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
@@ -212,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Method for add Card Stack on bag player
     private void takeButtonAction() {
-<<<<<<< HEAD
+
         int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
 
         // Check if the player exceeds maximum bag capacity
@@ -221,24 +218,21 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-=======
->>>>>>> mc
         // Create a list to hold the views to remove
         List<View> viewsToRemove = new ArrayList<>();
         List<Token> tokensToRemove = new ArrayList<>();
 
         UserController currentPlayerController = getCurrentPlayerController();
 
-
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
-<<<<<<< HEAD
-=======
-            if (tokenColor.equals(TokenColor.GOLD)){
-                cardController.refreshValidCard(currentPlayerController, tokenColor);
+
+            if (tokenColor == TokenColor.GOLD && currentPlayerController.getUser().getOwnedGoldToken() >= 3) {
+                Toast.makeText(this, "You can't hold more than 3 gold tokens!", Toast.LENGTH_SHORT).show();
+                return;
             }
->>>>>>> mc
+
             currentPlayerController.setOwnedToken(tokenColor);
 
             GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
@@ -265,11 +259,10 @@ public class MainActivity extends AppCompatActivity {
         tokenController.resetSelectedToken(viewsToRemove);
         tokenController.refreshTokenEvent();
 
-<<<<<<< HEAD
+
         getCurrentPlayerController().setPlayerBoard();
 
-=======
->>>>>>> mc
+        victoryCondition();
         changeCurrentPlayer();
     }
 
@@ -310,11 +303,46 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
-<<<<<<< HEAD
-        cardController.refreshValidCard(getCurrentPlayerController());
-=======
+
+//        cardController.refreshValidCard(getCurrentPlayerController());
+
         cardController.refreshValidCard(getCurrentPlayerController(), TokenColor.WHITE);
->>>>>>> mc
+    }
+
+    public void victoryCondition(){
+        if (getCurrentPlayerController().getUser().getCardsPoint() == 20){
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 20 point");
+        } else if (getCurrentPlayerController().getUser().getCrowns() == 3) {
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 3 crown");
+        } else if (getCurrentPlayerController().getUser().getMostSameCardColorValue() == 10) {
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 10 same card color");
+        }
+    }
+    private void showDialog(String message) {
+        // Create a custom dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Inflate the custom layout (optional, only if you want custom layout)
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
+        builder.setView(dialogView);
+
+        // Find the TextView in the dialog layout and set the message
+        TextView dialogMessageTextView = dialogView.findViewById(R.id.dialog_message);
+        dialogMessageTextView.setText(message);
+
+        // Set the OK button
+        Button okButton = dialogView.findViewById(R.id.dialog_ok_button);
+        okButton.setOnClickListener(v -> OpenStartUpActivity());
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void OpenStartUpActivity() {
+        Intent intent = new Intent(this, StartUpActivity.class);
+        startActivity(intent);
     }
 
 }

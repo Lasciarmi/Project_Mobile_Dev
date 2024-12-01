@@ -58,7 +58,7 @@ public class User implements Parcelable {
         ownedTokens.put(TokenColor.BLACK, 0);
         ownedTokens.put(TokenColor.RED, 0);
         ownedTokens.put(TokenColor.PEARL, 0);
-        ownedTokens.put(TokenColor.GOLD, 10);
+        ownedTokens.put(TokenColor.GOLD, 0);
 
         ownedDiscount.put(TokenColor.BLUE, 0);
         ownedDiscount.put(TokenColor.WHITE, 0);
@@ -106,6 +106,10 @@ public class User implements Parcelable {
 
     public int getTotalTokens() {
         return getOwnedTokens().values().stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public int getOwnedGoldToken(){
+        return ownedTokens.get(TokenColor.GOLD);
     }
 
     public void InitOwnedTokens(HashMap<Token, Integer> ownedTokens, Token token) {

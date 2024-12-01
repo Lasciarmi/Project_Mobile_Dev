@@ -96,7 +96,7 @@ public class CardController {
                             else{
                                 this.selectedCard = null;
                             }
-                            refreshValidCard(userController);
+                            refreshValidCard(userController, TokenColor.WHITE);
                         });
                     }
                     else {
