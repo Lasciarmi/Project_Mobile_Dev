@@ -22,6 +22,8 @@ import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class TokenController {
@@ -148,6 +150,7 @@ public class TokenController {
 //            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             splendorDuelBoard.addView(view);
+
 
             // Mark Slot
             isFilled[row][col] = true;
@@ -647,5 +650,4 @@ public class TokenController {
     public List<Token> getSelectedToken(){
         return selectedToken;
     }
-
 }

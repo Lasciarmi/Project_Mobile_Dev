@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.model.Card;
+import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -21,6 +22,7 @@ import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
 import com.example.mainboardsplendor.model.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class UserController {
 
@@ -43,7 +45,7 @@ public class UserController {
 
         scoreBoardPlayer.playerName.setText(user.getUsername());
 
-        scoreBoardPlayer.poinPlayer.setText( String.valueOf(user.getCardsPoint()) );
+        scoreBoardPlayer.poinPlayer.setText(String.valueOf(user.getCardsPoint()));
         scoreBoardPlayer.crownPlayer.setText(String.valueOf(user.getCrowns()));
         scoreBoardPlayer.cardPoinPlayer.setText(String.valueOf(user.getMostSameCardColorValue()));
 
@@ -105,4 +107,9 @@ public class UserController {
 
     public void setOwnedCard(Card selectedCard) {
     }
+
+
+
+
+
 }

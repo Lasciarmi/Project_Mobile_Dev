@@ -1,13 +1,16 @@
 package com.example.mainboardsplendor.view;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 //            purchaseButtonAction();
 //        });
 //        usePrivilegeButton.setOnClickListener(v -> {
-//            // TODO: 12/1/2024  
+//            // TODO: 12/1/2024
 //        });
 
 
@@ -151,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
-//        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
+//        cardController.refreshValidCard(user1Controller);
+        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -236,6 +240,16 @@ public class MainActivity extends AppCompatActivity {
 
     // Method for add Token Stack on bag player
     private void takeTokenButtonAction() {
+    // Method for add Card Stack on bag player
+
+        int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
+
+        // Check if the player exceeds maximum bag capacity
+        if (totalTokens + selectedToken.size() > 10) {
+            Toast.makeText(this, "You cannot take any more tokens. Your bag will exceed the maximum capacity!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Create a list to hold the views to remove
         List<View> viewsToRemove = new ArrayList<>();
         List<Token> tokensToRemove = new ArrayList<>();
@@ -250,6 +264,11 @@ public class MainActivity extends AppCompatActivity {
                 cardController.refreshValidCard(currentPlayerController, tokenColor);
                 this.dontChangePlayer = true;
             }
+            // TODO: 12/1/2024 Harusnya check kartu hutang, bukan jumlah gold
+//            if (tokenColor == TokenColor.GOLD && currentPlayerController.getUser().getOwnedGoldToken() >= 3) {
+//                Toast.makeText(this, "You can't hold more than 3 gold tokens!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             else{
                 this.dontChangePlayer = false;
                 currentPlayerController.setOwnedToken(tokenColor);
@@ -280,9 +299,13 @@ public class MainActivity extends AppCompatActivity {
             tokenController.resetSelectedToken(viewsToRemove);
             tokenController.refreshTokenEvent();
 
+            getCurrentPlayerController().setPlayerBoard();
+
+            victoryCondition();
             changeCurrentPlayer();
         }
         // Remove the collected views after the loop
+
     }
 
     // Method for add Card Stack
@@ -323,6 +346,42 @@ public class MainActivity extends AppCompatActivity {
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
         cardController.refreshValidCard(getCurrentPlayerController(), null);
+    }
+
+    public void victoryCondition(){
+        if (getCurrentPlayerController().getUser().getCardsPoint() == 20){
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 20 point");
+        } else if (getCurrentPlayerController().getUser().getCrowns() == 3) {
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 3 crown");
+        } else if (getCurrentPlayerController().getUser().getMostSameCardColorValue() == 10) {
+            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 10 same card color");
+        }
+    }
+    private void showDialog(String message) {
+        // Create a custom dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Inflate the custom layout (optional, only if you want custom layout)
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
+        builder.setView(dialogView);
+
+        // Find the TextView in the dialog layout and set the message
+        TextView dialogMessageTextView = dialogView.findViewById(R.id.dialog_message);
+        dialogMessageTextView.setText(message);
+
+        // Set the OK button
+        Button okButton = dialogView.findViewById(R.id.dialog_ok_button);
+        okButton.setOnClickListener(v -> OpenStartUpActivity());
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void OpenStartUpActivity() {
+        Intent intent = new Intent(this, StartUpActivity.class);
+        startActivity(intent);
     }
 
 }
