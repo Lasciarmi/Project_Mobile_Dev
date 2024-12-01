@@ -115,10 +115,17 @@ public class MainActivity extends AppCompatActivity {
         Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
         Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
 
-        // TAKE BUTTON ON CLICK LISTENER
+        // BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
             takeButtonAction();
         });
+        purchaseCardButton.setOnClickListener(v -> {
+            // TODO: 12/1/2024  
+            purchaseButtonAction();
+        });
+//        usePrivilegeButton.setOnClickListener(v -> {
+//            // TODO: 12/1/2024  
+//        });
 
 
         // Init TokenBag on Board
@@ -165,6 +172,26 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
         goldTokenBagPlayer1 = binding.layoutPlayer1Bag.listGoldToken.listToken;
         goldTokenBagPlayer2 = binding.layoutPlayer2Bag.listGoldToken.listToken;
+    }
+
+    private void purchaseButtonAction() {
+        if (selectedCard != null){
+
+            UserController currentPlayerController = getCurrentPlayerController();
+
+            if (selectedToken != null){
+                for (Token token : selectedToken) {
+                    TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
+                    if (tokenColor.equals(TokenColor.GOLD)){
+                        // TODO: 12/1/2024 MC, Kalau confirm pas hutang, lalu remove gold token dari selected token dan selectedCard dibuat null
+                    }
+                }
+            }
+            else{
+                // TODO: 12/1/2024 Theo, kalau confirm purchase card, lalu selectedCard dibuat null
+            }
+
+        }
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
@@ -220,8 +247,6 @@ public class MainActivity extends AppCompatActivity {
         List<Token> tokensToRemove = new ArrayList<>();
 
         UserController currentPlayerController = getCurrentPlayerController();
-
-
 
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
