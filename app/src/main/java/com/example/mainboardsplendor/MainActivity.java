@@ -29,6 +29,7 @@ import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 import com.example.mainboardsplendor.model.Token;
 import com.example.mainboardsplendor.model.User;
+import com.example.mainboardsplendor.view.CreateUserActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
