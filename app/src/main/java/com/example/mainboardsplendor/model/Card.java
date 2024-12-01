@@ -19,6 +19,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int crowns;
     private int level;
     private int Image;
+    private boolean isSelected = false;
     private HashMap<TokenColor, Integer> price;
 
     public Card(@NonNull Context context) {
@@ -39,6 +40,16 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setImage(int image) {
         Image = image;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    @Override
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public Color getColor() {

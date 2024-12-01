@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Card> listCardLevel1 = new ArrayList<>();
     private List<RoyalCard> listRoyalCard = new ArrayList<>();
     private List<Token> selectedToken = new ArrayList<>();
+    private Card selectedCard;
 
     private User user1;
     private User user2;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         binding.taskBar.taskBarUsePrivilege.setVisibility(View.GONE);
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this);
+        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();

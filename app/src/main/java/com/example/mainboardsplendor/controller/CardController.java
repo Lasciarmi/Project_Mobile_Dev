@@ -33,13 +33,14 @@ public class CardController {
     private List<Card> listCardLevel2;
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
-
-    private Card selectedCard = null;
+    private Card selectedCard;
 
     private Context context;
     private MainActivity mainActivity;
 
-    public CardController(GridLayout cardStoreTop, GridLayout cardStoreMid, GridLayout cardStoreBot, GridLayout reservedCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2, List<Card> listCardLevel3, List<RoyalCard> listRoyalCard,Context context, MainActivity mainActivity) {
+    public CardController(GridLayout cardStoreTop, GridLayout cardStoreMid, GridLayout cardStoreBot,
+                          GridLayout reservedCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2,
+                          List<Card> listCardLevel3, List<RoyalCard> listRoyalCard,Context context, MainActivity mainActivity, Card selectedCard) {
         this.cardStoreTop = cardStoreTop;
         this.cardStoreMid = cardStoreMid;
         this.cardStoreBot = cardStoreBot;
@@ -50,6 +51,7 @@ public class CardController {
         this.listRoyalCard = listRoyalCard;
         this.context = context;
         this.mainActivity = mainActivity;
+        this.selectedCard = selectedCard;
     }
 
     public void refreshValidCard(UserController userController) {
@@ -72,15 +74,15 @@ public class CardController {
                     int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
                     int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
-                    if (sum >= 0 && (selectedCard != null || selectedCard == card)){
+                    if (sum >= 0 && (selectedCard == null || selectedCard == card)){
                         card.setClickable(true);
                         card.setBackgroundResource(R.drawable.image_border_card_clickable);
                         card.setOnClickListener(v -> {
-                            if (selectedCard == null) {
-                                selectedCard = card;
+                            if (selectedCard == null){
+                                this.selectedCard = card;
                             }
-                            else {
-                                selectedCard = null;
+                            else{
+                                this.selectedCard = null;
                             }
                             refreshValidCard(userController);
                         });
@@ -666,9 +668,5 @@ public class CardController {
         Random random = new Random();
         int randomIndex = random.nextInt(royalCards.size());
         return royalCards.remove(randomIndex);
-    }
-
-    public Card getSelectedCard() {
-        return selectedCard;
     }
 }
