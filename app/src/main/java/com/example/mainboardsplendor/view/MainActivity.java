@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenBag.size()));
 
         // Init CardBoard
-        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.reservedCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
+        cardController = new CardController(binding.cardBoard.cardStoreTop, binding.cardBoard.cardStoreMid, binding.cardBoard.cardStoreBot, binding.cardBoard.royalCard, listCardLevel1, listCardLevel2, listCardLevel3, listRoyalCard,this, this, selectedCard);
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         // check valid card (TODO: DELETE)
 //        cardController.refreshValidCard(user1Controller);
-        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
+        cardController.refreshValidCard(user1Controller);
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
             if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
                 setTaskBar(ActiveTaskBar.CARD);
-                cardController.refreshValidCard(currentPlayerController, tokenColor);
+                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
                 this.dontChangePlayer = true;
             }
             // TODO: 12/1/2024 Harusnya check kartu hutang, bukan jumlah gold
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
-        cardController.refreshValidCard(getCurrentPlayerController(), null);
+        cardController.refreshValidCard(getCurrentPlayerController());
     }
 
     public void victoryCondition(){

@@ -60,12 +60,12 @@ public class User implements Parcelable {
         ownedTokens.put(TokenColor.PEARL, 0);
         ownedTokens.put(TokenColor.GOLD, 0);
 
-        ownedDiscount.put(TokenColor.BLUE, 0);
-        ownedDiscount.put(TokenColor.WHITE, 0);
-        ownedDiscount.put(TokenColor.GREEN, 0);
-        ownedDiscount.put(TokenColor.BLACK, 0);
-        ownedDiscount.put(TokenColor.RED, 0);
-        ownedDiscount.put(TokenColor.PEARL, 0);
+        ownedDiscount.put(TokenColor.BLUE, 10);
+        ownedDiscount.put(TokenColor.WHITE, 10);
+        ownedDiscount.put(TokenColor.GREEN, 10);
+        ownedDiscount.put(TokenColor.BLACK, 10);
+        ownedDiscount.put(TokenColor.RED, 10);
+        ownedDiscount.put(TokenColor.PEARL, 10);
     }
 
     protected User(Parcel in) {

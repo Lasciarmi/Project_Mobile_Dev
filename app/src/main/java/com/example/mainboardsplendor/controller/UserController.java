@@ -1,5 +1,6 @@
 package com.example.mainboardsplendor.controller;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -106,10 +107,27 @@ public class UserController {
     }
 
     public void setOwnedCard(Card selectedCard) {
+//        Tambah point objective di object user
+        user.setCardsPoint(user.getCardsPoint()+selectedCard.getCardValue());
+        user.setCrowns(user.getCrowns()+selectedCard.getCrowns());
+//        user.setMostSameCardColorValue(user.getMostSameCardColorValue()+selectedCard.getMostSameCardColorValue());
+
+//        Tambah discount di object user
+        HashMap<TokenColor, Integer> ownedDiscount = user.getOwnedDiscount();
+        if(selectedCard.getColor().equals(TokenColor.BLUE.getTokenColor(mainActivity))){
+            ownedDiscount.put(TokenColor.BLUE, ownedDiscount.get(TokenColor.BLUE) + selectedCard.getDiscount());
+
+        } else if (selectedCard.getColor().equals(TokenColor.WHITE.getTokenColor(mainActivity))) {
+            ownedDiscount.put(TokenColor.WHITE, ownedDiscount.get(TokenColor.WHITE) + selectedCard.getDiscount());
+        } else if (selectedCard.getColor().equals(TokenColor.GREEN.getTokenColor(mainActivity))) {
+            ownedDiscount.put(TokenColor.GREEN, ownedDiscount.get(TokenColor.GREEN) + selectedCard.getDiscount());
+        } else if (selectedCard.getColor().equals(TokenColor.BLACK.getTokenColor(mainActivity))) {
+            ownedDiscount.put(TokenColor.BLACK, ownedDiscount.get(TokenColor.BLACK) + selectedCard.getDiscount());
+        } else if (selectedCard.getColor().equals(TokenColor.RED.getTokenColor(mainActivity))) {
+            ownedDiscount.put(TokenColor.RED, ownedDiscount.get(TokenColor.RED) + selectedCard.getDiscount());
+        } else if (selectedCard.getColor().equals(TokenColor.PEARL.getTokenColor(mainActivity))) {
+            ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
+        }
     }
-
-
-
-
 
 }
