@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 
+import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -52,10 +53,21 @@ public class CardController {
         this.mainActivity = mainActivity;
     }
 
-    public void refreshValidCard(UserController userController) {
+    public void refreshValidCard(UserController userController, TokenColor tokenColor) {
 //      for each listcard in allListLevelCard
         for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
 
+            if (tokenColor.equals(TokenColor.GOLD)){
+                for (int i=0; i < cardBoard.getChildCount(); i++) {
+                    View view = cardBoard.getChildAt(i);
+                    if(view instanceof Card){
+                        Card card = (Card) view;
+                        card.setClickable(true);
+                        card.setBackgroundResource(R.drawable.image_border_card_clickable);
+                    }
+                    mainActivity.setTaskBar(ActiveTaskBar.CARD);
+                }
+            }
 //          for each card in listcard
             for (int i=0; i < cardBoard.getChildCount(); i++) {
                 View view = cardBoard.getChildAt(i);

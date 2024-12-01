@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitReservedCardBoard();
 
         // check valid card (TODO: DELETE)
-        cardController.refreshValidCard(user1Controller);
+        cardController.refreshValidCard(user1Controller, TokenColor.WHITE);
 
         // Binding all token bag player
         blueTokenBagPlayer1 = binding.layoutPlayer1Bag.listBlueToken.listToken;
@@ -172,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
+                TextView textView= taskBarTakeToken.findViewById(R.id.text_task1);
+                textView.setText("You must select a Token or purchase a card");
                 break;
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
@@ -212,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
+            if (tokenColor.equals(TokenColor.GOLD)){
+                cardController.refreshValidCard(currentPlayerController, tokenColor);
+            }
             currentPlayerController.setOwnedToken(tokenColor);
 
             GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
@@ -278,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         }
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
-        cardController.refreshValidCard(getCurrentPlayerController());
+        cardController.refreshValidCard(getCurrentPlayerController(), TokenColor.WHITE);
     }
 
 }
