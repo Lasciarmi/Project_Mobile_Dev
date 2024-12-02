@@ -168,6 +168,8 @@ public class UserController {
             ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
             mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
         }
+
+        Toast.makeText(mainActivity, "sdsd", Toast.LENGTH_SHORT).show();
     }
 
     public int getCrowns(){
