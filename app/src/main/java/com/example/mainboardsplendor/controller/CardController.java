@@ -241,12 +241,14 @@ public class CardController {
         int[] list_price_card_ultra_level_3_1 = {0, 0, 0, 8, 0, 0};
         AddPriceHashMap(hashMap_price_card_ultra_level_3_1, list_price_card_ultra_level_3_1);
         Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 0, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
+        card_ultra_level_3_1.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_3_2 = {0, 0, 0, 8, 0, 0};
         AddPriceHashMap(hashMap_price_card_ultra_level_3_2, list_price_card_ultra_level_3_2);
         Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 3, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_2);
+        card_ultra_level_3_2.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_white_level_3_1 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
@@ -409,18 +411,21 @@ public class CardController {
         int[] list_price_card_ultra_level_2_1 = {6, 0, 0, 0, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_2_1, list_price_card_ultra_level_2_1);
         Card card_ultra_level_2_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, hashMap_price_card_ultra_level_2_1, R.drawable.card_ultra_level_2_1);
+        card_ultra_level_2_1.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_2_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_2_2 = {0, 0, 6, 0, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_2_2, list_price_card_ultra_level_2_2);
         Card card_ultra_level_2_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 2, hashMap_price_card_ultra_level_2_2, R.drawable.card_ultra_level_2_2);
+        card_ultra_level_2_2.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_2_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_2_3 = {0, 0, 6, 0, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_2_3, list_price_card_ultra_level_2_3);
         Card card_ultra_level_2_3 = AddCard(2, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 2, 1, 0, hashMap_price_card_ultra_level_2_3, R.drawable.card_ultra_level_2_3);
+        card_ultra_level_2_3.setUniversal(true);
 
         // Total 24 Cards
         listCardLevel2.add(card_blue_level_2_1);
@@ -611,24 +616,28 @@ public class CardController {
         int[] list_price_card_ultra_level_1_1 = {0, 0, 0, 4, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_1_1, list_price_card_ultra_level_1_1);
         Card card_ultra_level_1_1 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, hashMap_price_card_ultra_level_1_1, R.drawable.card_ultra_level_1_1);
+        card_ultra_level_1_1.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_2 = {0, 2, 2, 1, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_1_2, list_price_card_ultra_level_1_2);
         Card card_ultra_level_1_2 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 0, hashMap_price_card_ultra_level_1_2, R.drawable.card_ultra_level_1_2);
+        card_ultra_level_1_2.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_3 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_3 = {2, 0, 0, 1, 2, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_1_3, list_price_card_ultra_level_1_3);
         Card card_ultra_level_1_3 = AddCard(1, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1,1, 0, hashMap_price_card_ultra_level_1_3, R.drawable.card_ultra_level_1_3);
+        card_ultra_level_1_3.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_1_4 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_1_4 = {0, 4, 0, 0, 0, 1};
         AddPriceHashMap(hashMap_price_card_ultra_level_1_4, list_price_card_ultra_level_1_4);
         Card card_ultra_level_1_4 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 1, 1, 1, hashMap_price_card_ultra_level_1_4, R.drawable.card_ultra_level_1_4);
+        card_ultra_level_1_4.setUniversal(true);
 
         // Total 30 cards
         listCardLevel1.add(card_blue_level_1_1);
