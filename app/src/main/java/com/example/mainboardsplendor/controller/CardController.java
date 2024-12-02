@@ -3,6 +3,7 @@ package com.example.mainboardsplendor.controller;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -151,14 +152,10 @@ public class CardController {
     }
 
     private void cardClickedJoker(UserController userController, Card card, TokenColor tokenColor) {
-        if (selectedCard == null){
-            this.selectedCard = card;
-        }
-        else{
-            this.selectedCard = null;
-        }
-        refreshForReverseCard(userController, tokenColor);
+        this.selectedCard = (this.selectedCard == card) ? null : card;
+        refreshForReverseCard(userController, tokenColor); //
     }
+
 
     public void cardClicked(UserController userController, Card card) {
         if (selectedCard == null){
@@ -672,6 +669,29 @@ public class CardController {
         InitCard(listCardLevel1, cardStoreBot, 5);
     }
 
+    public void setCardGridLayout(){
+        for(Card card : listCardLevel3){
+            card.setCurrentGridLayout(cardStoreTop);
+        }
+        for(Card card : listCardLevel2){
+            card.setCurrentGridLayout(cardStoreMid);
+        }
+        for(Card card : listCardLevel1) {
+            card.setCurrentGridLayout(cardStoreBot);
+        }
+    }
+
+    public List<Card> getListCard(GridLayout gridLayout){
+        if (gridLayout.equals(cardStoreTop)) {
+            return listCardLevel3;
+        } else if (gridLayout.equals(cardStoreMid)) {
+            return listCardLevel2;
+        } else if (gridLayout.equals(cardStoreBot)) {
+            return listCardLevel1;
+        }
+        return null;
+    }
+
     private void InitCard(List<Card> cards, GridLayout cardBoard, int rowCount) {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
@@ -689,7 +709,7 @@ public class CardController {
         }
     }
 
-    private Card PickRandomCard(List<Card> listCard){
+    public Card PickRandomCard(List<Card> listCard){
         Random random = new Random();
         int randomIndex = random.nextInt(listCard.size());
         return listCard.remove(randomIndex);
@@ -787,5 +807,22 @@ public class CardController {
 //            remove kartu reserved in player pool
             selectedCard.setReserved(false);
         }
+    }
+
+    // Method for add Card Stack
+    public void addNewCard(FrameLayout currentCardStack) {
+        Card card = new Card(mainActivity);
+        card.setImageResource(selectedCard.getImage());
+
+        int cardSpacing = 70; // Sesuaikan agar hanya sebagian atas yang terlihat
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(200,300);
+
+        // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
+        params.topMargin = currentCardStack.getChildCount() * cardSpacing;
+        card.setLayoutParams(params);
+
+        // Tambahkan kartu ke dalam currentCardStack
+        currentCardStack.addView(card);
     }
 }

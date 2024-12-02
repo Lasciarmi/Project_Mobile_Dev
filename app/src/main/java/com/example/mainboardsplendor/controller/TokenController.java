@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.databinding.CustomTaskBarBinding;
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
+import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TokenController {
     private static final int quantityBlueToken = 4;
@@ -59,6 +62,41 @@ public class TokenController {
         this.splendorDuelBoard = splendorDuelBoard;
 //        this.taskBarTakeToken = taskBarTakeToken;
     }
+
+    public void payCard(Card selectedCard, UserController currentPlayerController) {
+        HashMap<TokenColor, Integer> price = selectedCard.getPrice();
+
+        for (TokenColor tokenColor : price.keySet()) {
+            FrameLayout currentFrame = mainActivity.getCurrentFrameLayout(tokenColor.getTokenColor(mainActivity));
+
+            if (currentFrame == null) {
+                continue; // Skip jika FrameLayout tidak ditemukan
+            }
+
+            int tokenPrice = price.getOrDefault(tokenColor, 0); // Gunakan getOrDefault untuk aman
+            if (currentFrame.getChildCount() == 0) {
+                // Tidak ada kartu diskon, bayar penuh
+                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenBag);
+            } else {
+                for (int i = 0; i < currentFrame.getChildCount(); i++) {
+                    View child = currentFrame.getChildAt(i);
+                    if (child instanceof Card) {
+                        Card card = (Card) child;
+
+                        Map<TokenColor, Integer> cardPrice = card.getPrice();
+                        int discountCard = (cardPrice != null) ? cardPrice.getOrDefault(tokenColor, 0) : 0; // Pastikan tidak null
+
+                        int priceDiscounted = Math.max(tokenPrice - discountCard, 0);
+
+                        if (priceDiscounted > 0) {
+                            currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenBag);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     public void initTokenBag() {
         Token blueToken = new Token(context);

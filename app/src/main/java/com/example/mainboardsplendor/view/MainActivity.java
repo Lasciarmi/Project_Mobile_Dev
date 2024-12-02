@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewParent;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         cardController.InitCardTopDeck();
         cardController.InitCardMidDeck();
         cardController.InitCardBotDeck();
+        cardController.setCardGridLayout();
         cardController.InitCardBoard();
 
         // Init ReversedCard
@@ -189,6 +191,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setTokenBagSize(List<Token> tokenBag) {
+        // Hitung jumlah token di dalam tokenBag
+        int tokenCount = tokenBag.size();
+
+        // Perbarui TextView dengan jumlah token
+        binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenCount));
+    }
+
+
+    public List<Token> getTokenBag(){
+        return tokenBag;
+    }
+
     public GridLayout getCardReservedPlayer(){
         if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
     }
@@ -212,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 currentPlayerController.setOwnedToken(TokenColor.GOLD);
                 currentPlayerController.setTokenBagPlayer(TokenColor.GOLD, tokenJokerPlayerGrid, R.drawable.gold_token);
 
-                // buang token
+                // buang token Done
                 View tokenView = tokenController.getViewAt(selectedToken.get(0).getLocation().get(0), selectedToken.get(0).getLocation().get(1), tokenGridLayout);
                 tokenView.setVisibility(View.INVISIBLE);
                 selectedToken.remove(0);
@@ -231,10 +246,11 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
-                addNewCard(currentFrameLayout);
+                cardController.addNewCard(currentFrameLayout);
+                tokenController.payCard(selectedCard, currentPlayerController);
+                currentPlayerController.setOwnedCard(selectedCard);
             }
-            currentPlayerController.setOwnedCard(selectedCard);
-            cardController.cardClicked(currentPlayerController, selectedCard);
+            cardController.cardClicked(getCurrentPlayerController(), selectedCard);
             this.selectedCard = cardController.getSelectedCard();
             currentPlayerController.setPlayerBoard();
             victoryCondition();
@@ -381,23 +397,6 @@ public class MainActivity extends AppCompatActivity {
         }
         // Remove the collected views after the loop
 
-    }
-
-    // Method for add Card Stack
-    public void addNewCard(FrameLayout currentCardStack) {
-        ImageView card = new ImageView(this);
-        card.setImageResource(selectedCard.getImage());
-
-        int cardSpacing = 70; // Sesuaikan agar hanya sebagian atas yang terlihat
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(200,300);
-
-        // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
-        params.topMargin = currentCardStack.getChildCount() * cardSpacing;
-        card.setLayoutParams(params);
-
-        // Tambahkan kartu ke dalam currentCardStack
-        currentCardStack.addView(card);
     }
 
     private UserController getCurrentPlayerController() {
