@@ -73,7 +73,7 @@ public class CardController {
                     int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
                     int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
-                    if (sum >= 0 && (selectedCard == null || selectedCard == card)){
+                    if (sum >= 0 && (selectedCard == null || selectedCard == card) && selectedRoyalCard == null && !mainActivity.getUsingScrollNow()){
                         card.setClickable(true);
                         card.setBackgroundResource(R.drawable.image_border_card_clickable);
                         card.setOnClickListener(v -> {
@@ -100,7 +100,11 @@ public class CardController {
                     int ownedCrown = userController.getCrowns();
                     int ownedRoyalCard = userController.getRoyalCard();
 //
-                    if ((ownedCrown >= 3 && ownedRoyalCard == 0)|| (ownedCrown >= 6 && ownedRoyalCard == 1) || (ownedCrown >= 9 && ownedRoyalCard == 2)){
+                    if (
+                            ((ownedCrown >= 3 && ownedRoyalCard == 0) ||
+                            (ownedCrown >= 6 && ownedRoyalCard == 1) ||
+                            (ownedCrown >= 9 && ownedRoyalCard == 2)) && (selectedRoyalCard == null || selectedRoyalCard == royalCard) && selectedCard == null && !mainActivity.getUsingScrollNow()
+                    ){
                         royalCard.setClickable(true);
                         royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
                         royalCard.setOnClickListener(v -> {
@@ -175,6 +179,7 @@ public class CardController {
             this.selectedRoyalCard = null;
         }
         refreshValidCrownCard(userController);
+        refreshValidCard(userController);
     }
 
     public RoyalCard getRoyalCard(){
@@ -690,17 +695,6 @@ public class CardController {
         }
     }
 
-    public List<Card> getListCard(GridLayout gridLayout){
-        if (gridLayout.equals(cardStoreTop)) {
-            return listCardLevel3;
-        } else if (gridLayout.equals(cardStoreMid)) {
-            return listCardLevel2;
-        } else if (gridLayout.equals(cardStoreBot)) {
-            return listCardLevel1;
-        }
-        return null;
-    }
-
     private void InitCard(List<Card> cards, GridLayout cardBoard, int rowCount) {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
@@ -836,7 +830,4 @@ public class CardController {
         currentCardStack.addView(card);
     }
 
-    public void setRoyalCard() {
-        selectedRoyalCard = null;
-    }
 }

@@ -267,8 +267,17 @@ public class MainActivity extends AppCompatActivity {
         if(user1.getCurrent()) return tokenJokerPlayer1; else return tokenJokerPlayer2;
     }
 
+    private void justRefreshAndCheckVictoryCondition() {
+        user1Controller.setPlayerBoard();
+        user2Controller.setPlayerBoard();
+        victoryCondition();
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
+        setTaskBar(ActiveTaskBar.NONE);
+    }
+
     private void refreshAndChangeThePlayer() {
-        getCurrentPlayerController().setPlayerBoard();
+        user1Controller.setPlayerBoard();
+        user2Controller.setPlayerBoard();
         victoryCondition();
         changeCurrentPlayer();
         cardController.refreshValidCrownCard(getCurrentPlayerController());
@@ -286,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
         getCurrentPlayerController().useScroll();
         setTaskBar(ActiveTaskBar.GEMS);
         tokenController.refreshValidToken();
+        cardController.refreshValidCard(getCurrentPlayerController());
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
+        justRefreshAndCheckVictoryCondition();
     }
 
     private void replenishTokenButtonAction() {
@@ -313,6 +325,8 @@ public class MainActivity extends AppCompatActivity {
             GridLayout gridLayoutParent = (GridLayout) parent;
 
             gridLayoutParent.removeView(royalCard);
+            royalCard.setClickable(false);
+            royalCard.setBackgroundResource(0);
             GridLayout newGridLayout = getRoyalCardBoard(currentPlayerController);
             newGridLayout.addView(royalCard);
 
@@ -321,10 +335,7 @@ public class MainActivity extends AppCompatActivity {
             selectedUser.setCardsPoint(selectedUser.getCardsPoint()+royalCard.getPoints());
             selectedUser.setSumRoyalCard(selectedUser.getSumRoyalCard()+1);
             cardController.royaleCardClicked(currentPlayerController, royalCard);
-            cardController.setRoyalCard();
-            // todo: buat method di userController
-            //  - card select dan unselect royal card belum dibuat 
-            //  - setelah pilih royal card tidak boleh pilih kartu royal card lain
+            justRefreshAndCheckVictoryCondition();
             return;
         }
         this.selectedCard = getSelectedCard();
@@ -489,8 +500,8 @@ public class MainActivity extends AppCompatActivity {
                 tokenController.refreshValidToken();
             }
         }
-        // Remove the collected views after the loop
-
+        // Refresh the text
+        justRefreshAndCheckVictoryCondition();
     }
 
     private void takeAvailablePrivilege(UserController currentPlayerController) {
@@ -604,8 +615,6 @@ public class MainActivity extends AppCompatActivity {
             user2.setCurrent(false);
             user1.setCurrent(true);
         }
-        user1Controller.setPlayerBoard();
-        user2Controller.setPlayerBoard();
         cardController.refreshValidCard(getCurrentPlayerController());
         if (tokenBag.isEmpty()){
             taskBarReplenishBoard.setVisibility(View.INVISIBLE);
