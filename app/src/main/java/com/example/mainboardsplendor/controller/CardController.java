@@ -796,6 +796,7 @@ public class CardController {
             params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
 
             Card card = PickRandomCard(getListCardByLevel(selectedCard));
+            mainActivity.setCardDeckSize(getListCardByLevel(selectedCard));
             card.setImageResource(card.getImage());
             card.setLayoutParams(params);
             card.setCurrentGridLayout(currentGridLayout);

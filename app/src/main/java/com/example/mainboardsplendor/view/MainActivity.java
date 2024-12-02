@@ -4,21 +4,17 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.helper.widget.Grid;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -199,9 +195,20 @@ public class MainActivity extends AppCompatActivity {
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenCount));
     }
 
+    public void setCardDeckSize(List<Card> listCard) {
+        int cardCount = listCard.size();
+        TextView size = sizeCardDeck(listCard);
+        size.setText(String.valueOf(cardCount));
+    }
 
-    public List<Token> getTokenBag(){
-        return tokenBag;
+    public TextView sizeCardDeck(List<Card> listCard){
+        if(listCard.equals(listCardLevel1)){
+            return binding.cardBoard.totalDeck3;
+        } else if (listCard.equals(listCardLevel2)){
+            return binding.cardBoard.totalDeck2;
+        } else if (listCard.equals(listCardLevel3)){
+            return binding.cardBoard.totalDeck1;
+        } else return null;
     }
 
     public GridLayout getCardReservedPlayer(){
