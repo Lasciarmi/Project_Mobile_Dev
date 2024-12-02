@@ -730,16 +730,6 @@ public class TokenController {
         mainActivity.setTokenBagSize();
     }
 
-    public void printIsFilled() {
-        for (int i = 0; i < isFilled.length; i++) {
-            for (int j = 0; j < isFilled[i].length; j++) {
-                System.out.print(isFilled[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
-
     public void setIsFilledFalse(List<Token> tokensToRemove){
         for (Token token: tokensToRemove){
             int row = token.getLocation().get(0);

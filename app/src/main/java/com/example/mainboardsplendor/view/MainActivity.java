@@ -201,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
     public void setTokenBagSize() {
         if (tokenBag.isEmpty()){
             int tokenCount = 0;
+            binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenCount));
+            return;
         }
         int tokenCount = tokenBag.size();
 
@@ -381,6 +383,10 @@ public class MainActivity extends AppCompatActivity {
                 tokensToRemove.add(token); // Add the token to the list for removal
                 setTaskBar(ActiveTaskBar.NONE);
             }
+        }
+
+        if (!tokensToRemove.isEmpty()){
+            tokenController.setIsFilledFalse(tokensToRemove);
         }
 
         if (!dontChangePlayer || isUsingScrollNow){
