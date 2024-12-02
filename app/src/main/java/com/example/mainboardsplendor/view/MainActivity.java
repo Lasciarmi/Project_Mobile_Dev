@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.helper.widget.Grid;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout cardReservedPlayer1;
     private GridLayout cardReservedPlayer2;
 
+    private GridLayout tokenJokerPlayer1;
+    private GridLayout tokenJokerPlayer2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +119,16 @@ public class MainActivity extends AppCompatActivity {
         taskBarReplenishBoard = binding.taskBar.replenishBoardTaskBar.cardViewTaskBar;
         setTaskBar(ActiveTaskBar.NONE);
 
+        //get Button from task bar
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
         Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
         Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
 
+        // get gridLayout for reserved card and joker
         cardReservedPlayer1 = binding.layoutPlayer1Bag.cardReservedPlayer;
         cardReservedPlayer2 = binding.layoutPlayer2Bag.cardReservedPlayer;
-
+        tokenJokerPlayer1 = binding.layoutPlayer1Bag.jokerGridLayout;
+        tokenJokerPlayer2 = binding.layoutPlayer2Bag.jokerGridLayout;
 
         // BUTTON ON CLICK LISTENER
         takeTokenButton.setOnClickListener(v -> {
@@ -182,8 +189,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private GridLayout getCardReservedPlayer(){
+    public GridLayout getCardReservedPlayer(){
         if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
+    }
+
+    private GridLayout getTokenJokerPlayer(){
+        if(user1.getCurrent()) return tokenJokerPlayer1; else return tokenJokerPlayer2;
     }
 
     private void purchaseButtonAction() {
@@ -194,21 +205,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (!selectedToken.isEmpty()){
 
+                // joker
+                GridLayout tokenJokerPlayerGrid = getTokenJokerPlayer();
                 currentPlayerController.setOwnedToken(TokenColor.GOLD);
-                GridLayout cardReservedGridLayout = getCardReservedPlayer();
-                View view = LayoutInflater.from(this).inflate(
-                        R.layout.layout_reseved_card_player, cardReservedGridLayout, false);
-
-                Card cardReserved = view.findViewById(R.id.card_reserved);
-                CardView cardView = view.findViewById(R.id.joker_token);
-                Token tokenReserved = cardView.findViewById(R.id.token_view);
-
-                cardReserved.setImageResource(cardController.getSelectedCard().getImage());
-                tokenReserved.setImageResource(R.drawable.gold_token);
-
-                view.setVisibility(View.VISIBLE);
-
-                cardReservedGridLayout.addView(view);
+                currentPlayerController.setTokenBagPlayer(TokenColor.GOLD, tokenJokerPlayerGrid, R.drawable.gold_token);
 
                 // buang token
                 View tokenView = tokenController.getViewAt(selectedToken.get(0).getLocation().get(0), selectedToken.get(0).getLocation().get(1), tokenGridLayout);
@@ -218,6 +218,18 @@ public class MainActivity extends AppCompatActivity {
                 viewsToRemove.add(tokenView);
                 tokenController.resetSelectedToken(viewsToRemove);
                 tokenController.refreshTokenEvent();
+
+                // reserved card
+                GridLayout cardReservedGridLayout = getCardReservedPlayer();
+                cardController.removeAndAddNewCardInBoard(selectedCard);
+                cardReservedGridLayout.addView(selectedCard);
+                cardController.cardClicked(currentPlayerController, selectedCard);
+
+                this.selectedCard = cardController.getSelectedCard();
+                currentPlayerController.setPlayerBoard();
+                victoryCondition();
+                changeCurrentPlayer();
+                return;
 
             }
             else{

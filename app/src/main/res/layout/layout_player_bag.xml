@@ -181,7 +181,22 @@
                 android:columnCount="3">
             </GridLayout>
         </LinearLayout>
+        <!--joker grid Layout-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
 
+            <GridLayout
+                android:id="@+id/joker_gridLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rowCount="1"
+                android:columnCount="3">
+            </GridLayout>
+        </LinearLayout>
+        <!--joker grid Layout-->
         <!-- ROYAL CARD -->
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"

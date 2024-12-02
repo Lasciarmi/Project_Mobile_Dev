@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.helper.widget.Grid;
+
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.model.User;
 import com.example.mainboardsplendor.view.MainActivity;
@@ -25,7 +27,7 @@ public class CardController {
     GridLayout cardStoreTop;
     GridLayout cardStoreMid;
     GridLayout cardStoreBot;
-    GridLayout reservedCardBoard;
+    GridLayout royalCardBoard;
 
     private List<Card> listCardLevel3;
     private List<Card> listCardLevel2;
@@ -38,12 +40,12 @@ public class CardController {
     private MainActivity mainActivity;
 
     public CardController(GridLayout cardStoreTop, GridLayout cardStoreMid, GridLayout cardStoreBot,
-                          GridLayout reservedCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2,
+                          GridLayout royalCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2,
                           List<Card> listCardLevel3, List<RoyalCard> listRoyalCard,Context context, MainActivity mainActivity, Card selectedCard) {
         this.cardStoreTop = cardStoreTop;
         this.cardStoreMid = cardStoreMid;
         this.cardStoreBot = cardStoreBot;
-        this.reservedCardBoard = reservedCardBoard;
+        this.royalCardBoard = royalCardBoard;
         this.listCardLevel1 = listCardLevel1;
         this.listCardLevel2 = listCardLevel2;
         this.listCardLevel3 = listCardLevel3;
@@ -57,7 +59,8 @@ public class CardController {
 
     public void refreshValidCard(UserController userController) {
 //      for each listcard in allListLevelCard
-        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCardBoard)) {
+        GridLayout reservedCard = mainActivity.getCardReservedPlayer();
+        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCard)) {
             //  for each card in listcard
             for (int i=0; i < cardBoard.getChildCount(); i++) {
                 View view = cardBoard.getChildAt(i);
@@ -744,7 +747,7 @@ public class CardController {
             royalCard.setImageResource(royalCard.getImage());
             royalCard.setLayoutParams(params);
 
-            reservedCardBoard.addView(royalCard);
+            royalCardBoard.addView(royalCard);
         }
     }
 
