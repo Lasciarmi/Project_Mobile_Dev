@@ -337,7 +337,7 @@ public class TokenController {
 
         if(selectedToken.isEmpty()) {
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
-            mainActivity.cardClickAndUnclicked();
+//            mainActivity.cardClickAndUnclicked();
         }
     }
 
