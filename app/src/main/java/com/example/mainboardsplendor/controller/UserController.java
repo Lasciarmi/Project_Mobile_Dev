@@ -33,7 +33,6 @@ public class UserController {
     private MainActivity mainActivity;
     private TextView playerName;
 
-
     public UserController(User user, LayoutScorePlayerBoardBinding scoreBoardPlayer, LayoutPlayerBagBinding layoutPlayerBag, MainActivity mainActivity) {
         this.user = user;
         this.scoreBoardPlayer = scoreBoardPlayer;
@@ -139,9 +138,6 @@ public class UserController {
             ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
             mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
         }
-        
-//        Tambah image card di area player
-        // TODO: 12/1/2024 DONT FORGET 
     }
 
     public int getCrowns(){

@@ -2,7 +2,9 @@ package com.example.mainboardsplendor.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,12 +81,15 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout cardReservedPlayer1;
     private GridLayout cardReservedPlayer2;
 
+    private MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding =ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        mediaPlayer = MediaPlayer.create(this, R.raw.shinesfx);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             takeTokenButtonAction();
         });
         purchaseCardButton.setOnClickListener(v -> {
-            purchaseButtonAction();
+
         });
 //        usePrivilegeButton.setOnClickListener(v -> {
 //            // TODO: 12/1/2024
@@ -143,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         int colCount = tokenGridLayout.getColumnCount();
         tokenController.InitTokenBoard(rowCount, colCount);
 
-        // GET LIST SELECTEDTOKEN
+        // GET LIST SELECTED TOKEN
         selectedToken = tokenController.getSelectedToken();
 
         // SET TOKEN BAG SIZE ON TEXT
@@ -181,6 +185,21 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+    }
+
+    public void playSFX() {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(0);
+            mediaPlayer.start();
+        }
     }
 
     private GridLayout getCardReservedPlayer(){
@@ -240,13 +259,12 @@ public class MainActivity extends AppCompatActivity {
                 textCardButon.setText("Take Selected Card");
                 //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
-
             case SCROLL:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.VISIBLE);
                 break;
-                case NONE:
+            case NONE:
                 taskBarTakeToken.setVisibility(View.GONE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.GONE);
@@ -284,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Check if the player exceeds maximum bag capacity
         if (totalTokens + selectedToken.size() > 10) {
-            Toast.makeText(this, "You cannot take any more tokens. Your bag will exceed the maximum capacity!", Toast.LENGTH_SHORT).show();
+            showCustomDialog("You cannot take these tokens because it will exceed your bag's capacity!", "OK", null);
             return;
         }
 
@@ -297,9 +315,9 @@ public class MainActivity extends AppCompatActivity {
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
-            if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
+            if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null) {
                 if (currentPlayerController.getUser().getReserveCard() == 3) {
-                    Toast.makeText(this, "You can't hold more than 3 Reserved Card!", Toast.LENGTH_SHORT).show();
+                    showCustomDialog("You can't hold more than 3 Reserved Cards!", "OK", null);
                     return;
                 }
                 setTaskBar(ActiveTaskBar.CARD);
@@ -307,8 +325,9 @@ public class MainActivity extends AppCompatActivity {
 
                 this.dontChangePlayer = true;
             }
-            else{
+            else {
                 this.dontChangePlayer = false;
+                playSFX();
                 currentPlayerController.setOwnedToken(tokenColor);
 
                 GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
@@ -329,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
             for (View view : viewsToRemove) {
     //            tokenGridLayout.removeView(view);
                 view.setVisibility(View.INVISIBLE);
+                playSFX();
             }
 
             // Remove the selected tokens from the list
@@ -386,34 +406,38 @@ public class MainActivity extends AppCompatActivity {
         cardController.refreshValidCard(getCurrentPlayerController());
     }
 
-    public void victoryCondition(){
-        if (getCurrentPlayerController().getUser().getCardsPoint() == 20){
-            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 20 point");
-        } else if (getCurrentPlayerController().getUser().getCrowns() == 10) {
-            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 3 crown");
-        } else if (getCurrentPlayerController().getUser().getMostSameCardColorValue() == 10) {
-            showDialog("Congratulations " + getCurrentPlayerController().getUser().getUsername() + "! \n You win with 10 same card color");
+    public void victoryCondition() {
+        UserController currentPlayer = getCurrentPlayerController();
+        if (currentPlayer.getUser().getCardsPoint() == 20) {
+            showCustomDialog("You win with 20 points!", "OK", this::OpenStartUpActivity);
+        } else if (currentPlayer.getUser().getCrowns() == 10) {
+            showCustomDialog("You win with 10 crowns!", "OK", this::OpenStartUpActivity);
+        } else if (currentPlayer.getUser().getMostSameCardColorValue() == 10) {
+            showCustomDialog("You win with 10 same card colors!", "OK", this::OpenStartUpActivity);
         }
     }
-    private void showDialog(String message) {
-        // Create a custom dialog
+
+    private void showCustomDialog(String message, String buttonText, Runnable onButtonClick) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Inflate the custom layout (optional, only if you want custom layout)
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_layout, null);
         builder.setView(dialogView);
 
-        // Find the TextView in the dialog layout and set the message
-        TextView dialogMessageTextView = dialogView.findViewById(R.id.dialog_message);
-        dialogMessageTextView.setText(message);
+        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+        Button button = dialogView.findViewById(R.id.dialog_ok_button);
 
-        // Set the OK button
-        Button okButton = dialogView.findViewById(R.id.dialog_ok_button);
-        okButton.setOnClickListener(v -> OpenStartUpActivity());
+        messageTextView.setText(message);
+        button.setText(buttonText);
 
-        // Create and show the dialog
         AlertDialog dialog = builder.create();
+        button.setOnClickListener(v -> {
+            if (onButtonClick != null) {
+                onButtonClick.run();
+            }
+            dialog.dismiss();
+        });
+
         dialog.show();
     }
 
