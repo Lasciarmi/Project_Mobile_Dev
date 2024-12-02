@@ -300,6 +300,11 @@ public class MainActivity extends AppCompatActivity {
 
             UserController currentPlayerController = getCurrentPlayerController();
 
+            if (selectedCard.isUniversal()) {
+                showGemSelectionDialog(selectedCard, currentPlayerController);
+                return;
+            }
+
             cardController.removeAndAddNewCardInBoard(selectedCard);
 
             if (!selectedToken.isEmpty()){
@@ -327,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             else{
+
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
                 cardController.addNewCard(currentFrameLayout);
                 tokenController.payCard(selectedCard, currentPlayerController);
@@ -585,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(dialogView);
 
         TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
-        Button button = dialogView.findViewById(R.id.dialog_ok_button);
+        Button button = dialogView.findViewById(R.id.dialog_red_button);
 
         messageTextView.setText(message);
         button.setText(buttonText);
@@ -604,6 +610,59 @@ public class MainActivity extends AppCompatActivity {
     private void OpenStartUpActivity() {
         Intent intent = new Intent(this, StartUpActivity.class);
         startActivity(intent);
+    }
+
+    private void showGemSelectionDialog(Card universalCard, UserController currentPlayerController) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.another_dialog_layout, null);
+        builder.setView(dialogView);
+
+        Button btnGreen = dialogView.findViewById(R.id.dialog_green_button);
+        Button btnWhite = dialogView.findViewById(R.id.dialog_white_button);
+        Button btnBlue = dialogView.findViewById(R.id.dialog_blue_button);
+        Button btnBlack = dialogView.findViewById(R.id.dialog_black_button);
+        Button btnRed = dialogView.findViewById(R.id.dialog_red_button);
+
+        AlertDialog dialog = builder.create();
+
+        btnGreen.setOnClickListener(v -> {
+            assignGemToCard(universalCard, TokenColor.GREEN, currentPlayerController);
+            dialog.dismiss();
+        });
+
+        btnWhite.setOnClickListener(v -> {
+            assignGemToCard(universalCard, TokenColor.WHITE, currentPlayerController);
+            dialog.dismiss();
+        });
+
+        btnBlue.setOnClickListener(v -> {
+            assignGemToCard(universalCard, TokenColor.BLUE, currentPlayerController);
+            dialog.dismiss();
+        });
+
+        btnBlack.setOnClickListener(v -> {
+            assignGemToCard(universalCard, TokenColor.BLACK, currentPlayerController);
+            dialog.dismiss();
+        });
+
+        btnRed.setOnClickListener(v -> {
+            assignGemToCard(universalCard, TokenColor.RED, currentPlayerController);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void assignGemToCard(Card universalCard, TokenColor selectedColor, UserController currentPlayerController) {
+        universalCard.setColor(selectedColor.getTokenColor(this));
+
+        FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedColor.getTokenColor(this));
+        cardController.addNewCard(currentFrameLayout);
+        tokenController.payCard(universalCard, currentPlayerController);
+        currentPlayerController.setOwnedCard(universalCard);
+
+        refreshAndChangeThePlayer();
     }
 
 }
