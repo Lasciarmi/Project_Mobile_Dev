@@ -3,6 +3,7 @@ package com.example.mainboardsplendor.controller;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -799,5 +800,22 @@ public class CardController {
 
         currentGridLayout.removeView(selectedCard);
         currentGridLayout.addView(card, cardIndexOnGridLayout);
+    }
+
+    // Method for add Card Stack
+    public void addNewCard(FrameLayout currentCardStack) {
+        Card card = new Card(mainActivity);
+        card.setImageResource(selectedCard.getImage());
+
+        int cardSpacing = 70; // Sesuaikan agar hanya sebagian atas yang terlihat
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(200,300);
+
+        // Hitung jumlah kartu yang ada untuk mengatur posisi kartu baru
+        params.topMargin = currentCardStack.getChildCount() * cardSpacing;
+        card.setLayoutParams(params);
+
+        // Tambahkan kartu ke dalam currentCardStack
+        currentCardStack.addView(card);
     }
 }

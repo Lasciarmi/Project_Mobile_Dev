@@ -1,17 +1,14 @@
 package com.example.mainboardsplendor.controller;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.Token;
@@ -94,7 +91,7 @@ public class UserController {
         Toast.makeText(mainActivity, "TokenColor "+ tokenColor + " : " + getOwnedToken().get(tokenColor), Toast.LENGTH_SHORT).show();
 
         View view = LayoutInflater.from(mainActivity).inflate(R.layout.custom_token, tokenGridLayout, false);
-        ImageView tokenView = view.findViewById(R.id.token_view);
+        Token tokenView = view.findViewById(R.id.token_view);
         CardView cardView = view.findViewById(R.id.cardView_token);
 
         // Set Image token
@@ -117,17 +114,17 @@ public class UserController {
         HashMap<TokenColor, Integer> ownedDiscount = user.getOwnedDiscount();
         HashMap<TokenColor, Integer> cardPrice = selectedCard.getPrice();
 
-        int blueDisounted = (cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) > 0) ? cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) : 0;
-        int whiteDisounted = (cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) > 0) ? cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) : 0;
-        int greenDisounted = (cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) > 0) ? cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) : 0;
+        int blueDiscounted = (cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) > 0) ? cardPrice.get(TokenColor.BLUE)-ownedDiscount.get(TokenColor.BLUE) : 0;
+        int whiteDiscounted = (cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) > 0) ? cardPrice.get(TokenColor.WHITE)-ownedDiscount.get(TokenColor.WHITE) : 0;
+        int greenDiscounted = (cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) > 0) ? cardPrice.get(TokenColor.GREEN)-ownedDiscount.get(TokenColor.GREEN) : 0;
         int blackDisounted = (cardPrice.get(TokenColor.BLACK)-ownedDiscount.get(TokenColor.BLACK) > 0) ? cardPrice.get(TokenColor.BLACK)-ownedDiscount.get(TokenColor.BLACK) : 0;
-        int redDisounted = (cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) > 0) ? cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) : 0;
+        int redDiscounted = (cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) > 0) ? cardPrice.get(TokenColor.RED)-ownedDiscount.get(TokenColor.RED) : 0;
 
-        int bluePuts = ownedToken.get(TokenColor.BLUE) - blueDisounted;
-        int whitePuts = ownedToken.get(TokenColor.WHITE) - whiteDisounted;
-        int greenPuts = ownedToken.get(TokenColor.GREEN) - greenDisounted;
+        int bluePuts = ownedToken.get(TokenColor.BLUE) - blueDiscounted;
+        int whitePuts = ownedToken.get(TokenColor.WHITE) - whiteDiscounted;
+        int greenPuts = ownedToken.get(TokenColor.GREEN) - greenDiscounted;
         int blackPuts = ownedToken.get(TokenColor.BLACK) - blackDisounted;
-        int redPuts = ownedToken.get(TokenColor.RED) - redDisounted;
+        int redPuts = ownedToken.get(TokenColor.RED) - redDiscounted;
         int pearlPuts = ownedToken.get(TokenColor.PEARL) - cardPrice.get(TokenColor.PEARL);
 
         int sum4DecreaseGoldPuts = ((bluePuts > 0) ? 0 : bluePuts)
@@ -150,7 +147,7 @@ public class UserController {
 //        Tambah crown objective di object user
         user.setCrowns(user.getCrowns()+selectedCard.getCrowns());
 
-//        Tambah discount dan value card yang sama di object user bergantung warnanya
+//        Tambah discount dan value card yang sama di object user bergantung warnanya TODO: TAMBAH METHOD INI DI USERCONTROLLER
         HashMap<TokenColor, Integer> mostSameCardValuePerColor = user.getMostSameCardValuePerColor();
         if(selectedCard.getColor().equals(TokenColor.BLUE.getTokenColor(mainActivity))){
             ownedDiscount.put(TokenColor.BLUE, ownedDiscount.get(TokenColor.BLUE) + selectedCard.getDiscount());
@@ -177,4 +174,20 @@ public class UserController {
         return user.getCrowns();
     }
 
+    public void payToken(GridLayout currentTokenStack, Integer quantity, List<Token> tokenBag) {
+        for (int i = 0; i < quantity; i++) {
+            if (currentTokenStack.getChildCount() > 0) {
+                View tokenView = currentTokenStack.getChildAt(0); // Ambil token pertama
+                currentTokenStack.removeView(tokenView);         // Hapus token
+                CardView cardView = (CardView) tokenView;
+                Token tokenRemoved = cardView.findViewById(R.id.token_view);
+                if (tokenRemoved != null) {
+                    tokenBag.add(tokenRemoved);
+                    mainActivity.setTokenBagSize(tokenBag);    // Perbarui tampilan jumlah token
+                }
+            } else {
+                break; // Jika tidak ada token tersisa
+            }
+        }
+    }
 }
