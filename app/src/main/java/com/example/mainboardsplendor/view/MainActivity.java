@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
         Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
         Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
+        Button replenishBoardButton = taskBarReplenishBoard.findViewById(R.id.task_button);
 
         // get gridLayout for reserved card and joker
         cardReservedPlayer1 = binding.layoutPlayer1Bag.cardReservedPlayer;
@@ -134,9 +135,12 @@ public class MainActivity extends AppCompatActivity {
         purchaseCardButton.setOnClickListener(v -> {
             purchaseButtonAction();
         });
-//        usePrivilegeButton.setOnClickListener(v -> {
-//            // TODO: 12/1/2024
-//        });
+        usePrivilegeButton.setOnClickListener(v -> {
+            usePrivilegeButtonAction();
+        });
+        replenishBoardButton.setOnClickListener(v -> {
+            replenishTokenButtonAction();
+        });
 
 
         // Init TokenBag on Board
@@ -187,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
     public void setTokenBagSize(List<Token> tokenBag) {
         // Hitung jumlah token di dalam tokenBag
         int tokenCount = tokenBag.size();
@@ -211,6 +218,10 @@ public class MainActivity extends AppCompatActivity {
         } else return null;
     }
 
+    public List<Token> getTokenBag(){
+        return tokenBag;
+    }
+
     public GridLayout getCardReservedPlayer(){
         if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
     }
@@ -219,6 +230,13 @@ public class MainActivity extends AppCompatActivity {
         if(user1.getCurrent()) return tokenJokerPlayer1; else return tokenJokerPlayer2;
     }
 
+    private void usePrivilegeButtonAction() {
+        // TODO: 12/2/2024
+    }
+
+    private void replenishTokenButtonAction() {
+        // TODO: 12/2/2024
+    }
     private void purchaseButtonAction() {
         this.selectedCard = cardController.getSelectedCard();
         if (selectedCard != null){

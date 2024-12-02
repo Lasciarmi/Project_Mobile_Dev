@@ -51,7 +51,6 @@ public class TokenController {
     private MainActivity mainActivity;
     public List<Token> selectedToken = new ArrayList<>();
     private GridLayout splendorDuelBoard;
-//    private CardView taskBarTakeToken;
 
     private List<View> removedView = new ArrayList<>();
 
@@ -60,7 +59,6 @@ public class TokenController {
         this.context = context;
         this.mainActivity = mainActivity;
         this.splendorDuelBoard = splendorDuelBoard;
-//        this.taskBarTakeToken = taskBarTakeToken;
     }
 
     public void payCard(Card selectedCard, UserController currentPlayerController) {
