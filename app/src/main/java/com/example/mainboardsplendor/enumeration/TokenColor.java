@@ -2,7 +2,6 @@ package com.example.mainboardsplendor.enumeration;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 

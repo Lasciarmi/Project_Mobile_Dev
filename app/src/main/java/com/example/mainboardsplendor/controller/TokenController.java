@@ -2,14 +2,12 @@ package com.example.mainboardsplendor.controller;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -44,8 +42,6 @@ public class TokenController {
     private boolean[][] isFilled;
 
     private List<Token> tokenBag;
-    private List<Token> tempTokenBag = new ArrayList<>();
-    private final List<CardView> tokenPick = new ArrayList<>();
     private Context context;
     private MainActivity mainActivity;
     public List<Token> selectedToken = new ArrayList<>();
@@ -180,11 +176,8 @@ public class TokenController {
             ArrayList<Integer> location = new ArrayList<>();
             location.add(row);
             location.add(col);
-//            Log.d("MainActivity", "Setting location: " + location.toString());
             tokenImage.setLocation(location);
             setOnClickListenerToken(tokenImage);
-//            tokenImage.setOnClickListener(view1 -> selectToken(tokenImage));
-//            Log.d("MainActivity", "Location set: " + tokenImage.getLocation().toString());
 
             splendorDuelBoard.addView(view);
 
@@ -337,13 +330,9 @@ public class TokenController {
                     continue;
                 }
 
-                int row = movementPattern[i][0];
-                int col = movementPattern[i][1];
-
                 View chilView = splendorDuelBoard.getChildAt(i);
 
                 if (chilView == null) {
-                    Log.e("Error", "Child view at index " + i + " is null.");
                     continue;
                 }
 
@@ -363,12 +352,7 @@ public class TokenController {
                             currentToken.setIsSelected(false);
 
                             cardView.setCardBackgroundColor(currentToken.getColor().toArgb());
-                            Log.d("refreshValidToken", "Token at index " + i + " updated.");
-                        } else {
-                            Log.e("Error", "Token view is null for CardView at index " + i);
                         }
-                    } else {
-                        Log.e("Error", "CardView at index " + i + " is null.");
                     }
                 }
             }

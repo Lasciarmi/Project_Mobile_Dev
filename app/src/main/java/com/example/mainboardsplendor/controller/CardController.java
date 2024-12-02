@@ -5,12 +5,8 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
-import android.widget.ImageView;
-
-import androidx.constraintlayout.helper.widget.Grid;
 
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
-import com.example.mainboardsplendor.model.User;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -18,7 +14,6 @@ import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;

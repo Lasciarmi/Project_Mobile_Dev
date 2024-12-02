@@ -2,8 +2,6 @@ package com.example.mainboardsplendor.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -102,12 +100,11 @@ public class User implements Parcelable {
         }
     };
 
-    public boolean addToken2Bag(TokenColor token) {
+    public void addToken2Bag(TokenColor token) {
         if (getTotalTokens() >= bagCapacity) {
-            return false;
+            return;
         }
         incrementToken(token);
-        return true;
     }
 
     private void incrementToken(TokenColor token) {
