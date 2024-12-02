@@ -264,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
         getCurrentPlayerController().setPlayerBoard();
         victoryCondition();
         changeCurrentPlayer();
+        playSFX();
     }
 
     private void usePrivilegeButtonAction() {
@@ -522,7 +523,6 @@ public class MainActivity extends AppCompatActivity {
             taskBarReplenishBoard.setVisibility(View.INVISIBLE);
             return;
         }
-        playSFX();
         taskBarReplenishBoard.setVisibility(View.VISIBLE);
     }
 
