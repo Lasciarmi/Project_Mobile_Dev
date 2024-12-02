@@ -16,6 +16,7 @@ public enum TokenColor {
     RED(R.color.color4redToken),
     PEARL(R.color.color4pearlToken),
     GOLD(R.color.color4goldToken),
+    NORMAL(R.color.color4normalToken),
     FIRST_PLAYER(R.color.first_player);
 
     private final int colorResId;

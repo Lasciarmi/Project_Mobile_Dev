@@ -282,6 +282,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replenishTokenButtonAction() {
+        if (!selectedToken.isEmpty()){
+            Toast.makeText(this, "You must unselect selected token", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(tokenBag.isEmpty()){
             Toast.makeText(this, "Token bag is Empty", Toast.LENGTH_SHORT).show();
             taskBarReplenishBoard.setVisibility(View.GONE);
