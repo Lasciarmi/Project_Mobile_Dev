@@ -270,7 +270,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void usePrivilegeButtonAction() {
-
+        if (!selectedToken.isEmpty()){
+            Toast.makeText(this, "You must unselect selected token", Toast.LENGTH_SHORT).show();
+            return;
+        }
         isUsingScrollNow = true;
         dontChangePlayer = true;
         getCurrentPlayerController().useScroll();
@@ -342,7 +345,6 @@ public class MainActivity extends AppCompatActivity {
     public Card getSelectedCard(){
         return cardController.getSelectedCard();
     }
-
 
     // Method for add Token Stack on bag player
     private void takeTokenButtonAction() {
@@ -473,12 +475,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
-        if (getCurrentPlayerController().getUser().getScroll() > 0 && !isUsingScrollNow){
-            taskBarUsePrivilege.setVisibility(View.VISIBLE);
-        }
-        else {
-            taskBarUsePrivilege.setVisibility(View.GONE);
-        }
         switch (activeTaskBar){
             case GEMS:
                 taskBarTakeToken.setVisibility(View.VISIBLE);
@@ -487,6 +483,7 @@ public class MainActivity extends AppCompatActivity {
                 Button textTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
                 textToken.setText("You must select a Token");
                 textTokenButton.setText("Take Selected Token");
+                setPrivilegeTaskBar();
                 break;
 
             case CARD:
@@ -496,18 +493,34 @@ public class MainActivity extends AppCompatActivity {
                 Button textCardButon = taskBarPurchaseCard.findViewById(R.id.task_button);
                 textCard.setText("You must select a card");
                 textCardButon.setText("Take Selected Card");
+                setPrivilegeTaskBar();
                 //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
 
             case NONE:
-                taskBarTakeToken.setVisibility(View.INVISIBLE);
+                taskBarTakeToken.setVisibility(View.VISIBLE);
+                TextView textView = taskBarTakeToken.findViewById(R.id.text_task1);
+                textView.setText("You must select a Token");
+                Button button = taskBarTakeToken.findViewById(R.id.task_button);
+                button.setText("Take Selected Token");
+                taskBarUsePrivilege.setVisibility(View.GONE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 if (tokenBag.isEmpty()){
                     taskBarReplenishBoard.setVisibility(View.GONE);
                 } else {
                     taskBarReplenishBoard.setVisibility(View.VISIBLE);
                 }
+                setPrivilegeTaskBar();
                 break;
+        }
+    }
+
+    public void setPrivilegeTaskBar(){
+        if (getCurrentPlayerController().getUser().getScroll() > 0 && !isUsingScrollNow){
+            taskBarUsePrivilege.setVisibility(View.VISIBLE);
+        }
+        else {
+            taskBarUsePrivilege.setVisibility(View.GONE);
         }
     }
 
