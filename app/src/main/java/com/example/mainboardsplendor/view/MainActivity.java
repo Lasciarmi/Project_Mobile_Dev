@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // Get Player 1 and 2 Username
         Intent intent = getIntent();
         user1 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_1));
-        user1.setScroll(1);
+        user1.setScroll(2);
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
         // SET CURRENT PLAYER 1
         user1.setCurrent(true);
@@ -270,8 +270,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void usePrivilegeButtonAction() {
-////        tokenController.selectedToken = new ArrayList<>();
-////        selectedToken = new ArrayList<>();
+        if (!selectedToken.isEmpty()){
+            Toast.makeText(this, "You must unselect selected token", Toast.LENGTH_SHORT).show();
+            return;
+        }
         isUsingScrollNow = true;
         dontChangePlayer = true;
         getCurrentPlayerController().useScroll();
@@ -330,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
                 tokenController.payCard(selectedCard, currentPlayerController);
                 currentPlayerController.setOwnedCard(selectedCard);
             }
-            cardRefreshValidCard();
+            cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
             this.selectedCard = getSelectedCard();
             refreshAndChangeThePlayer();
         }

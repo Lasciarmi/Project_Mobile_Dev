@@ -304,21 +304,6 @@ public class TokenController {
                 for (Token token1: selectedToken) {
                     token1.setClickable(true);
                 }
-
-                // Menampilkan Toast dalam thread utama jika diperlukan
-//                if (context != null) {
-//                    String message = "Add 1 Token\n" +
-//                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
-//                            "Selected Tokens isValid?: " + token.getValid();
-//                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-//                    TextView textView = new TextView(context);
-//                    textView.setText(message);
-//                    textView.setPadding(16, 16, 16, 16);
-//                    textView.setBackgroundColor(Color.BLACK);
-//                    textView.setTextColor(Color.WHITE);
-//                    toast.setView(textView);
-//                    toast.show();
-//                }
             }
 
             refreshValidToken();
@@ -343,11 +328,8 @@ public class TokenController {
     public void refreshValidToken(){
         if (selectedToken.isEmpty()) {
             for (int i = 0; i < movementPattern.length; i++) {
-                Log.d("refreshValidToken", "Checking child view at index: " + i);
 
-                // Ensure that the movementPattern array has valid values for row and col
                 if (i >= movementPattern.length) {
-                    Log.e("Error", "Index " + i + " exceeds movementPattern length.");
                     continue;
                 }
 
@@ -362,15 +344,12 @@ public class TokenController {
                 }
 
                 if (removedView.contains(chilView)) {
-                    Log.d("refreshValidToken", "Skipping removed view at index " + i);
                     continue;
                 }
 
-                // Check if chilView is a CardView before casting
                 if (chilView instanceof CardView) {
                     CardView cardView = (CardView) chilView;
 
-                    // Ensure cardView is not null
                     if (cardView != null) {
                         Token currentToken = cardView.findViewById(R.id.token_view);
 
@@ -387,8 +366,6 @@ public class TokenController {
                     } else {
                         Log.e("Error", "CardView at index " + i + " is null.");
                     }
-                } else {
-                    Log.e("Error", "Child view at index " + i + " is not a CardView.");
                 }
             }
         }
