@@ -19,6 +19,7 @@ import com.example.mainboardsplendor.databinding.LayoutPlayerBagBinding;
 import com.example.mainboardsplendor.databinding.LayoutScorePlayerBoardBinding;
 import com.example.mainboardsplendor.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -174,20 +175,18 @@ public class UserController {
         return user.getCrowns();
     }
 
-    public void payToken(GridLayout currentTokenStack, Integer quantity, List<Token> tokenBag) {
+    public void payToken(GridLayout currentTokenStack, Integer quantity, TokenColor tokenColor) {
         for (int i = 0; i < quantity; i++) {
             if (currentTokenStack.getChildCount() > 0) {
                 View tokenView = currentTokenStack.getChildAt(0); // Ambil token pertama
-                currentTokenStack.removeView(tokenView);         // Hapus token
-                CardView cardView = (CardView) tokenView;
-                Token tokenRemoved = cardView.findViewById(R.id.token_view);
-                if (tokenRemoved != null) {
-                    tokenBag.add(tokenRemoved);
-                    mainActivity.setTokenBagSize(tokenBag);    // Perbarui tampilan jumlah token
-                }
+                Token token = tokenView.findViewById(R.id.token_view);
+                token.setColor(tokenColor.getTokenColor(mainActivity));
+                mainActivity.getTokenBag().add(token);
+                currentTokenStack.removeView(tokenView);
             } else {
                 break; // Jika tidak ada token tersisa
             }
         }
+        mainActivity.setTokenBagSize();
     }
 }

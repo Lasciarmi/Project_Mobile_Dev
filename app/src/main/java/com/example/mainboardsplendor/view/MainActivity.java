@@ -135,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
         purchaseCardButton.setOnClickListener(v -> {
             purchaseButtonAction();
         });
-        usePrivilegeButton.setOnClickListener(v -> {
-            usePrivilegeButtonAction();
-        });
+//        usePrivilegeButton.setOnClickListener(v -> {
+//            usePrivilegeButtonAction();
+//        });
         replenishBoardButton.setOnClickListener(v -> {
             replenishTokenButtonAction();
         });
@@ -189,16 +189,18 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
 
+        TextView textViewReplenish = taskBarReplenishBoard.findViewById(R.id.text_task1);
+        Button buttonReplenish = taskBarReplenishBoard.findViewById(R.id.task_button);
+        textViewReplenish.setText("Before taking your mandatory action, you can ");
+        buttonReplenish.setText("Replenish the Board");
     }
 
-
-
-
-    public void setTokenBagSize(List<Token> tokenBag) {
-        // Hitung jumlah token di dalam tokenBag
+    public void setTokenBagSize() {
+        if (tokenBag.isEmpty()){
+            int tokenCount = 0;
+        }
         int tokenCount = tokenBag.size();
 
-        // Perbarui TextView dengan jumlah token
         binding.tokenBoard.numTokenBag.setText(String.valueOf(tokenCount));
     }
 
@@ -236,7 +238,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void replenishTokenButtonAction() {
         // TODO: 12/2/2024
+        tokenController.addToken2Board();
     }
+
     private void purchaseButtonAction() {
         this.selectedCard = cardController.getSelectedCard();
         if (selectedCard != null){
@@ -329,10 +333,6 @@ public class MainActivity extends AppCompatActivity {
                 taskBarPurchaseCard.setVisibility(View.GONE);
                 taskBarUsePrivilege.setVisibility(View.GONE);
                 taskBarReplenishBoard.setVisibility(View.GONE);
-                TextView textView = taskBarReplenishBoard.findViewById(R.id.text_task1);
-                Button button = taskBarReplenishBoard.findViewById(R.id.task_button);
-                textView.setText("Before taking your mandatory action, you can ");
-                button.setText("Replenish the Board");
                 break;
         }
     }
@@ -403,6 +403,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        if (!tokensToRemove.isEmpty()) {
+            tokenController.setIsFilledFalse(tokensToRemove);
+        }
+
         if (!dontChangePlayer){
             for (View view : viewsToRemove) {
     //            tokenGridLayout.removeView(view);
@@ -442,6 +446,11 @@ public class MainActivity extends AppCompatActivity {
         user1Controller.setPlayerBoard();
         user2Controller.setPlayerBoard();
         cardController.refreshValidCard(getCurrentPlayerController());
+        if (tokenBag.isEmpty()){
+            taskBarReplenishBoard.setVisibility(View.INVISIBLE);
+            return;
+        }
+        taskBarReplenishBoard.setVisibility(View.VISIBLE);
     }
 
     public void victoryCondition(){

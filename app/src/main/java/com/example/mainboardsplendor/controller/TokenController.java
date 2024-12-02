@@ -9,13 +9,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
-import com.example.mainboardsplendor.databinding.CustomTaskBarBinding;
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
 import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.view.MainActivity;
@@ -24,7 +21,6 @@ import com.example.mainboardsplendor.enumeration.TokenColor;
 import com.example.mainboardsplendor.model.Token;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +40,10 @@ public class TokenController {
             {1, 0}, {0, 0}, {0, 1}, {0, 2}, {0, 3},
             {0, 4}, {1, 4}, {2, 4}, {3, 4}, {4, 4}
     };
+    private boolean[][] isFilled;
 
     private List<Token> tokenBag;
+    private List<Token> tempTokenBag = new ArrayList<>();
     private final List<CardView> tokenPick = new ArrayList<>();
     private Context context;
     private MainActivity mainActivity;
@@ -74,7 +72,7 @@ public class TokenController {
             int tokenPrice = price.getOrDefault(tokenColor, 0); // Gunakan getOrDefault untuk aman
             if (currentFrame.getChildCount() == 0) {
                 // Tidak ada kartu diskon, bayar penuh
-                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenBag);
+                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenColor);
             } else {
                 for (int i = 0; i < currentFrame.getChildCount(); i++) {
                     View child = currentFrame.getChildAt(i);
@@ -87,7 +85,7 @@ public class TokenController {
                         int priceDiscounted = Math.max(tokenPrice - discountCard, 0);
 
                         if (priceDiscounted > 0) {
-                            currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenBag);
+                            currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenColor);
                         }
                     }
                 }
@@ -128,7 +126,7 @@ public class TokenController {
     }
 
     public void InitTokenBoard(int rowCount, int colCount) {
-        boolean[][] isFilled = new boolean[rowCount][colCount];
+        isFilled = new boolean[rowCount][colCount];
 
         for (int i = 0; i < movementPattern.length; i++) {
             Token token = pickRandomToken();
@@ -686,4 +684,90 @@ public class TokenController {
     public List<Token> getSelectedToken(){
         return selectedToken;
     }
+
+    public void addToken2Board() {
+        for (int i = 0; i < movementPattern.length; i++) {
+            if (tokenBag.isEmpty()){
+                return;
+            }
+
+            int row = movementPattern[i][0];
+            int col = movementPattern[i][1];
+
+            if (isFilled[row][col]) {
+                continue;
+            } else {
+                Token newToken = pickRandomToken();
+                if(newToken == null){
+                    return;
+                }
+
+                View view = LayoutInflater.from(context).inflate(
+                        R.layout.custom_token, splendorDuelBoard, false);
+
+                Token tokenImage = view.findViewById(R.id.token_view);
+
+                CardView cardView = view.findViewById(R.id.cardView_token);
+
+                cardView.setCardBackgroundColor(newToken.getColor().toArgb());
+
+                Color color = newToken.getColor();
+                tokenImage.setColor(color);
+                if (color.equals(TokenColor.BLUE.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.blue_token);
+                } else if (color.equals(TokenColor.WHITE.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.white_token);
+                } else if (color.equals(TokenColor.GREEN.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.green_token);
+                } else if (color.equals(TokenColor.BLACK.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.black_token);
+                } else if (color.equals(TokenColor.RED.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.red_token);
+                } else if (color.equals(TokenColor.PEARL.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.pearl_token);
+                } else if (color.equals(TokenColor.GOLD.getTokenColor(context))) {
+                    tokenImage.setImageResource(R.drawable.gold_token);
+                }
+
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.rowSpec = GridLayout.spec(row);
+                params.columnSpec = GridLayout.spec(col);
+                params.setGravity(Gravity.FILL);
+                view.setLayoutParams(params);
+
+                ArrayList<Integer> location = new ArrayList<>();
+                location.add(row);
+                location.add(col);
+                tokenImage.setLocation(location);
+
+                setOnClickListenerToken(tokenImage);
+
+                splendorDuelBoard.removeView(view);
+                splendorDuelBoard.addView(view);
+
+                // Mark Slot
+                isFilled[row][col] = true;
+            }
+        }
+        mainActivity.setTokenBagSize();
+    }
+
+    public void printIsFilled() {
+        for (int i = 0; i < isFilled.length; i++) {
+            for (int j = 0; j < isFilled[i].length; j++) {
+                System.out.print(isFilled[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
+    public void setIsFilledFalse(List<Token> tokensToRemove){
+        for (Token token: tokensToRemove){
+            int row = token.getLocation().get(0);
+            int col = token.getLocation().get(1);
+            isFilled[row][col] = false;
+        }
+    }
+
 }
