@@ -666,6 +666,7 @@ public class TokenController {
     public void addToken2Board() {
         for (int i = 0; i < movementPattern.length; i++) {
             if (tokenBag.isEmpty()){
+                mainActivity.setTokenBagSize();
                 return;
             }
 
@@ -727,7 +728,6 @@ public class TokenController {
                 isFilled[row][col] = true;
             }
         }
-        mainActivity.setTokenBagSize();
     }
 
     public void setIsFilledFalse(List<Token> tokensToRemove){
