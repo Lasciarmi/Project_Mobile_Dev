@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Card selectedCard;
     private boolean dontChangePlayer = false;
     private boolean isUsingScrollNow = false;
-    private int privilegeOnBoard = 3;
+    private int privilegeOnBoard = 2;
 
     private User user1;
     private User user2;
@@ -270,8 +270,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void usePrivilegeButtonAction() {
-////        tokenController.selectedToken = new ArrayList<>();
-////        selectedToken = new ArrayList<>();
+
         isUsingScrollNow = true;
         dontChangePlayer = true;
         getCurrentPlayerController().useScroll();
