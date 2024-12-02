@@ -6,7 +6,10 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import androidx.constraintlayout.helper.widget.Grid;
+
 import com.example.mainboardsplendor.enumeration.ActiveTaskBar;
+import com.example.mainboardsplendor.model.User;
 import com.example.mainboardsplendor.view.MainActivity;
 import com.example.mainboardsplendor.R;
 import com.example.mainboardsplendor.enumeration.TokenColor;
@@ -14,6 +17,7 @@ import com.example.mainboardsplendor.model.Card;
 import com.example.mainboardsplendor.model.RoyalCard;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -23,24 +27,25 @@ public class CardController {
     GridLayout cardStoreTop;
     GridLayout cardStoreMid;
     GridLayout cardStoreBot;
-    GridLayout reservedCardBoard;
+    GridLayout royalCardBoard;
 
     private List<Card> listCardLevel3;
     private List<Card> listCardLevel2;
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
     private Card selectedCard;
+    private RoyalCard selectedCrownCard;
 
     private Context context;
     private MainActivity mainActivity;
 
     public CardController(GridLayout cardStoreTop, GridLayout cardStoreMid, GridLayout cardStoreBot,
-                          GridLayout reservedCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2,
+                          GridLayout royalCardBoard,List<Card> listCardLevel1, List<Card> listCardLevel2,
                           List<Card> listCardLevel3, List<RoyalCard> listRoyalCard,Context context, MainActivity mainActivity, Card selectedCard) {
         this.cardStoreTop = cardStoreTop;
         this.cardStoreMid = cardStoreMid;
         this.cardStoreBot = cardStoreBot;
-        this.reservedCardBoard = reservedCardBoard;
+        this.royalCardBoard = royalCardBoard;
         this.listCardLevel1 = listCardLevel1;
         this.listCardLevel2 = listCardLevel2;
         this.listCardLevel3 = listCardLevel3;
@@ -54,7 +59,8 @@ public class CardController {
 
     public void refreshValidCard(UserController userController) {
 //      for each listcard in allListLevelCard
-        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCardBoard)) {
+        GridLayout reservedCard = mainActivity.getCardReservedPlayer();
+        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCard)) {
             //  for each card in listcard
             for (int i=0; i < cardBoard.getChildCount(); i++) {
                 View view = cardBoard.getChildAt(i);
@@ -86,6 +92,33 @@ public class CardController {
             }
         }
     }
+
+    public void refreshValidCrownCard(UserController userController) {
+//      for each listcard in allListLevelCard
+            for (int i=0; i < reservedCardBoard.getChildCount(); i++) {
+                View view = reservedCardBoard.getChildAt(i);
+//                RoyalCard royalCard = view.findViewById(R.id.royal_card);
+//                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                if (view instanceof RoyalCard) {
+                    RoyalCard royalCard = (RoyalCard) view;
+                    int ownedCrown = userController.getCrowns();
+//
+                    if (ownedCrown == 3 || ownedCrown == 6){
+                        royalCard.setClickable(true);
+                        royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
+                        royalCard.setOnClickListener(v -> {
+                            royaleCardClicked(userController, royalCard);
+                        });
+                    }
+                    else {
+                        royalCard.setClickable(false);
+                        royalCard.setBackgroundResource(0);
+                    }
+                }
+
+        }
+    }
+
 
     public void refreshForReverseCard(UserController userController, TokenColor tokenColor) {
         for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot)) {
@@ -123,7 +156,7 @@ public class CardController {
     }
 
 
-    private void cardClicked(UserController userController, Card card) {
+    public void cardClicked(UserController userController, Card card) {
         if (selectedCard == null){
             mainActivity.setTaskBar(ActiveTaskBar.CARD);
             this.selectedCard = card;
@@ -133,6 +166,18 @@ public class CardController {
             this.selectedCard = null;
         }
         refreshValidCard(userController);
+    }
+
+    private void royaleCardClicked(UserController userController, RoyalCard royalCard) {
+        if (selectedCrownCard == null){
+            mainActivity.setTaskBar(ActiveTaskBar.CARD);
+            this.selectedCrownCard = royalCard;
+        }
+        else{
+            mainActivity.setTaskBar(ActiveTaskBar.NONE);
+            this.selectedCrownCard = null;
+        }
+//        refreshValidCrownCard(userController);
     }
 
     public void InitCardTopDeck() {
@@ -649,7 +694,8 @@ public class CardController {
     private void InitCard(List<Card> cards, GridLayout cardBoard, int rowCount) {
         for (int i=0; i < rowCount; i++) {
             Card card = PickRandomCard(cards);
-//            card.setCurrentGridLayout(cardBoard);
+            card.setCurrentGridLayout(cardBoard);
+            card.setCardIndexOnGridLayout(i);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.setMargins(2, 0, 2, 0);
             params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
@@ -720,7 +766,7 @@ public class CardController {
             royalCard.setImageResource(royalCard.getImage());
             royalCard.setLayoutParams(params);
 
-            reservedCardBoard.addView(royalCard);
+            royalCardBoard.addView(royalCard);
         }
     }
 
@@ -730,5 +776,28 @@ public class CardController {
         return royalCards.remove(randomIndex);
     }
 
+    private List<Card> getListCardByLevel(Card card){
+        if (card.getLevel() == 1) return listCardLevel1;
+        else if (card.getLevel() == 2) return listCardLevel2;
+        else return listCardLevel3;
+    }
 
+    public void removeAndAddNewCardInBoard(Card selectedCard) {
+        GridLayout currentGridLayout = selectedCard.getCurrentGridLayout();
+        int cardIndexOnGridLayout = selectedCard.getCardIndexOnGridLayout();
+
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+        params.setMargins(2, 0, 2, 0);
+        params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
+        params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
+
+        Card card = PickRandomCard(getListCardByLevel(selectedCard));
+        card.setImageResource(card.getImage());
+        card.setLayoutParams(params);
+        card.setCurrentGridLayout(currentGridLayout);
+        card.setCardIndexOnGridLayout(cardIndexOnGridLayout);
+
+        currentGridLayout.removeView(selectedCard);
+        currentGridLayout.addView(card, cardIndexOnGridLayout);
+    }
 }

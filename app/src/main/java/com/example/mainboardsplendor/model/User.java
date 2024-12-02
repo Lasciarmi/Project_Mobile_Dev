@@ -114,23 +114,23 @@ public class User implements Parcelable {
         ownedTokens.put(token, ownedTokens.getOrDefault(token, 0) + 1);
     }
 
-    public boolean addPoint2CardColor(TokenColor token) {
-        if (getTotalTokens() >= bagCapacity) {
-            return false;
-        }
-        incrementPoint(token);
-        return true;
+    public HashMap<TokenColor, Integer> getMostSameCardValuePerColor() {
+        return mostSameCardValuePerColor;
     }
 
-    private void incrementPoint(TokenColor token) {
-        mostSameCardValuePerColor.put(token, mostSameCardValuePerColor.getOrDefault(token, 0) + 1);
+    public void setMostSameCardValuePerColor(HashMap<TokenColor, Integer> mostSameCardValuePerColor) {
+        this.mostSameCardValuePerColor = mostSameCardValuePerColor;
+    }
+
+    public boolean isCurrent() {
+        return isCurrent;
     }
 
     public int getTotalTokens() {
         return getOwnedTokens().values().stream().mapToInt(Integer::intValue).sum();
     }
 
-    public int getOwnedGoldToken(){
+    public int getOwnedGoldToken() {
         return ownedTokens.get(TokenColor.GOLD);
     }
 
@@ -141,9 +141,11 @@ public class User implements Parcelable {
     public HashMap<TokenColor, Integer> getOwnedTokens() {
         return ownedTokens;
     }
+
     public HashMap<TokenColor, Integer> getOwnedDiscount() {
         return ownedDiscount;
     }
+
     public void setOwnedDiscount(HashMap<TokenColor, Integer> ownedDiscount) {
         this.ownedDiscount = ownedDiscount;
     }
@@ -151,6 +153,7 @@ public class User implements Parcelable {
     public void setOwnedTokens(HashMap<TokenColor, Integer> ownedTokens) {
         this.ownedTokens = ownedTokens;
     }
+
     public void setCardsPoint(int cardsPoint) {
         CardsPoint = cardsPoint;
     }

@@ -7,11 +7,12 @@
     app:cardElevation="12dp"
     app:cardBackgroundColor="@color/transparent">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/frame_reserved_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <com.example.mainboardsplendor.model.Card
             android:layout_width="60dp"
@@ -28,6 +29,6 @@
             layout="@layout/custom_token"
             android:layout_gravity="center"/>
 
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

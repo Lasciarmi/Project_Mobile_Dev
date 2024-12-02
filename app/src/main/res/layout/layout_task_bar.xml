@@ -19,6 +19,11 @@
             layout="@layout/custom_task_bar"
             android:visibility="gone"/>
 
+        <include
+            android:id="@+id/replenish_board_task_bar"
+            layout="@layout/custom_task_bar"
+            android:visibility="gone"/>
+
 <!--        <androidx.cardview.widget.CardView-->
 <!--            android:id="@+id/task_bar_take_gems"-->
 <!--            android:layout_width="match_parent"-->
