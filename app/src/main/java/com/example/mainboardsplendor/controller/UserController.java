@@ -31,7 +31,6 @@ public class UserController {
     private MainActivity mainActivity;
     private TextView playerName;
 
-
     public UserController(User user, LayoutScorePlayerBoardBinding scoreBoardPlayer, LayoutPlayerBagBinding layoutPlayerBag, MainActivity mainActivity) {
         this.user = user;
         this.scoreBoardPlayer = scoreBoardPlayer;
