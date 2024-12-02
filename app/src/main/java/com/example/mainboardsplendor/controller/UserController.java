@@ -198,4 +198,8 @@ public class UserController {
     public void increaseScroll() {
         user.setScroll(user.getScroll()+1);
     }
+
+    public int getRoyalCard() {
+        return user.getSumRoyalCard();
+    }
 }

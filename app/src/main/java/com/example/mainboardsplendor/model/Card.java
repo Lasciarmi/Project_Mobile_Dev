@@ -21,8 +21,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int level;
     private int Image;
     private boolean isUniversal = false;
-    private boolean isReserved = false;
-    private boolean isUniversal = false;
+    private boolean isReserved = false;;
     private HashMap<TokenColor, Integer> price;
     private GridLayout currentGridLayout;
     private int cardIndexOnGridLayout;
@@ -37,14 +36,6 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
 
     public Card(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public boolean isUniversal() {
-        return isUniversal;
-    }
-
-    public void setUniversal(boolean universal) {
-        isUniversal = universal;
     }
 
     public int getImage() {
