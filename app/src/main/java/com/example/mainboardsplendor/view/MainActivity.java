@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -271,6 +270,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void usePrivilegeButtonAction() {
+////        tokenController.selectedToken = new ArrayList<>();
+////        selectedToken = new ArrayList<>();
         isUsingScrollNow = true;
         dontChangePlayer = true;
         getCurrentPlayerController().useScroll();
@@ -329,14 +330,14 @@ public class MainActivity extends AppCompatActivity {
                 tokenController.payCard(selectedCard, currentPlayerController);
                 currentPlayerController.setOwnedCard(selectedCard);
             }
-            cardClickAndUnclicked();
+            cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
             this.selectedCard = getSelectedCard();
             refreshAndChangeThePlayer();
         }
     }
 
-    public void cardClickAndUnclicked() {
-        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
+    public void cardRefreshValidCard() {
+        cardController.refreshValidCard(getCurrentPlayerController());
     }
 
     public Card getSelectedCard(){

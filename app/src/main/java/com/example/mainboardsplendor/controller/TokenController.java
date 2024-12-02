@@ -268,6 +268,7 @@ public class TokenController {
                 cardView.setCardBackgroundColor(color);
             }
             selectedToken.add(token);
+
         }
         else  {
             if (!selected && valid) {
@@ -284,20 +285,7 @@ public class TokenController {
                 refreshValidToken();
                 disableAllGoldTokens(splendorDuelBoard);
 
-                // Menampilkan Toast dalam thread utama jika diperlukan
-//                if (context != null) {
-//                    String message = "Add 1 Token\n" +
-//                            "Selected Tokens isSelected?: " + token.getSelected() + "\n" +
-//                            "Selected Tokens isValid?: " + token.getValid();
-//                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-//                    TextView textView = new TextView(context);
-//                    textView.setText(message);
-//                    textView.setPadding(16, 16, 16, 16);
-//                    textView.setBackgroundColor(Color.BLACK);
-//                    textView.setTextColor(Color.WHITE);
-//                    toast.setView(textView);
-//                    toast.show();
-//                }
+
             }
 
 
@@ -337,7 +325,7 @@ public class TokenController {
 
         if(selectedToken.isEmpty()) {
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
-//            mainActivity.cardClickAndUnclicked();
+            mainActivity.cardRefreshValidCard();
         }
     }
 
