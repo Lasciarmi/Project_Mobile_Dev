@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private Card selectedCard;
     private boolean dontChangePlayer = false;
     private boolean isUsingScrollNow = false;
+    private int privilegeOnBoard = 3;
 
     private User user1;
     private User user2;
@@ -115,12 +116,12 @@ public class MainActivity extends AppCompatActivity {
         taskBarPurchaseCard = binding.taskBar.purchaseCardTaskBar.cardViewTaskBar;
         taskBarUsePrivilege = binding.taskBar.taskBarUsePrivilege;
         taskBarReplenishBoard = binding.taskBar.replenishBoardTaskBar.cardViewTaskBar;
-        setTaskBar(ActiveTaskBar.NONE);
+
 
         //get Button from task bar
         Button takeTokenButton = taskBarTakeToken.findViewById(R.id.task_button);
         Button purchaseCardButton = taskBarPurchaseCard.findViewById(R.id.task_button);
-        Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.task_button);
+        Button usePrivilegeButton = taskBarUsePrivilege.findViewById(R.id.privilege_button);
         Button replenishBoardButton = taskBarReplenishBoard.findViewById(R.id.task_button);
 
         // get gridLayout for reserved card and joker
@@ -139,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
         usePrivilegeButton.setOnClickListener(v -> {
             usePrivilegeButtonAction();
         });
-        replenishBoardButton.setOnClickListener(v -> {
-            replenishTokenButtonAction();
-        });
+//        replenishBoardButton.setOnClickListener(v -> {
+//            replenishTokenButtonAction();
+//        });
 
 
         // Init TokenBag on Board
@@ -190,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
 
+        setTaskBar(ActiveTaskBar.NONE);
     }
 
     public void setTokenBagSize(List<Token> tokenBag) {
@@ -232,9 +234,16 @@ public class MainActivity extends AppCompatActivity {
         if(user1.getCurrent()) return tokenJokerPlayer1; else return tokenJokerPlayer2;
     }
 
+    private void refreshAndChangeThePlayer() {
+        getCurrentPlayerController().setPlayerBoard();
+        victoryCondition();
+        changeCurrentPlayer();
+    }
+
     private void usePrivilegeButtonAction() {
-        // TODO: 12/2/2024
         isUsingScrollNow = true;
+        dontChangePlayer = true;
+        getCurrentPlayerController().useScroll();
         setTaskBar(ActiveTaskBar.GEMS);
         tokenController.refreshValidToken();
     }
@@ -244,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void purchaseButtonAction() {
-        this.selectedCard = cardController.getSelectedCard();
+        this.selectedCard = getSelectedCard();
         if (selectedCard != null){
 
             UserController currentPlayerController = getCurrentPlayerController();
@@ -281,13 +290,20 @@ public class MainActivity extends AppCompatActivity {
                 tokenController.payCard(selectedCard, currentPlayerController);
                 currentPlayerController.setOwnedCard(selectedCard);
             }
-            cardController.cardClicked(getCurrentPlayerController(), selectedCard);
-            this.selectedCard = cardController.getSelectedCard();
-            currentPlayerController.setPlayerBoard();
-            victoryCondition();
-            changeCurrentPlayer();
+            cardClickAndUnclicked();
+            this.selectedCard = getSelectedCard();
+            refreshAndChangeThePlayer();
         }
     }
+
+    public void cardClickAndUnclicked() {
+        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
+    }
+
+    public Card getSelectedCard(){
+        return cardController.getSelectedCard();
+    }
+
 
     // Method for add Token Stack on bag player
     private void takeTokenButtonAction() {
@@ -307,6 +323,28 @@ public class MainActivity extends AppCompatActivity {
 
         UserController currentPlayerController = getCurrentPlayerController();
 
+        boolean isPass = false;
+        if(selectedToken.size() >= 2){
+            if (selectedToken.size() == 2){
+                if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                        && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this))){
+                    isPass = true;
+                }
+            }
+            else{
+                if (selectedToken.size() == 3){
+                    if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                        && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
+                        isPass = true;
+                    }
+                }
+            }
+        }
+        if (isPass && privilegeOnBoard > 0){
+            privilegeOnBoard -= 1;
+            currentPlayerController.increaseScroll();
+        }
+
         // Collect views to remove and tokens to remove in separate lists
         for (Token token : selectedToken) {
             TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
@@ -321,7 +359,9 @@ public class MainActivity extends AppCompatActivity {
                 this.dontChangePlayer = true;
             }
             else{
-                this.dontChangePlayer = false;
+                if(!isUsingScrollNow){
+                    this.dontChangePlayer = false;
+                }
                 currentPlayerController.setOwnedToken(tokenColor);
 
                 GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
@@ -338,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (!dontChangePlayer){
+        if (!dontChangePlayer || isUsingScrollNow){
             for (View view : viewsToRemove) {
                 //            tokenGridLayout.removeView(view);
                 view.setVisibility(View.INVISIBLE);
@@ -350,10 +390,14 @@ public class MainActivity extends AppCompatActivity {
             tokenController.resetSelectedToken(viewsToRemove);
             tokenController.refreshTokenEvent();
 
-            getCurrentPlayerController().setPlayerBoard();
-
-            victoryCondition();
-            changeCurrentPlayer();
+            if (!isUsingScrollNow) {
+                refreshAndChangeThePlayer();
+            }
+            else {
+                isUsingScrollNow = false;
+                dontChangePlayer = false;
+                tokenController.refreshValidToken();
+            }
         }
         // Remove the collected views after the loop
 
@@ -375,6 +419,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTaskBar(ActiveTaskBar activeTaskBar){
+        if (getCurrentPlayerController().getUser().getScroll() > 0 && !isUsingScrollNow){
+            taskBarUsePrivilege.setVisibility(View.VISIBLE);
+        }
+        else {
+            taskBarUsePrivilege.setVisibility(View.GONE);
+        }
         switch (activeTaskBar){
             case GEMS:
                 taskBarTakeToken.setVisibility(View.VISIBLE);
@@ -384,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 textToken.setText("You must select a Token");
                 textTokenButton.setText("Take Selected Token");
                 break;
+
             case CARD:
                 taskBarPurchaseCard.setVisibility(View.VISIBLE);
                 taskBarTakeToken.setVisibility(View.GONE);
@@ -394,16 +445,9 @@ public class MainActivity extends AppCompatActivity {
                 //setelah dipilih jangan lupa set None biar hilang textnya
                 break;
 
-            case SCROLL:
-                taskBarTakeToken.setVisibility(View.INVISIBLE);
-                taskBarPurchaseCard.setVisibility(View.GONE);
-                taskBarUsePrivilege.setVisibility(View.VISIBLE);
-                break;
-
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
-                taskBarUsePrivilege.setVisibility(View.GONE);
                 taskBarReplenishBoard.setVisibility(View.GONE);
                 TextView textView = taskBarReplenishBoard.findViewById(R.id.text_task1);
                 Button button = taskBarReplenishBoard.findViewById(R.id.task_button);

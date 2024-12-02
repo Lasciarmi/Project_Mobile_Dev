@@ -190,4 +190,12 @@ public class UserController {
             }
         }
     }
+
+    public void useScroll() {
+        user.setScroll(user.getScroll()-1);
+    }
+
+    public void increaseScroll() {
+        user.setScroll(user.getScroll()+1);
+    }
 }

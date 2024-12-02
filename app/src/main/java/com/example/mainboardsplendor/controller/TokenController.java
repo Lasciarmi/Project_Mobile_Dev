@@ -283,7 +283,7 @@ public class TokenController {
                 }
 
                 selectedToken.add(token);
-
+                refreshValidToken();
                 disableAllGoldTokens(splendorDuelBoard);
 
                 // Menampilkan Toast dalam thread utama jika diperlukan
@@ -339,6 +339,7 @@ public class TokenController {
 
         if(selectedToken.isEmpty()) {
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
+            mainActivity.cardClickAndUnclicked();
         }
     }
 
@@ -401,10 +402,6 @@ public class TokenController {
                 } else {
                     Log.e("Error", "Child view at index " + i + " is not a CardView.");
                 }
-            }
-
-            if (mainActivity.getUsingScrollNow()){
-                disableAllGoldTokens(splendorDuelBoard);
             }
         }
         else if (selectedToken.size() == 1) {
@@ -580,6 +577,10 @@ public class TokenController {
                 }
             }
         }
+
+        if (mainActivity.getUsingScrollNow()){
+            disableAllGoldTokens(splendorDuelBoard);
+        }
     }
 
     private void disableAllTokenInBoardWithThisIndex(int i) {
@@ -597,7 +598,6 @@ public class TokenController {
     }
 
     private void disableAllGoldTokens(GridLayout gridLayout) {
-        refreshValidToken();
         for (int i = 0; i < gridLayout.getChildCount(); i++) {
             View childView = gridLayout.getChildAt(i);
             CardView cardView = (CardView) childView;
