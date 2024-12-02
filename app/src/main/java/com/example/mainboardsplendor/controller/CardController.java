@@ -95,8 +95,8 @@ public class CardController {
 
     public void refreshValidCrownCard(UserController userController) {
 //      for each listcard in allListLevelCard
-            for (int i=0; i < reservedCardBoard.getChildCount(); i++) {
-                View view = reservedCardBoard.getChildAt(i);
+            for (int i=0; i < royalCardBoard.getChildCount(); i++) {
+                View view = royalCardBoard.getChildAt(i);
 //                RoyalCard royalCard = view.findViewById(R.id.royal_card);
 //                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
                 if (view instanceof RoyalCard) {
