@@ -62,8 +62,6 @@ public class TokenController {
         for (TokenColor tokenColor : price.keySet()) {
             FrameLayout currentFrame = mainActivity.getCurrentFrameLayout(tokenColor.getTokenColor(mainActivity));
 
-
-
             int tokenPrice = price.getOrDefault(tokenColor, 0); // Gunakan getOrDefault untuk aman
             if (currentFrame != null) {
                 if (currentFrame.getChildCount() == 0) {

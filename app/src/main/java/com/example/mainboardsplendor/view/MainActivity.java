@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
     private GridLayout tokenJokerPlayer1;
     private GridLayout tokenJokerPlayer2;
+
+    private GridLayout royalCardPlayer1;
+    private GridLayout royalCardPlayer2;
 
     private MediaPlayer mediaPlayer;
 
@@ -176,8 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Init ReversedCard
         cardController.InitRoyalCard();
-        cardController.InitReservedCardBoard();
-        cardController.refreshValidCrownCard(getCurrentPlayerController());
+        cardController.InitRoyalCardBoard();
 
         // check valid card (TODO: DELETE)
         cardController.refreshValidCard(user1Controller);
@@ -195,6 +198,9 @@ public class MainActivity extends AppCompatActivity {
         redTokenBagPlayer2 = binding.layoutPlayer2Bag.listRedToken.listToken;
         pearlTokenBagPlayer1 = binding.layoutPlayer1Bag.listPearlToken.listToken;
         pearlTokenBagPlayer2 = binding.layoutPlayer2Bag.listPearlToken.listToken;
+
+        royalCardPlayer1 = binding.layoutPlayer1Bag.cardRoyalPlayer;
+        royalCardPlayer2 = binding.layoutPlayer2Bag.cardRoyalPlayer;
 
         TextView textViewReplenish = taskBarReplenishBoard.findViewById(R.id.text_task1);
         Button buttonReplenish = taskBarReplenishBoard.findViewById(R.id.task_button);
@@ -265,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
         getCurrentPlayerController().setPlayerBoard();
         victoryCondition();
         changeCurrentPlayer();
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
         setTaskBar(ActiveTaskBar.NONE);
         playSFX();
     }
@@ -282,6 +289,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replenishTokenButtonAction() {
+        if (!selectedToken.isEmpty()){
+            Toast.makeText(this, "You must unselect selected token", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(tokenBag.isEmpty()){
             Toast.makeText(this, "Token bag is Empty", Toast.LENGTH_SHORT).show();
             taskBarReplenishBoard.setVisibility(View.GONE);
@@ -295,10 +306,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void purchaseButtonAction() {
+        UserController currentPlayerController = getCurrentPlayerController();
+        RoyalCard royalCard = cardController.getRoyalCard();
+        if (royalCard!=null){
+            ViewParent parent = royalCard.getParent();
+            GridLayout gridLayoutParent = (GridLayout) parent;
+
+            gridLayoutParent.removeView(royalCard);
+            GridLayout newGridLayout = getRoyalCardBoard(currentPlayerController);
+            newGridLayout.addView(royalCard);
+
+            User selectedUser = currentPlayerController.getUser();
+            // Todo: Fix it
+            selectedUser.setCardsPoint(selectedUser.getCardsPoint()+royalCard.getPoints());
+            selectedUser.setSumRoyalCard(selectedUser.getSumRoyalCard()+1);
+            cardController.royaleCardClicked(currentPlayerController, royalCard);
+            cardController.setRoyalCard();
+            // todo: buat method di userController
+            //  - card select dan unselect royal card belum dibuat 
+            //  - setelah pilih royal card tidak boleh pilih kartu royal card lain
+            return;
+        }
         this.selectedCard = getSelectedCard();
         if (selectedCard != null){
 
-            UserController currentPlayerController = getCurrentPlayerController();
+//            UserController currentPlayerController = getCurrentPlayerController();
 
             if (selectedCard.isUniversal()) {
                 showGemSelectionDialog(selectedCard, currentPlayerController);
@@ -332,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
             else{
-
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
                 cardController.addNewCard(currentFrameLayout);
                 tokenController.payCard(selectedCard, currentPlayerController);
@@ -341,6 +372,15 @@ public class MainActivity extends AppCompatActivity {
             cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
             this.selectedCard = getSelectedCard();
             refreshAndChangeThePlayer();
+        }
+    }
+
+    private GridLayout getRoyalCardBoard(UserController currentPlayerController) {
+        if (currentPlayerController.equals(user1Controller)){
+            return royalCardPlayer1;
+        }
+        else{
+            return royalCardPlayer2;
         }
     }
 
@@ -476,6 +516,8 @@ public class MainActivity extends AppCompatActivity {
             if(user1.getCurrent()) return binding.layoutPlayer1Bag.blackCardStack; else return binding.layoutPlayer2Bag.blackCardStack;
         } else if (color.equals(TokenColor.RED.getTokenColor(this))){
             if(user1.getCurrent()) return binding.layoutPlayer1Bag.redCardStack; else return binding.layoutPlayer2Bag.redCardStack;
+        } else if(color.equals(TokenColor.NORMAL.getTokenColor(this))){
+            if(user1.getCurrent()) return binding.layoutPlayer1Bag.normalCardStack; else return binding.layoutPlayer2Bag.normalCardStack;
         }
         return null;
     }
@@ -657,10 +699,15 @@ public class MainActivity extends AppCompatActivity {
     private void assignGemToCard(Card universalCard, TokenColor selectedColor, UserController currentPlayerController) {
         universalCard.setColor(selectedColor.getTokenColor(this));
 
+        cardController.removeAndAddNewCardInBoard(universalCard);
+
         FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedColor.getTokenColor(this));
         cardController.addNewCard(currentFrameLayout);
         tokenController.payCard(universalCard, currentPlayerController);
         currentPlayerController.setOwnedCard(universalCard);
+
+        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
+        this.selectedCard = getSelectedCard();
 
         refreshAndChangeThePlayer();
     }

@@ -30,7 +30,7 @@ public class CardController {
     private List<Card> listCardLevel1;
     private List<RoyalCard> listRoyalCard;
     private Card selectedCard;
-    private RoyalCard selectedCrownCard;
+    private RoyalCard selectedRoyalCard;
 
     private Context context;
     private MainActivity mainActivity;
@@ -98,8 +98,9 @@ public class CardController {
                 if (view instanceof RoyalCard) {
                     RoyalCard royalCard = (RoyalCard) view;
                     int ownedCrown = userController.getCrowns();
+                    int ownedRoyalCard = userController.getRoyalCard();
 //
-                    if (ownedCrown == 3 || ownedCrown == 6){
+                    if ((ownedCrown >= 3 && ownedRoyalCard == 0)|| (ownedCrown >= 6 && ownedRoyalCard == 1) || (ownedCrown >= 9 && ownedRoyalCard == 2)){
                         royalCard.setClickable(true);
                         royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
                         royalCard.setOnClickListener(v -> {
@@ -164,16 +165,20 @@ public class CardController {
         refreshValidCard(userController);
     }
 
-    private void royaleCardClicked(UserController userController, RoyalCard royalCard) {
-        if (selectedCrownCard == null){
+    public void royaleCardClicked(UserController userController, RoyalCard royalCard) {
+        if (selectedRoyalCard == null){
             mainActivity.setTaskBar(ActiveTaskBar.CARD);
-            this.selectedCrownCard = royalCard;
+            this.selectedRoyalCard = royalCard;
         }
         else{
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
-            this.selectedCrownCard = null;
+            this.selectedRoyalCard = null;
         }
-//        refreshValidCrownCard(userController);
+        refreshValidCrownCard(userController);
+    }
+
+    public RoyalCard getRoyalCard(){
+        return selectedRoyalCard;
     }
 
     public void InitCardTopDeck() {
@@ -235,7 +240,7 @@ public class CardController {
         // seq: [blue, white, green, black, red, pearl]
         int[] list_price_card_ultra_level_3_1 = {0, 0, 0, 8, 0, 0};
         AddPriceHashMap(hashMap_price_card_ultra_level_3_1, list_price_card_ultra_level_3_1);
-        Card card_ultra_level_3_1 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 0, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
+        Card card_ultra_level_3_1 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 3, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_1);
         card_ultra_level_3_1.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_3_2 = new HashMap<>();
@@ -760,7 +765,7 @@ public class CardController {
         return royalCard;
     }
 
-    public void InitReservedCardBoard() {
+    public void InitRoyalCardBoard() {
         for (int i = 0; i<4; i++){
             RoyalCard royalCard = PickRandomRoyalCard(listRoyalCard);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -829,5 +834,9 @@ public class CardController {
 
         // Tambahkan kartu ke dalam currentCardStack
         currentCardStack.addView(card);
+    }
+
+    public void setRoyalCard() {
+        selectedRoyalCard = null;
     }
 }

@@ -32,6 +32,16 @@ public class User implements Parcelable {
 
     private static final int bagCapacity = 10;
 
+    private int sumRoyalCard = 0;
+
+    public int getSumRoyalCard() {
+        return sumRoyalCard;
+    }
+
+    public void setSumRoyalCard(int sumRoyalCard) {
+        this.sumRoyalCard = sumRoyalCard;
+    }
+
     public boolean getCurrent() {
         return isCurrent;
     }
@@ -61,12 +71,12 @@ public class User implements Parcelable {
         ownedTokens.put(TokenColor.PEARL, 0);
         ownedTokens.put(TokenColor.GOLD, 0);
 
-        ownedDiscount.put(TokenColor.BLUE, 0);
-        ownedDiscount.put(TokenColor.WHITE, 0);
-        ownedDiscount.put(TokenColor.GREEN, 0);
-        ownedDiscount.put(TokenColor.BLACK, 0);
-        ownedDiscount.put(TokenColor.RED, 0);
-        ownedDiscount.put(TokenColor.PEARL, 0);
+        ownedDiscount.put(TokenColor.BLUE, 10);
+        ownedDiscount.put(TokenColor.WHITE, 10);
+        ownedDiscount.put(TokenColor.GREEN, 10);
+        ownedDiscount.put(TokenColor.BLACK, 10);
+        ownedDiscount.put(TokenColor.RED, 10);
+        ownedDiscount.put(TokenColor.PEARL, 10);
 
         mostSameCardValuePerColor.put(TokenColor.BLUE, 0);
         mostSameCardValuePerColor.put(TokenColor.WHITE, 0);

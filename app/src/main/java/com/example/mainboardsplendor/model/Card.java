@@ -20,8 +20,8 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int crowns;
     private int level;
     private int Image;
-    private boolean isReserved = false;
     private boolean isUniversal = false;
+    private boolean isReserved = false;;
     private HashMap<TokenColor, Integer> price;
     private GridLayout currentGridLayout;
     private int cardIndexOnGridLayout;
