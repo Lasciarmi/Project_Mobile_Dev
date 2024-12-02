@@ -20,7 +20,7 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
     private int crowns;
     private int level;
     private int Image;
-    private boolean isSelected = false;
+    private boolean isReserved = false;
     private HashMap<TokenColor, Integer> price;
     private GridLayout currentGridLayout;
     private int cardIndexOnGridLayout;
@@ -45,14 +45,12 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
         Image = image;
     }
 
-    @Override
-    public boolean isSelected() {
-        return isSelected;
+    public boolean isReserved() {
+        return isReserved;
     }
 
-    @Override
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setReserved(boolean reserved) {
+        isReserved = reserved;
     }
 
     public Color getColor() {

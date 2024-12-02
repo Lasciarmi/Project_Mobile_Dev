@@ -766,19 +766,26 @@ public class CardController {
     public void removeAndAddNewCardInBoard(Card selectedCard) {
         GridLayout currentGridLayout = selectedCard.getCurrentGridLayout();
         int cardIndexOnGridLayout = selectedCard.getCardIndexOnGridLayout();
-
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.setMargins(2, 0, 2, 0);
-        params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
-        params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
-
-        Card card = PickRandomCard(getListCardByLevel(selectedCard));
-        card.setImageResource(card.getImage());
-        card.setLayoutParams(params);
-        card.setCurrentGridLayout(currentGridLayout);
-        card.setCardIndexOnGridLayout(cardIndexOnGridLayout);
-
         currentGridLayout.removeView(selectedCard);
-        currentGridLayout.addView(card, cardIndexOnGridLayout);
+
+        if (!selectedCard.isReserved()){
+//            add card in board
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.setMargins(2, 0, 2, 0);
+            params.width = (int) (60 * mainActivity.getResources().getDisplayMetrics().density);
+            params.height = (int) (100 * mainActivity.getResources().getDisplayMetrics().density);
+
+            Card card = PickRandomCard(getListCardByLevel(selectedCard));
+            card.setImageResource(card.getImage());
+            card.setLayoutParams(params);
+            card.setCurrentGridLayout(currentGridLayout);
+            card.setCardIndexOnGridLayout(cardIndexOnGridLayout);
+
+            currentGridLayout.addView(card, cardIndexOnGridLayout);
+        }
+        else {
+//            remove kartu reserved in player pool
+            selectedCard.setReserved(false);
+        }
     }
 }

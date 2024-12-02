@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity {
 
             UserController currentPlayerController = getCurrentPlayerController();
 
+            cardController.removeAndAddNewCardInBoard(selectedCard);
+
             if (!selectedToken.isEmpty()){
 
                 // joker
@@ -221,24 +223,18 @@ public class MainActivity extends AppCompatActivity {
 
                 // reserved card
                 GridLayout cardReservedGridLayout = getCardReservedPlayer();
-                cardController.removeAndAddNewCardInBoard(selectedCard);
+                selectedCard.setCurrentGridLayout(cardReservedGridLayout);
+                selectedCard.setReserved(true);
+                selectedCard.setCardIndexOnGridLayout(cardReservedGridLayout.getChildCount());
                 cardReservedGridLayout.addView(selectedCard);
-                cardController.cardClicked(currentPlayerController, selectedCard);
-
-                this.selectedCard = cardController.getSelectedCard();
-                currentPlayerController.setPlayerBoard();
-                victoryCondition();
-                changeCurrentPlayer();
-                return;
 
             }
             else{
                 FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedCard.getColor());
                 addNewCard(currentFrameLayout);
-                currentPlayerController.setOwnedCard(selectedCard);
             }
-            cardController.removeAndAddNewCardInBoard(selectedCard);
-            cardController.cardClicked(getCurrentPlayerController(), selectedCard);
+            currentPlayerController.setOwnedCard(selectedCard);
+            cardController.cardClicked(currentPlayerController, selectedCard);
             this.selectedCard = cardController.getSelectedCard();
             currentPlayerController.setPlayerBoard();
             victoryCondition();
