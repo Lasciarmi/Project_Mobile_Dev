@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -65,30 +66,33 @@ public class TokenController {
         for (TokenColor tokenColor : price.keySet()) {
             FrameLayout currentFrame = mainActivity.getCurrentFrameLayout(tokenColor.getTokenColor(mainActivity));
 
-            if (currentFrame == null) {
-                continue; // Skip jika FrameLayout tidak ditemukan
-            }
+
 
             int tokenPrice = price.getOrDefault(tokenColor, 0); // Gunakan getOrDefault untuk aman
-            if (currentFrame.getChildCount() == 0) {
-                // Tidak ada kartu diskon, bayar penuh
-                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenColor);
-            } else {
-                for (int i = 0; i < currentFrame.getChildCount(); i++) {
-                    View child = currentFrame.getChildAt(i);
-                    if (child instanceof Card) {
-                        Card card = (Card) child;
+            if (currentFrame != null) {
+                if (currentFrame.getChildCount() == 0) {
+                    // Tidak ada kartu diskon, bayar penuh
+                    currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenColor);
+                } else {
+                    for (int i = 0; i < currentFrame.getChildCount(); i++) {
+                        View child = currentFrame.getChildAt(i);
+                        if (child instanceof Card) {
+                            Card card = (Card) child;
 
-                        Map<TokenColor, Integer> cardPrice = card.getPrice();
-                        int discountCard = (cardPrice != null) ? cardPrice.getOrDefault(tokenColor, 0) : 0; // Pastikan tidak null
+                            Map<TokenColor, Integer> cardPrice = card.getPrice();
+                            int discountCard = (cardPrice != null) ? cardPrice.getOrDefault(tokenColor, 0) : 0; // Pastikan tidak null
 
-                        int priceDiscounted = Math.max(tokenPrice - discountCard, 0);
+                            int priceDiscounted = Math.max(tokenPrice - discountCard, 0);
 
-                        if (priceDiscounted > 0) {
-                            currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenColor);
+                            if (priceDiscounted > 0) {
+                                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenColor);
+                            }
                         }
                     }
                 }
+            }
+            else{
+                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenColor);
             }
         }
     }

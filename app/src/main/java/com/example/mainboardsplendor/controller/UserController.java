@@ -125,7 +125,7 @@ public class UserController {
         int greenPuts = ownedToken.get(TokenColor.GREEN) - greenDiscounted;
         int blackPuts = ownedToken.get(TokenColor.BLACK) - blackDisounted;
         int redPuts = ownedToken.get(TokenColor.RED) - redDiscounted;
-        int pearlPuts = ownedToken.get(TokenColor.PEARL) - cardPrice.get(TokenColor.PEARL);
+        int pearlPuts = (ownedToken.get(TokenColor.PEARL) - cardPrice.get(TokenColor.PEARL));
 
         int sum4DecreaseGoldPuts = ((bluePuts > 0) ? 0 : bluePuts)
                 + ((whitePuts > 0) ? 0 : whitePuts)
