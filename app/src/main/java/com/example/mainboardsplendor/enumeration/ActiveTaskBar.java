@@ -4,6 +4,4 @@ public enum ActiveTaskBar {
     GEMS,
     CARD,
     NONE,
-    SCROLL
-
 }

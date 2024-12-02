@@ -244,6 +244,7 @@ public class TokenController {
     }
 
     private void selectToken(Token token) {
+
         mainActivity.setTaskBar(ActiveTaskBar.GEMS);
         Boolean selected = token.getSelected();
         Boolean valid = token.getValid();
@@ -327,6 +328,7 @@ public class TokenController {
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
             mainActivity.cardRefreshValidCard();
         }
+
     }
 
     public void resetSelectedToken(List<View> view){
