@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         // Get Player 1 and 2 Username
         Intent intent = getIntent();
         user1 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_1));
+        user1.setScroll(1);
         user2 = new User(intent.getStringExtra(CreateUserActivity.PLAYER_2));
         // SET CURRENT PLAYER 1
         user1.setCurrent(true);
@@ -264,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
         getCurrentPlayerController().setPlayerBoard();
         victoryCondition();
         changeCurrentPlayer();
+        setTaskBar(ActiveTaskBar.NONE);
         playSFX();
     }
 
@@ -276,7 +279,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replenishTokenButtonAction() {
+        if(tokenBag.isEmpty()){
+            Toast.makeText(this, "Token bag is Empty", Toast.LENGTH_SHORT).show();
+            taskBarReplenishBoard.setVisibility(View.GONE);
+            return;
+        }
+        if(privilegeOnBoard > 0){
+            takeAvailablePrivilege(getCurrentPlayerController());
+        }
         tokenController.addToken2Board();
+        taskBarReplenishBoard.setVisibility(View.GONE);
     }
 
     private void purchaseButtonAction() {
@@ -368,8 +380,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         if (isPass && privilegeOnBoard > 0){
-            privilegeOnBoard -= 1;
-            currentPlayerController.increaseScroll();
+            takeAvailablePrivilege(currentPlayerController);
         }
 
         // Collect views to remove and tokens to remove in separate lists
@@ -434,6 +445,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void takeAvailablePrivilege(UserController currentPlayerController) {
+        UserController opponentController;
+        if (currentPlayerController.equals(user1Controller)){
+            opponentController = user2Controller;
+        }
+        else{
+            opponentController = user1Controller;
+        }
+        privilegeOnBoard -= 1;
+        opponentController.increaseScroll();
+    }
+
     public FrameLayout getCurrentFrameLayout(Color color){
         if(color.equals(TokenColor.BLUE.getTokenColor(this))){
             if(user1.getCurrent()) return binding.layoutPlayer1Bag.blueCardStack; else return binding.layoutPlayer2Bag.blueCardStack;
@@ -479,7 +502,11 @@ public class MainActivity extends AppCompatActivity {
             case NONE:
                 taskBarTakeToken.setVisibility(View.INVISIBLE);
                 taskBarPurchaseCard.setVisibility(View.GONE);
-                taskBarReplenishBoard.setVisibility(View.GONE);
+                if (tokenBag.isEmpty()){
+                    taskBarReplenishBoard.setVisibility(View.GONE);
+                } else {
+                    taskBarReplenishBoard.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
