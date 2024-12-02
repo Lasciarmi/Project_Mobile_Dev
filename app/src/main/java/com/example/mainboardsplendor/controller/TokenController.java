@@ -95,7 +95,6 @@ public class TokenController {
         }
     }
 
-
     public void initTokenBag() {
         Token blueToken = new Token(context);
         blueToken.setColor(Color.valueOf(mainActivity.getResources().getColor(R.color.color4blueToken)));
@@ -403,56 +402,61 @@ public class TokenController {
                     Log.e("Error", "Child view at index " + i + " is not a CardView.");
                 }
             }
+
+            if (mainActivity.getUsingScrollNow()){
+                disableAllGoldTokens(splendorDuelBoard);
+            }
         }
         else if (selectedToken.size() == 1) {
             for (int i=0; i<movementPattern.length; i++){
-                if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)){
-                    // current Location
-                    continue;
-                } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) + 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
-                    // bot Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) - 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
-                    // top Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
-                    // right Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
-                    // Left Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
-                    // Top-Left Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
-                    // Top-Right Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
-                    // Bot-Left Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                }  else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
-                    // Bot-Right Location
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    updateTokenView(chilView);
-                } else {
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    if (chilView == null) {
+                if (!mainActivity.getUsingScrollNow()){
+                    if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)){
+                        // current Location
+                        continue;
+                    } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) + 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
+                        // bot Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if (movementPattern[i][0] == (selectedToken.get(0).getLocation().get(0) - 1) && movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)) {
+                        // top Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                        // right Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if (movementPattern[i][0] == selectedToken.get(0).getLocation().get(0) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                        // Left Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                        // Top-Left Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)-1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                        // Top-Right Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)-1)) {
+                        // Bot-Left Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else if ((movementPattern[i][0] == selectedToken.get(0).getLocation().get(0)+1) && (movementPattern[i][1] == selectedToken.get(0).getLocation().get(1)+1)) {
+                        // Bot-Right Location
+                        View chilView = splendorDuelBoard.getChildAt(i);
+                        updateTokenView(chilView);
+                    } else{
+                        disableAllTokenInBoardWithThisIndex(i);
+                    }
+                }
+                else {
+                    Token currentSelectedToken = selectedToken.get(0);
+                    if ((movementPattern[i][0] == currentSelectedToken.getLocation().get(0) && movementPattern[i][1] == currentSelectedToken.getLocation().get(1))){
                         continue;
                     }
-                    CardView cardView = (CardView) chilView;
-                    Token currentToken = cardView.findViewById(R.id.token_view);
-                    currentToken.setClickable(false);
-                    currentToken.setValid(false);
-                    currentToken.setIsSelected(false);
-                    int color = ContextCompat.getColor(context, R.color.transparent);
-                    cardView.setCardBackgroundColor(color);
+                    else{
+                        disableAllTokenInBoardWithThisIndex(i);
+                    }
                 }
             }
         }
@@ -482,17 +486,7 @@ public class TokenController {
                         continue;
                     } else {
                         // Non-hint lokasi
-                        View chilView = splendorDuelBoard.getChildAt(i);
-                        if (chilView == null) {
-                            continue;
-                        }
-                        CardView cardView = (CardView) chilView;
-                        Token currentToken = cardView.findViewById(R.id.token_view);
-                        currentToken.setClickable(false);
-                        currentToken.setValid(false);
-                        currentToken.setIsSelected(false);
-                        int color = ContextCompat.getColor(context, R.color.transparent);
-                        cardView.setCardBackgroundColor(color);
+                        disableAllTokenInBoardWithThisIndex(i);
                     }
                 }
             }
@@ -515,17 +509,7 @@ public class TokenController {
                         continue;
                     } else {
                         // Non-hint lokasi
-                        View chilView = splendorDuelBoard.getChildAt(i);
-                        if (chilView == null) {
-                            continue;
-                        }
-                        CardView cardView = (CardView) chilView;
-                        Token currentToken = cardView.findViewById(R.id.token_view);
-                        currentToken.setClickable(false);
-                        currentToken.setValid(false);
-                        currentToken.setIsSelected(false);
-                        int color = ContextCompat.getColor(context, R.color.transparent);
-                        cardView.setCardBackgroundColor(color);
+                        disableAllTokenInBoardWithThisIndex(i);
                     }
                 }
             }
@@ -573,17 +557,7 @@ public class TokenController {
                     }
                     else {
                         // Non-hint locations
-                        View chilView = splendorDuelBoard.getChildAt(i);
-                        if (chilView == null) {
-                            continue;
-                        }
-                        CardView cardView = (CardView) chilView;
-                        Token currentToken = cardView.findViewById(R.id.token_view);
-                        currentToken.setClickable(false);
-                        currentToken.setValid(false);
-                        currentToken.setIsSelected(false);
-                        int color = ContextCompat.getColor(context, R.color.transparent);
-                        cardView.setCardBackgroundColor(color);
+                        disableAllTokenInBoardWithThisIndex(i);
                     }
                 }
             }
@@ -602,20 +576,24 @@ public class TokenController {
                     // current Location
                     continue;
                 } else {
-                    View chilView = splendorDuelBoard.getChildAt(i);
-                    if (chilView == null) {
-                        continue;
-                    }
-                    CardView cardView = (CardView) chilView;
-                    Token currentToken = cardView.findViewById(R.id.token_view);
-                    currentToken.setClickable(false);
-                    currentToken.setValid(false);
-                    currentToken.setIsSelected(false);
-                    int color = ContextCompat.getColor(context, R.color.transparent);
-                    cardView.setCardBackgroundColor(color);
+                    disableAllTokenInBoardWithThisIndex(i);
                 }
             }
         }
+    }
+
+    private void disableAllTokenInBoardWithThisIndex(int i) {
+        View chilView = splendorDuelBoard.getChildAt(i);
+        if (chilView == null) {
+            return;
+        }
+        CardView cardView = (CardView) chilView;
+        Token currentToken = cardView.findViewById(R.id.token_view);
+        currentToken.setClickable(false);
+        currentToken.setValid(false);
+        currentToken.setIsSelected(false);
+        int color = ContextCompat.getColor(context, R.color.transparent);
+        cardView.setCardBackgroundColor(color);
     }
 
     private void disableAllGoldTokens(GridLayout gridLayout) {

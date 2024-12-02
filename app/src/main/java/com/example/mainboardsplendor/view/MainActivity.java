@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Token> selectedToken = new ArrayList<>();
     private Card selectedCard;
     private boolean dontChangePlayer = false;
+    private boolean isUsingScrollNow = false;
 
     private User user1;
     private User user2;
@@ -191,9 +192,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-
     public void setTokenBagSize(List<Token> tokenBag) {
         // Hitung jumlah token di dalam tokenBag
         int tokenCount = tokenBag.size();
@@ -222,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
         return tokenBag;
     }
 
+    public boolean getUsingScrollNow(){
+        return isUsingScrollNow;
+    }
+
     public GridLayout getCardReservedPlayer(){
         if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
     }
@@ -232,11 +234,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void usePrivilegeButtonAction() {
         // TODO: 12/2/2024
+        isUsingScrollNow = true;
+        setTaskBar(ActiveTaskBar.GEMS);
+        tokenController.refreshValidToken();
     }
 
     private void replenishTokenButtonAction() {
         // TODO: 12/2/2024
     }
+
     private void purchaseButtonAction() {
         this.selectedCard = cardController.getSelectedCard();
         if (selectedCard != null){
@@ -281,6 +287,76 @@ public class MainActivity extends AppCompatActivity {
             victoryCondition();
             changeCurrentPlayer();
         }
+    }
+
+    // Method for add Token Stack on bag player
+    private void takeTokenButtonAction() {
+        // Method for add Card Stack on bag player
+
+        int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
+
+        // Check if the player exceeds maximum bag capacity
+        if (totalTokens + selectedToken.size() > 10) {
+            Toast.makeText(this, "You cannot take any more tokens. Your bag will exceed the maximum capacity!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a list to hold the views to remove
+        List<View> viewsToRemove = new ArrayList<>();
+        List<Token> tokensToRemove = new ArrayList<>();
+
+        UserController currentPlayerController = getCurrentPlayerController();
+
+        // Collect views to remove and tokens to remove in separate lists
+        for (Token token : selectedToken) {
+            TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
+            if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
+                if (currentPlayerController.getUser().getReserveCard() == 3) {
+                    Toast.makeText(this, "You can't hold more than 3 Reserved Card!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                setTaskBar(ActiveTaskBar.CARD);
+                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
+
+                this.dontChangePlayer = true;
+            }
+            else{
+                this.dontChangePlayer = false;
+                currentPlayerController.setOwnedToken(tokenColor);
+
+                GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
+                int tokenImage = tokenController.getImageToken(tokenColor);
+
+                currentPlayerController.setTokenBagPlayer(tokenColor, tokenBagGridLayout, tokenImage);
+                View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
+                view.getId();
+                if (view != null) {
+                    viewsToRemove.add(view); // Add the view to the list
+                }
+                tokensToRemove.add(token); // Add the token to the list for removal
+                setTaskBar(ActiveTaskBar.NONE);
+            }
+        }
+
+        if (!dontChangePlayer){
+            for (View view : viewsToRemove) {
+                //            tokenGridLayout.removeView(view);
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            // Remove the selected tokens from the list
+            selectedToken.removeAll(tokensToRemove);
+
+            tokenController.resetSelectedToken(viewsToRemove);
+            tokenController.refreshTokenEvent();
+
+            getCurrentPlayerController().setPlayerBoard();
+
+            victoryCondition();
+            changeCurrentPlayer();
+        }
+        // Remove the collected views after the loop
+
     }
 
     public FrameLayout getCurrentFrameLayout(Color color){
@@ -352,76 +428,6 @@ public class MainActivity extends AppCompatActivity {
             if(user1.getCurrent()) return pearlTokenBagPlayer1; else return pearlTokenBagPlayer2;
         }
         return null;
-    }
-
-    // Method for add Token Stack on bag player
-    private void takeTokenButtonAction() {
-    // Method for add Card Stack on bag player
-
-        int totalTokens = getCurrentPlayerController().getUser().getTotalTokens();
-
-        // Check if the player exceeds maximum bag capacity
-        if (totalTokens + selectedToken.size() > 10) {
-            Toast.makeText(this, "You cannot take any more tokens. Your bag will exceed the maximum capacity!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Create a list to hold the views to remove
-        List<View> viewsToRemove = new ArrayList<>();
-        List<Token> tokensToRemove = new ArrayList<>();
-
-        UserController currentPlayerController = getCurrentPlayerController();
-
-        // Collect views to remove and tokens to remove in separate lists
-        for (Token token : selectedToken) {
-            TokenColor tokenColor = tokenController.mapColorToTokenColor(token.getColor());
-            if (tokenColor.equals(TokenColor.GOLD) && selectedCard == null){
-                if (currentPlayerController.getUser().getReserveCard() == 3) {
-                    Toast.makeText(this, "You can't hold more than 3 Reserved Card!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                setTaskBar(ActiveTaskBar.CARD);
-                cardController.refreshForReverseCard(currentPlayerController, tokenColor);
-
-                this.dontChangePlayer = true;
-            }
-            else{
-                this.dontChangePlayer = false;
-                currentPlayerController.setOwnedToken(tokenColor);
-
-                GridLayout tokenBagGridLayout = getTokenBagGridLayout(tokenColor);
-                int tokenImage = tokenController.getImageToken(tokenColor);
-
-                currentPlayerController.setTokenBagPlayer(tokenColor, tokenBagGridLayout, tokenImage);
-                View view = tokenController.getViewAt(token.getLocation().get(0), token.getLocation().get(1), tokenGridLayout);
-                view.getId();
-                if (view != null) {
-                    viewsToRemove.add(view); // Add the view to the list
-                }
-                tokensToRemove.add(token); // Add the token to the list for removal
-                setTaskBar(ActiveTaskBar.NONE);
-            }
-        }
-
-        if (!dontChangePlayer){
-            for (View view : viewsToRemove) {
-    //            tokenGridLayout.removeView(view);
-                view.setVisibility(View.INVISIBLE);
-            }
-
-            // Remove the selected tokens from the list
-            selectedToken.removeAll(tokensToRemove);
-
-            tokenController.resetSelectedToken(viewsToRemove);
-            tokenController.refreshTokenEvent();
-
-            getCurrentPlayerController().setPlayerBoard();
-
-            victoryCondition();
-            changeCurrentPlayer();
-        }
-        // Remove the collected views after the loop
-
     }
 
     private UserController getCurrentPlayerController() {
