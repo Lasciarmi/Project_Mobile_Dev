@@ -260,7 +260,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public GridLayout getCardReservedPlayer(){
-        if(user1.getCurrent()) return cardReservedPlayer1; else return cardReservedPlayer2;
+        if(user1.getCurrent()) return cardReservedPlayer1;
+        else {
+            return cardReservedPlayer2;
+        }
     }
 
     private GridLayout getTokenJokerPlayer(){
@@ -319,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void purchaseButtonAction() {
         UserController currentPlayerController = getCurrentPlayerController();
+
         RoyalCard royalCard = cardController.getRoyalCard();
         if (royalCard!=null){
             ViewParent parent = royalCard.getParent();
@@ -338,10 +342,9 @@ public class MainActivity extends AppCompatActivity {
             justRefreshAndCheckVictoryCondition();
             return;
         }
-        this.selectedCard = getSelectedCard();
-        if (selectedCard != null){
 
-//            UserController currentPlayerController = getCurrentPlayerController();
+        selectedCard = getSelectedCard();
+        if (selectedCard != null){
 
             if (selectedCard.isUniversal()) {
                 showGemSelectionDialog(selectedCard, currentPlayerController);
@@ -371,6 +374,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedCard.setCurrentGridLayout(cardReservedGridLayout);
                 selectedCard.setReserved(true);
                 selectedCard.setCardIndexOnGridLayout(cardReservedGridLayout.getChildCount());
+                selectedCard.setClickable(false);
+                selectedCard.setBackgroundResource(0);
                 cardReservedGridLayout.addView(selectedCard);
 
             }
@@ -397,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void cardRefreshValidCard() {
         cardController.refreshValidCard(getCurrentPlayerController());
+        cardController.refreshValidCrownCard(getCurrentPlayerController());
     }
 
     public Card getSelectedCard(){
@@ -608,6 +614,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeCurrentPlayer() {
+        cardController.disableAllCard();
         if (user1.getCurrent()) {
             user1.setCurrent(false);
             user2.setCurrent(true);
@@ -625,11 +632,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void victoryCondition() {
         UserController currentPlayer = getCurrentPlayerController();
-        if (currentPlayer.getUser().getCardsPoint() == 20) {
+        if (currentPlayer.getUser().getCardsPoint() >= 20) {
             showCustomDialog("You win with 20 points!", "OK", this::OpenStartUpActivity);
-        } else if (currentPlayer.getUser().getCrowns() == 10) {
+        } else if (currentPlayer.getUser().getCrowns() >= 10) {
             showCustomDialog("You win with 10 crowns!", "OK", this::OpenStartUpActivity);
-        } else if (currentPlayer.getUser().getMostSameCardColorValue() == 10) {
+        } else if (currentPlayer.getUser().getMostSameCardColorValue() >= 10) {
             showCustomDialog("You win with 10 same card colors!", "OK", this::OpenStartUpActivity);
         }
     }
@@ -707,18 +714,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void assignGemToCard(Card universalCard, TokenColor selectedColor, UserController currentPlayerController) {
         universalCard.setColor(selectedColor.getTokenColor(this));
+        universalCard.setUniversal(false);
+        selectedCard = universalCard;
+        cardController.setSelectedCard(universalCard);
+        purchaseButtonAction();
 
-        cardController.removeAndAddNewCardInBoard(universalCard);
-
-        FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedColor.getTokenColor(this));
-        cardController.addNewCard(currentFrameLayout);
-        tokenController.payCard(universalCard, currentPlayerController);
-        currentPlayerController.setOwnedCard(universalCard);
-
-        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
-        this.selectedCard = getSelectedCard();
-
-        refreshAndChangeThePlayer();
+//        cardController.removeAndAddNewCardInBoard(universalCard);
+//
+//        FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedColor.getTokenColor(this));
+//        cardController.addNewCard(currentFrameLayout);
+//        tokenController.payCard(universalCard, currentPlayerController);
+//        currentPlayerController.setOwnedCard(universalCard);
+//
+//        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
+//        this.selectedCard = getSelectedCard();
+//
+//        refreshAndChangeThePlayer();
     }
 
 }

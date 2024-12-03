@@ -94,10 +94,6 @@ public class Card extends androidx.appcompat.widget.AppCompatImageView {
         this.price = price;
     }
 
-    public boolean isValidToPick() {
-        return true;
-    }
-
     public int getLevel() {
         return level;
     }

@@ -51,8 +51,6 @@ public class CardController {
         this.selectedCard = selectedCard;
     }
 
-    // TODO: 12/1/2024 method refreshValidRoyalCard
-
     public void refreshValidCard(UserController userController) {
 //      for each listcard in allListLevelCard
         GridLayout reservedCard = mainActivity.getCardReservedPlayer();
@@ -89,12 +87,27 @@ public class CardController {
         }
     }
 
+    public void disableAllCard() {
+//      for each listcard in allListLevelCard
+        GridLayout reservedCard = mainActivity.getCardReservedPlayer();
+        for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCard)) {
+            //  for each card in listcard
+            for (int i=0; i < cardBoard.getChildCount(); i++) {
+                View view = cardBoard.getChildAt(i);
+                if (view instanceof Card) {
+                    Card card = (Card) view;
+                    card.setClickable(false);
+                    card.setBackgroundResource(0);
+
+                }
+            }
+        }
+    }
+
     public void refreshValidCrownCard(UserController userController) {
 //      for each listcard in allListLevelCard
             for (int i=0; i < royalCardBoard.getChildCount(); i++) {
                 View view = royalCardBoard.getChildAt(i);
-//                RoyalCard royalCard = view.findViewById(R.id.royal_card);
-//                royalCard.setBackgroundResource(R.drawable.image_border_card_clickable);
                 if (view instanceof RoyalCard) {
                     RoyalCard royalCard = (RoyalCard) view;
                     int ownedCrown = userController.getCrowns();
@@ -830,4 +843,7 @@ public class CardController {
         currentCardStack.addView(card);
     }
 
+    public void setSelectedCard(Card universalCard) {
+        this.selectedCard = universalCard;
+    }
 }

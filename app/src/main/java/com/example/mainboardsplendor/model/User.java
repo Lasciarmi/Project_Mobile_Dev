@@ -125,24 +125,8 @@ public class User implements Parcelable {
         return mostSameCardValuePerColor;
     }
 
-    public void setMostSameCardValuePerColor(HashMap<TokenColor, Integer> mostSameCardValuePerColor) {
-        this.mostSameCardValuePerColor = mostSameCardValuePerColor;
-    }
-
-    public boolean isCurrent() {
-        return isCurrent;
-    }
-
     public int getTotalTokens() {
         return getOwnedTokens().values().stream().mapToInt(Integer::intValue).sum();
-    }
-
-    public int getOwnedGoldToken() {
-        return ownedTokens.get(TokenColor.GOLD);
-    }
-
-    public void InitOwnedTokens(HashMap<Token, Integer> ownedTokens, Token token) {
-        ownedTokens.put(token, 0);
     }
 
     public HashMap<TokenColor, Integer> getOwnedTokens() {
@@ -153,20 +137,8 @@ public class User implements Parcelable {
         return ownedDiscount;
     }
 
-    public void setOwnedDiscount(HashMap<TokenColor, Integer> ownedDiscount) {
-        this.ownedDiscount = ownedDiscount;
-    }
-
-    public void setOwnedTokens(HashMap<TokenColor, Integer> ownedTokens) {
-        this.ownedTokens = ownedTokens;
-    }
-
     public void setCardsPoint(int cardsPoint) {
         CardsPoint = cardsPoint;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 
@@ -174,20 +146,8 @@ public class User implements Parcelable {
         this.crowns = crowns;
     }
 
-    public void setMostSameCardColorValue(int mostSameCardColorValue) {
-        this.mostSameCardColorValue = mostSameCardColorValue;
-    }
-
     public void setScroll(int scroll) {
         Scroll = scroll;
-    }
-
-    public void setReserveCard(int reserveCard) {
-        this.reserveCard = reserveCard;
-    }
-
-    public void setTokensStack(int tokensStack) {
-        this.tokensStack = tokensStack;
     }
 
     public String getUsername() {

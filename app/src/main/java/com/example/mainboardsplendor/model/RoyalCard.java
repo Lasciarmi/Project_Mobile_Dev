@@ -14,7 +14,6 @@ public class RoyalCard extends androidx.appcompat.widget.AppCompatImageView {
     private int image;
 
 
-
     public RoyalCard(@NonNull Context context) {
         super(context);
     }
@@ -33,10 +32,6 @@ public class RoyalCard extends androidx.appcompat.widget.AppCompatImageView {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public int getCrowns() {
-        return crowns;
     }
 
     public void setCrowns(int crowns) {

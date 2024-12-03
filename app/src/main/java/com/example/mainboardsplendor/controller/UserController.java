@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -65,10 +64,6 @@ public class UserController {
         }
     }
 
-    public void setPlayerBold() {
-        playerName.setTypeface(null, Typeface.BOLD);
-    }
-
     public User getUser() {
         return user;
     }
@@ -86,7 +81,6 @@ public class UserController {
     }
 
     public void setTokenBagPlayer(TokenColor tokenColor, GridLayout tokenGridLayout, int tokenImage){
-        Toast.makeText(mainActivity, "TokenColor "+ tokenColor + " : " + getOwnedToken().get(tokenColor), Toast.LENGTH_SHORT).show();
 
         View view = LayoutInflater.from(mainActivity).inflate(R.layout.custom_token, tokenGridLayout, false);
         Token tokenView = view.findViewById(R.id.token_view);
@@ -100,10 +94,6 @@ public class UserController {
         view.setVisibility(View.VISIBLE);
         tokenGridLayout.addView(view);
 
-    }
-
-    public int getSumReservedCard(){
-        return user.getReserveCard();
     }
 
     public void setOwnedCard(Card selectedCard) {
@@ -145,7 +135,7 @@ public class UserController {
 //        Tambah crown objective di object user
         user.setCrowns(user.getCrowns()+selectedCard.getCrowns());
 
-//        Tambah discount dan value card yang sama di object user bergantung warnanya TODO: TAMBAH METHOD INI DI USERCONTROLLER
+//        Tambah discount dan value card yang sama di object user bergantung warnanya
         HashMap<TokenColor, Integer> mostSameCardValuePerColor = user.getMostSameCardValuePerColor();
         if(selectedCard.getColor().equals(TokenColor.BLUE.getTokenColor(mainActivity))){
             ownedDiscount.put(TokenColor.BLUE, ownedDiscount.get(TokenColor.BLUE) + selectedCard.getDiscount());
@@ -167,7 +157,6 @@ public class UserController {
             mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
         }
 
-        Toast.makeText(mainActivity, "sdsd", Toast.LENGTH_SHORT).show();
     }
 
     public int getCrowns(){
