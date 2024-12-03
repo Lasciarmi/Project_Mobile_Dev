@@ -137,6 +137,10 @@ public class User implements Parcelable {
         return ownedDiscount;
     }
 
+    public void setReserveCard(int reserveCard) {
+        this.reserveCard = reserveCard;
+    }
+
     public void setCardsPoint(int cardsPoint) {
         CardsPoint = cardsPoint;
     }

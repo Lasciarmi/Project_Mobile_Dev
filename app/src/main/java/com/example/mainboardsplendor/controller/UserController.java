@@ -189,4 +189,12 @@ public class UserController {
     public int getRoyalCard() {
         return user.getSumRoyalCard();
     }
+
+    public void increaseUserReserveCardInt() {
+        user.setReserveCard(user.getReserveCard()+1);
+    }
+
+    public void decreaseUserReserveCard() {
+        user.setReserveCard(user.getReserveCard()-1);
+    }
 }

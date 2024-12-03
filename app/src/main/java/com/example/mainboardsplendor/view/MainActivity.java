@@ -377,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedCard.setClickable(false);
                 selectedCard.setBackgroundResource(0);
                 cardReservedGridLayout.addView(selectedCard);
+                currentPlayerController.increaseUserReserveCardInt();
 
             }
             else{
@@ -384,6 +385,10 @@ public class MainActivity extends AppCompatActivity {
                 cardController.addNewCard(currentFrameLayout);
                 tokenController.payCard(selectedCard, currentPlayerController);
                 currentPlayerController.setOwnedCard(selectedCard);
+                if(selectedCard.isReserved()){
+                    currentPlayerController.decreaseUserReserveCard();
+                    selectedCard.setReserved(false);
+                }
             }
             cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
             this.selectedCard = getSelectedCard();
