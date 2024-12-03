@@ -308,6 +308,9 @@ public class TokenController {
             mainActivity.setTaskBar(ActiveTaskBar.NONE);
             mainActivity.cardRefreshValidCard();
         }
+        else{
+            mainActivity.disableAllCard();
+        }
 
     }
 

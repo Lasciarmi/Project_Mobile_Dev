@@ -263,9 +263,9 @@ public class CardController {
 
         HashMap<TokenColor, Integer> hashMap_price_card_ultra_level_3_2 = new HashMap<>();
         // seq: [blue, white, green, black, red, pearl]
-        int[] list_price_card_ultra_level_3_2 = {0, 0, 0, 8, 0, 0};
+        int[] list_price_card_ultra_level_3_2 = {0, 0, 0, 0, 8, 0};
         AddPriceHashMap(hashMap_price_card_ultra_level_3_2, list_price_card_ultra_level_3_2);
-        Card card_ultra_level_3_2 = AddCard(0, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 3, hashMap_price_card_ultra_level_3_1, R.drawable.card_ultra_level_3_2);
+        Card card_ultra_level_3_2 = AddCard(3, Color.valueOf(mainActivity.getResources().getColor(R.color.color4normalToken)), 3, 1, 0, hashMap_price_card_ultra_level_3_2, R.drawable.card_ultra_level_3_2);
         card_ultra_level_3_2.setUniversal(true);
 
         HashMap<TokenColor, Integer> hashMap_price_card_white_level_3_1 = new HashMap<>();

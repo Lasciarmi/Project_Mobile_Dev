@@ -322,6 +322,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void purchaseButtonAction() {
         UserController currentPlayerController = getCurrentPlayerController();
+//        if (!selectedToken.get(0).getColor().equals(TokenColor.GOLD.getTokenColor(this)) && selectedCard != null){
+//            Toast.makeText(this, "You must unselect one of them", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         RoyalCard royalCard = cardController.getRoyalCard();
         if (royalCard!=null){
@@ -434,18 +438,14 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isPass = false;
         if(selectedToken.size() >= 2){
-            if (selectedToken.size() == 2){
-                if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
-                        && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this))){
-                    isPass = true;
-                }
+            if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                    && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this))){
+                isPass = true;
             }
-            else{
-                if (selectedToken.size() == 3){
-                    if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
-                        && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
-                        isPass = true;
-                    }
+            if (selectedToken.size() == 3){
+                if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                    && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
+                    isPass = true;
                 }
             }
         }
@@ -619,7 +619,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeCurrentPlayer() {
-        cardController.disableAllCard();
+        disableAllCard();
         if (user1.getCurrent()) {
             user1.setCurrent(false);
             user2.setCurrent(true);
@@ -633,6 +633,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         taskBarReplenishBoard.setVisibility(View.VISIBLE);
+    }
+
+    public void disableAllCard() {
+        cardController.disableAllCard();
     }
 
     public void victoryCondition() {
@@ -723,18 +727,6 @@ public class MainActivity extends AppCompatActivity {
         selectedCard = universalCard;
         cardController.setSelectedCard(universalCard);
         purchaseButtonAction();
-
-//        cardController.removeAndAddNewCardInBoard(universalCard);
-//
-//        FrameLayout currentFrameLayout = getCurrentFrameLayout(selectedColor.getTokenColor(this));
-//        cardController.addNewCard(currentFrameLayout);
-//        tokenController.payCard(universalCard, currentPlayerController);
-//        currentPlayerController.setOwnedCard(universalCard);
-//
-//        cardController.cardClicked(getCurrentPlayerController(), getSelectedCard());
-//        this.selectedCard = getSelectedCard();
-//
-//        refreshAndChangeThePlayer();
     }
 
 }
