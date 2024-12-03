@@ -438,14 +438,25 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isPass = false;
         if(selectedToken.size() >= 2){
-            if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
-                    && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this))){
-                isPass = true;
-            }
-            if (selectedToken.size() == 3){
+            if (selectedToken.size() == 2){
                 if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
-                    && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
+                        && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this))){
                     isPass = true;
+                }
+            }
+            else{
+                if (selectedToken.size() == 3){
+                    if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                        && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
+                        isPass = true;
+                    } else if (
+                            (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
+                                    && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this)))
+                    ) {
+                        {
+                            isPass = true;
+                        }
+                    }
                 }
             }
         }
