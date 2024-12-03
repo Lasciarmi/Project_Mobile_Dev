@@ -68,7 +68,7 @@ public class CardController {
                     int green = (cardPrice.get(TokenColor.GREEN) <= ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)) ? 0 : (ownedToken.get(TokenColor.GREEN) + ownedDiscount.get(TokenColor.GREEN)-cardPrice.get(TokenColor.GREEN));
                     int black = (cardPrice.get(TokenColor.BLACK) <= ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)) ? 0 : (ownedToken.get(TokenColor.BLACK) + ownedDiscount.get(TokenColor.BLACK)-cardPrice.get(TokenColor.BLACK));
                     int red = (cardPrice.get(TokenColor.RED) <= ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)) ? 0 : (ownedToken.get(TokenColor.RED) + ownedDiscount.get(TokenColor.RED)-cardPrice.get(TokenColor.RED));
-                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) + ownedDiscount.get(TokenColor.PEARL)-cardPrice.get(TokenColor.PEARL));
+                    int pearl = (cardPrice.get(TokenColor.PEARL) <= ownedToken.get(TokenColor.PEARL)) ? 0 : (ownedToken.get(TokenColor.PEARL) -cardPrice.get(TokenColor.PEARL));
                     int sum = blue + white + green + black + red + pearl + ownedToken.get(TokenColor.GOLD);
 
                     if (sum >= 0 && (selectedCard == null || selectedCard == card) && selectedRoyalCard == null && !mainActivity.getUsingScrollNow()){
@@ -89,6 +89,7 @@ public class CardController {
 
     public void disableAllCard() {
 //      for each listcard in allListLevelCard
+        selectedCard = null;
         GridLayout reservedCard = mainActivity.getCardReservedPlayer();
         for (GridLayout cardBoard : Arrays.asList(cardStoreTop, cardStoreMid, cardStoreBot, reservedCard)) {
             //  for each card in listcard

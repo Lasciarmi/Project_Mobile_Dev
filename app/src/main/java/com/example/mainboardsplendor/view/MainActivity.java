@@ -317,15 +317,12 @@ public class MainActivity extends AppCompatActivity {
             takeAvailablePrivilege(getCurrentPlayerController());
         }
         tokenController.addToken2Board();
+        tokenController.refreshValidToken();
         taskBarReplenishBoard.setVisibility(View.GONE);
     }
 
     private void purchaseButtonAction() {
         UserController currentPlayerController = getCurrentPlayerController();
-//        if (!selectedToken.get(0).getColor().equals(TokenColor.GOLD.getTokenColor(this)) && selectedCard != null){
-//            Toast.makeText(this, "You must unselect one of them", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 
         RoyalCard royalCard = cardController.getRoyalCard();
         if (royalCard!=null){
@@ -449,10 +446,8 @@ public class MainActivity extends AppCompatActivity {
                     if (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
                         && selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor())){
                         isPass = true;
-                    } else if (
-                            (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor())
-                                    && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this)))
-                    ) {
+                    } else if ( (selectedToken.get(0).getColor().equals(selectedToken.get(1).getColor()) || selectedToken.get(0).getColor().equals(selectedToken.get(2).getColor()) )
+                            && selectedToken.get(0).getColor().equals(TokenColor.PEARL.getTokenColor(this)) ){
                         {
                             isPass = true;
                         }
@@ -503,7 +498,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (!dontChangePlayer || isUsingScrollNow){
             for (View view : viewsToRemove) {
-                //            tokenGridLayout.removeView(view);
                 view.setVisibility(View.INVISIBLE);
             }
 

@@ -68,21 +68,9 @@ public class TokenController {
                     // Tidak ada kartu diskon, bayar penuh
                     currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), tokenPrice, tokenColor);
                 } else {
-                    for (int i = 0; i < currentFrame.getChildCount(); i++) {
-                        View child = currentFrame.getChildAt(i);
-                        if (child instanceof Card) {
-                            Card card = (Card) child;
-
-                            Map<TokenColor, Integer> cardPrice = card.getPrice();
-                            int discountCard = (cardPrice != null) ? cardPrice.getOrDefault(tokenColor, 0) : 0; // Pastikan tidak null
-
-                            int priceDiscounted = Math.max(tokenPrice - discountCard, 0);
-
-                            if (priceDiscounted > 0) {
-                                currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenColor);
-                            }
-                        }
-                    }
+                    int ownedDiscountSpecificColor = (currentPlayerController.getOwnedDiscount().get(tokenColor) != null ? currentPlayerController.getOwnedDiscount().get(tokenColor) : 0);
+                    int priceDiscounted = tokenPrice - ownedDiscountSpecificColor;
+                    currentPlayerController.payToken(mainActivity.getTokenBagGridLayout(tokenColor), priceDiscounted, tokenColor);
                 }
             }
             else{
@@ -674,6 +662,9 @@ public class TokenController {
                 location.add(row);
                 location.add(col);
                 tokenImage.setLocation(location);
+                tokenImage.setClickable(true);
+                tokenImage.setIsSelected(false);
+                tokenImage.setValid(true);
 
                 setOnClickListenerToken(tokenImage);
 

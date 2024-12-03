@@ -153,7 +153,6 @@ public class UserController {
             ownedDiscount.put(TokenColor.RED, ownedDiscount.get(TokenColor.RED) + selectedCard.getDiscount());
             mostSameCardValuePerColor.put(TokenColor.RED, mostSameCardValuePerColor.get(TokenColor.RED) + selectedCard.getCardValue());
         } else if (selectedCard.getColor().equals(TokenColor.PEARL.getTokenColor(mainActivity))) {
-            ownedDiscount.put(TokenColor.PEARL, ownedDiscount.get(TokenColor.PEARL) + selectedCard.getDiscount());
             mostSameCardValuePerColor.put(TokenColor.PEARL, mostSameCardValuePerColor.get(TokenColor.PEARL) + selectedCard.getCardValue());
         }
 
