@@ -58,5 +58,3 @@ This app aims to bring the competitive and strategic nature of Splendor Duel to 
 ![Game Board](assets/Screenshot-01.png)
 ![Game Board](assets/Screenshot-02.png)
 ![Game Board](assets/Screenshot-03.png)
-![Game Board](assets/Screenshot-04.png)
-![Game Board](assets/Screenshot-05.png)
